@@ -1,28 +1,149 @@
 <template>
+  <!--容器div-->
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <!--重要信息通知栏-->
+    <ConnectedBar/>
+    <!--主体div-->
+    <div class="content">
+      <nav-bar></nav-bar>
+      <div class="view">
+        <!--标题栏-->
+        <TitleBar/>
+        <!--路由视图-->
+        <div class="router scrollbar">
+          <router-view />
+        </div>
+      </div>
+    </div>
+    <!--状态栏-->
+    <StatusBar />
+    <FootBar />
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
+import ConnectedBar from "./components/ConnectedBar.vue";
+import StatusBar from "./components/StatusBar.vue";
+import TitleBar from "./components/TitleBar.vue";
+import navBar from "./components/NavBar.vue";
+import FootBar from "./components/FootBar.vue";
+import {mapMutations} from 'vuex'
 export default {
-  name: 'App',
+  name: "app",
   components: {
-    HelloWorld
-  }
-}
+    ConnectedBar,
+    StatusBar,
+    TitleBar,
+    navBar,
+    FootBar
+  },
+  data() {
+    return {
+    };
+  },
+  created(){
+    // 注册一个监听器
+    window.addEventListener('resize', this.handleResize)
+  },
+  beforeDestroy: function () {
+    window.removeEventListener('resize', this.handleResize)
+  },  
+  methods: {
+    ...mapMutations(['screenWidth']),
+    handleResize () {
+      // 同步新的屏幕宽度到 store
+      this.screenWidth(document.documentElement.clientWidth)
+    },
+  }  
+};
 </script>
 
 <style>
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+}
+#app,.page,body,html {
+  height: 100%;
+}
+html{
+   touch-action:none;
+}
+body {
+  font-size: 16px;
+  font-family: Roboto, Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  margin: 0;
+}
+.content {
+  display: flex;
+  flex: auto 1 1;
+  height: 100%;
+  overflow: hidden;
+}
+.view{
+  flex: auto 1 1;
+  width: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+.router {
+  flex: 1;
+  overflow: auto;
+  /* padding: 0 20px 20px 20px */
+}
+
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+*::-webkit-scrollbar-thumb {
+  background-color: #b4c7d0;
+  border: 3px solid transparent;
+  background-clip: padding-box;
+  border-radius: 5px;
+}
+*::-webkit-scrollbar-track-piece {
+  background: 0 0;
+}
+
+.ddtv-ui-bt{
+  display: inline-block;
+  vertical-align: middle;
+  border: none;
+  font-family: inherit;
+  text-decoration: none;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  position: relative;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  border-radius: 3px;
+  padding: 0 14px;
+  font-size: 14px;
+  line-height: 16px;
+  height: 32px;
+  color: #2c3e50;
+  background: #e4f5ef;
+  outline: 0;
+  -webkit-tap-highlight-color: rgba(255,255,255,0);
+}
+.ddtv-ui-bt.flat {
+    color: #2c3e50;
+    background: 0 0;
+}
+.ddtv-ui-bt.flat {
+  -webkit-transition: background .1s,color .1s;
+  transition: background .1s,color .1s;
+}
+.ddtv-ui-bt.flat:hover{
+  background: #cae4da;
 }
 </style>

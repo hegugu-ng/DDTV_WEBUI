@@ -1,0 +1,138 @@
+<template>
+    <div class="nav" :style="{width:dw + 'px'}" id="navbar" v-show="$route.meta.show &&  screenWidth> 1024" >
+        <div class="logo"></div>
+        <div class="router-bar">
+          <div class="bar-item" v-for="(item , count) in info" :key="count" @click="$router.push({path:item.router})">
+            <el-tooltip class="item" effect="dark"  :content="item.title" placement="right" :disabled="!navBar">
+              <button class="ddtv-ui-bt nav-bt" :style="itemcss">
+                <i class="nav-icon" :class="item.router == $route.path ?item.icon + ' navon':item.icon"></i>
+                <div :class="item.router == $route.path ?'title navon':'title'" v-show="titleshow">{{ item.title }}</div>
+              </button>
+            </el-tooltip>
+          </div>
+        </div>
+        <div class="bar-item" :style="itemcss">
+          <button class="ddtv-ui-bt nav-bt" :style="itemcss">
+            <i class="el-icon-more nav-icon"></i>
+            <div class="title" v-if="titleshow">更多</div>
+          </button>
+        </div>
+    </div>
+</template>
+
+<script>
+import { mapGetters,mapState } from 'vuex';
+import gsap from 'gsap';
+export default {
+  name: "navBar",
+  computed:{
+    ...mapGetters(['navBar']),
+    ...mapState(['screenWidth']),
+  },
+  data(){
+    return{
+      dw:'',
+      dt:[1,2,3,4,5],
+      itemcss:null,
+      titleshow:null,
+      info:[
+        {title:"概览",router:'/',icon:'el-icon-s-home'},
+        {title:"房间配置",router:'/room',icon:'el-icon-menu'},
+        {title:"系统设置",router:'/setting',icon:'el-icon-s-tools'},
+        {title:"文件管理",router:'/ernjisn',icon:'el-icon-s-order'},
+        {title:"任务管理",router:'/event',icon:'el-icon-s-data'},
+      ]
+    }
+  },
+  beforeMount() {  
+    // 在挂载页面前 规定起始宽度，避免闪烁
+    if (document.documentElement.clientWidth < 1300) this.NavOff()
+    else this.NavOn()
+  }, 
+  watch:{
+    'navBar': function(val) {
+      if (val) this.NavOff()
+      else this.NavOn()
+      // if (oldval != val &&  this.screenWidth> 1024) {
+        // if(!this.$route.meta.show){return}
+        gsap.to('.nav',{width:this.dw,duration: 0.3})
+      // }
+    }
+  },
+  methods:{
+    NavOn:function(){
+      this.titleshow = true
+      console.debug("[UI] 导航栏展开")
+      this.dw = 220;
+      this.itemcss = {'justify-content': 'flex-start','padding-left': '10px'};
+    },
+    NavOff:function(){
+      this.titleshow = false
+      console.debug("[UI] 导航栏收缩")
+      this.dw = 46;
+      this.itemcss = {'justify-content': 'center'}
+    }
+  }
+
+};
+
+</script>
+
+<style scoped>
+.nav{
+  width: 220px;
+  z-index: 2;
+  background-color: #fff;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 2px 0 10px rgb(0 0 0 / 10%);
+  border-right: 1px solid #e6e4e4;
+}
+.view {
+  flex: auto 1 1;
+  height: 100%;
+  overflow: hidden;
+}
+.logo{
+  height: 65px;
+  flex-shrink: 0
+}
+.router-bar{
+  flex: 100% 1 1;
+  display: flex;
+  flex-direction: column;
+}
+.more{
+  height: 50px;
+  flex-shrink: 0
+}
+.bar-item{
+  height: 44px;
+  /* background-color: darkseagreen; */
+}
+.nav-bt{
+  width: 100%;
+  height: 100%;
+  background: 0 0;
+  border-radius: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding:0;
+}
+.nav-bt:hover{
+  background: #ebf8f3;
+}
+.nav-icon{
+  font-size: 25px;
+}
+.title{
+  flex-shrink: 0;
+  font-size: 16px;
+  padding-left: 7px;
+}
+.navon{
+  color: #42b983;
+}
+</style>

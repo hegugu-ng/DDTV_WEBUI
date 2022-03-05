@@ -1,0 +1,229 @@
+{
+	"Version": 3,
+	"Parameters": [
+		{
+			"Id": "ParamAngleX",
+			"GroupId": "",
+			"Name": "角度 X"
+		},
+		{
+			"Id": "ParamAngleY",
+			"GroupId": "",
+			"Name": "角度 Y"
+		},
+		{
+			"Id": "ParamAngleZ",
+			"GroupId": "",
+			"Name": "角度 Z"
+		},
+		{
+			"Id": "ParamEyeLOpen",
+			"GroupId": "",
+			"Name": "左眼开闭"
+		},
+		{
+			"Id": "ParamEyeROpen",
+			"GroupId": "",
+			"Name": "右眼开闭"
+		},
+		{
+			"Id": "ParamEyeBallX",
+			"GroupId": "",
+			"Name": "眼球 X"
+		},
+		{
+			"Id": "ParamEyeBallY",
+			"GroupId": "",
+			"Name": "眼球 Y"
+		},
+		{
+			"Id": "ParamBrowLY",
+			"GroupId": "",
+			"Name": "左眉上下"
+		},
+		{
+			"Id": "ParamBrowRY",
+			"GroupId": "",
+			"Name": "右眉上下"
+		},
+		{
+			"Id": "ParamMouthForm",
+			"GroupId": "",
+			"Name": "嘴部变形"
+		},
+		{
+			"Id": "ParamMouthOpenY",
+			"GroupId": "",
+			"Name": "嘴巴开闭"
+		},
+		{
+			"Id": "ParamBodyAngleZ",
+			"GroupId": "",
+			"Name": "身体 Z"
+		},
+		{
+			"Id": "ParamBreath",
+			"GroupId": "",
+			"Name": "呼吸"
+		},
+		{
+			"Id": "HAIRT1",
+			"GroupId": "",
+			"Name": "HAIRT1"
+		},
+		{
+			"Id": "HAIRT2",
+			"GroupId": "",
+			"Name": "HAIRT2"
+		},
+		{
+			"Id": "HAIRT3",
+			"GroupId": "",
+			"Name": "HAIRT3"
+		},
+		{
+			"Id": "HAIRT4",
+			"GroupId": "",
+			"Name": "HAIRT4"
+		},
+		{
+			"Id": "HAIRS1",
+			"GroupId": "",
+			"Name": "HAIRS1"
+		},
+		{
+			"Id": "HAIRS2",
+			"GroupId": "",
+			"Name": "HAIRS2"
+		},
+		{
+			"Id": "HAIRS3",
+			"GroupId": "",
+			"Name": "HAIRS3"
+		},
+		{
+			"Id": "HAIRS4",
+			"GroupId": "",
+			"Name": "HAIRS4"
+		},
+		{
+			"Id": "BODYC1",
+			"GroupId": "",
+			"Name": "BODYC1"
+		},
+		{
+			"Id": "BODYC2",
+			"GroupId": "",
+			"Name": "BODYC2"
+		},
+		{
+			"Id": "BODYC3",
+			"GroupId": "",
+			"Name": "BODYC3"
+		},
+		{
+			"Id": "FC01",
+			"GroupId": "",
+			"Name": "FC01"
+		},
+		{
+			"Id": "FC02",
+			"GroupId": "",
+			"Name": "FC02"
+		},
+		{
+			"Id": "FC03",
+			"GroupId": "",
+			"Name": "FC03"
+		},
+		{
+			"Id": "FC04",
+			"GroupId": "",
+			"Name": "FC04"
+		},
+		{
+			"Id": "FC05",
+			"GroupId": "",
+			"Name": "FC05"
+		},
+		{
+			"Id": "FC06",
+			"GroupId": "",
+			"Name": "FC06"
+		},
+		{
+			"Id": "FC07",
+			"GroupId": "",
+			"Name": "FC07"
+		},
+		{
+			"Id": "FC08",
+			"GroupId": "",
+			"Name": "FC08"
+		},
+		{
+			"Id": "Param9",
+			"GroupId": "",
+			"Name": "参数21"
+		}
+	],
+	"ParameterGroups": [],
+	"Parts": [
+		{
+			"Id": "EYEBRO",
+			"Name": "EYEBRO"
+		},
+		{
+			"Id": "FCC01",
+			"Name": "FC01"
+		},
+		{
+			"Id": "FCC02",
+			"Name": "FC02"
+		},
+		{
+			"Id": "BANGS",
+			"Name": "BANGS"
+		},
+		{
+			"Id": "FCC04",
+			"Name": "FC04"
+		},
+		{
+			"Id": "FCC05",
+			"Name": "FC03"
+		},
+		{
+			"Id": "FCC06",
+			"Name": "FC01"
+		},
+		{
+			"Id": "EYES",
+			"Name": "EYES"
+		},
+		{
+			"Id": "FC107",
+			"Name": "FC05"
+		},
+		{
+			"Id": "MOUTH",
+			"Name": "MOUTH"
+		},
+		{
+			"Id": "FACE",
+			"Name": "FACE"
+		},
+		{
+			"Id": "MHAIR",
+			"Name": "MHAIR"
+		},
+		{
+			"Id": "BODY",
+			"Name": "BODY"
+		},
+		{
+			"Id": "LEG",
+			"Name": "LEG"
+		}
+	]
+}
