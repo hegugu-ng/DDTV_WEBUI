@@ -26,3 +26,11 @@ jobs:
       run: |
         npm install
         npm run build
+    
+    - name: Deploy ?
+        uses: JamesIves/github-pages-deploy-action@3.6.2
+        with:
+          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }} #secrets.ACCESS_TOKEN是项目配置的密钥
+          BRANCH: hgg # The branch the action should deploy to.
+          FOLDER: dist # The folder the action should deploy.
+          CLEAN: true # Automatically remove deleted files from the deploy branch
