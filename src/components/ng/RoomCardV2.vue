@@ -154,7 +154,8 @@ export default {
           if(item.live_status != 1) continue
           let now = Date.now()
           let time = this.formatSeconds((now/1000 - item.live_time))
-          this.room[i].st = time
+          let room = this.room
+          room[i].st = time
         }
     }, 10000)
 },

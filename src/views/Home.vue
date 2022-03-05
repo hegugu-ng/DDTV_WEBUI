@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div class="home_">
     <!--核心数据-->
     <ng-infocard title="核心数据" update="23秒前">
       <ng-datagroup :CardItem="CoreData"></ng-datagroup>
