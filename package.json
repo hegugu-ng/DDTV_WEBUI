@@ -31,7 +31,9 @@
     "eslint": "^8.10.0",
     "eslint-plugin-vue": "^8.5.0",
     "vue-cli-plugin-element": "^1.0.1",
-    "vue-template-compiler": "^2.6.14"
+    "vue-template-compiler": "^2.6.14",
+    "ansi-regex":"^5.0.1"
+
   },
   "eslintConfig": {
     "root": true,
