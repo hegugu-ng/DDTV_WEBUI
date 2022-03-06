@@ -72,12 +72,12 @@ export default {
      * @param {massage} 弹窗展示的消息  str
      * @param {title}  弹窗展示的标题  str
      */
-    openWindows(message, title) {
-      // message 与 title 对弹窗进行描述
-      this.$alert(message, title, {
-        confirmButtonText: "确定",
-      });
-    },
+    // openWindows(message, title) {
+    //   // message 与 title 对弹窗进行描述
+    //   this.$alert(message, title, {
+    //     confirmButtonText: "确定",
+    //   });
+    // },
     /**
      * 本函数会进行一个Cookie保存操作
      */

@@ -29,7 +29,7 @@ import navBar from "./components/NavBar.vue";
 import FootBar from "./components/FootBar.vue";
 import {mapMutations} from 'vuex'
 export default {
-  name: "app",
+  name: "App",
   components: {
     ConnectedBar,
     StatusBar,

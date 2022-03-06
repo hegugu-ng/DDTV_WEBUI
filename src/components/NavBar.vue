@@ -5,7 +5,9 @@
           <div class="bar-item" v-for="(item , count) in info" :key="count" @click="$router.push({path:item.router})">
             <el-tooltip class="item" effect="dark"  :content="item.title" placement="right" :disabled="!navBar">
               <button class="ddtv-ui-bt nav-bt" :style="itemcss">
-                <i class="nav-icon" :class="item.router == $route.path ?item.icon + ' navon':item.icon"></i>
+                <el-icon class="nav-icon">
+                  <component :is="item.icon" />
+                </el-icon>
                 <div :class="item.router == $route.path ?'title navon':'title'" v-show="titleshow">{{ item.title }}</div>
               </button>
             </el-tooltip>
@@ -13,7 +15,9 @@
         </div>
         <div class="bar-item" :style="itemcss">
           <button class="ddtv-ui-bt nav-bt" :style="itemcss">
-            <i class="el-icon-more nav-icon"></i>
+            <el-icon class="nav-icon">
+              <more-filled />
+            </el-icon>
             <div class="title" v-if="titleshow">更多</div>
           </button>
         </div>
@@ -22,7 +26,7 @@
 
 <script>
 import { mapGetters,mapState } from 'vuex';
-import gsap from 'gsap';
+import TweenLite from 'gsap';
 export default {
   name: "navBar",
   computed:{
@@ -36,11 +40,11 @@ export default {
       itemcss:null,
       titleshow:null,
       info:[
-        {title:"概览",router:'/',icon:'el-icon-s-home'},
-        {title:"房间配置",router:'/room',icon:'el-icon-menu'},
-        {title:"系统设置",router:'/setting',icon:'el-icon-s-tools'},
-        {title:"文件管理",router:'/ernjisn',icon:'el-icon-s-order'},
-        {title:"任务管理",router:'/event',icon:'el-icon-s-data'},
+        {title:"概览",router:'/',icon:'home-filled'},
+        {title:"房间配置",router:'/room',icon:'menu'},
+        {title:"系统设置",router:'/setting',icon:'tools'},
+        {title:"文件管理",router:'/ernjisn',icon:'folder-opened'},
+        {title:"任务管理",router:'/event',icon:'operation'},
       ]
     }
   },
@@ -55,7 +59,7 @@ export default {
       else this.NavOn()
       // if (oldval != val &&  this.screenWidth> 1024) {
         // if(!this.$route.meta.show){return}
-        gsap.to('.nav',{width:this.dw,duration: 0.3})
+        TweenLite.to('.nav',{width:this.dw,duration: 0.3})
       // }
     }
   },

@@ -1,14 +1,27 @@
-import Vue from 'vue'
+import { createApp } from 'vue'
 import App from './App.vue'
+
+// 创建app
+const app = createApp(App)
+
 import router from './router'
 import store from './store'
-import './plugins/element.js'
-import 'default-passive-events'
+import ElementPlus from 'element-plus'
+import 'element-plus/dist/index.css'
 
-Vue.config.productionTip = false
+import * as ElIconModules from '@element-plus/icons'
 
-new Vue({
-  router,
-  store,
-  render: h => h(App)
-}).$mount('#app')
+// 统一注册Icon图标
+for (const iconName in ElIconModules) {
+  if (Reflect.has(ElIconModules, iconName)) {
+    const item = ElIconModules[iconName]
+    app.component(iconName, item)
+  }
+}
+
+app.use(ElementPlus)
+
+
+app.use(store)
+app.use(router)
+app.mount('#app')

@@ -13,7 +13,7 @@
 
 <script>
 import { mapState } from 'vuex';
-import gsap from 'gsap';
+import TweenLite from 'gsap';
 export default {
   name: "ConnectedBar",
   computed:{
@@ -36,7 +36,7 @@ export default {
           color = '#c1ae67'
           break;
       }
-      gsap.to('.connection-status',{background:color})
+      TweenLite.to('.connection-status',{background:color})
     }
   }
 

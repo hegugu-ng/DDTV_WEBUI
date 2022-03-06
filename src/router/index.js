@@ -1,5 +1,5 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
+import {createRouter,createWebHashHistory} from 'vue-router'
+
 import Home from '../views/Home.vue'
 import Room from '../views/Room.vue'
 import Setting from '../views/Setting.vue'
@@ -8,7 +8,7 @@ import Flv from '../views/flv.vue'
 
 import {isAuthenticated} from '../utils/authenticated'
 
-Vue.use(VueRouter)
+// Vue.use(VueRouter)
 
 const routes = [
   {
@@ -63,7 +63,8 @@ const routes = [
   },
 ]
 
-const router = new VueRouter({
+const router = createRouter({
+  history: createWebHashHistory(),
   routes,
 })
 

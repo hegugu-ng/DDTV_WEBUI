@@ -1,14 +1,12 @@
 <template>
   <div class="room">
-    <el-drawer title="添加房间" :visible.sync="drawer" :direction="direction" :before-close="handleClose" size="60%">
+    <el-drawer title="添加房间" v-model="drawer" :direction="direction" :before-close="handleClose" size="60%">
       <div class="ng-bntgroup">
-        <el-input
-          suffix-icon="el-icon-search"
-          size="mini"
-          v-model="addkeywords"
-          placeholder="搜索 房间号/昵称"
-          clearable
-        ></el-input>
+        <el-input size="small" v-model="addkeywords" placeholder="搜索 房间号/昵称" clearable>
+          <el-icon style="vertical-align: middle;">
+            <search />
+          </el-icon>
+        </el-input>
         <div class="ng-ultitle">找到{{ seview.length }}位主播</div>
       </div>
 
