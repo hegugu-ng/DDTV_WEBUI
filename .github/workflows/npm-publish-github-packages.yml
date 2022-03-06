@@ -27,11 +27,7 @@ jobs:
         run: npm run build
       - name: 压缩
         run: |
-          echo cd ${{ github.workspace }}
           cd ${{ github.workspace }}
-          echo ls
-          ls
-          echo zip -q -r dist.zip ./dist
           zip -q -r dist.zip ./dist
           ls
 
