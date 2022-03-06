@@ -1,13 +1,17 @@
 <template>
   <div>
     <div class="ng-lookup">
-      <el-checkbox size="mini" class="ng-checkboox right10" :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange" border>全选</el-checkbox>
-      <el-input class="ng-roominput right10" suffix-icon="el-icon-search" size="mini" v-model="lp" placeholder="搜索UID/房间号/昵称/标题" clearable></el-input>
-      <el-select class="ng-todo right10" v-model="select" size="mini" placeholder="执行的操作">
+      <el-checkbox size="small" class="ng-checkboox right10" :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange" border>全选</el-checkbox>
+      <el-input class="ng-roominput right10" size="small" v-model="lp" placeholder="搜索UID/房间号/昵称/标题" clearable>
+        <template #prefix>
+          <el-icon class="el-input__icon"><search /></el-icon>
+        </template>
+      </el-input>
+      <el-select class="ng-todo right10" v-model="select" size="small" placeholder="执行的操作">
         <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
         </el-option>
       </el-select>
-      <el-button :disabled="select == ''" size="mini" @click="$emit('requestgroup',select,checkedRoom)">确定</el-button>
+      <el-button :disabled="select == ''" size="small" @click="$emit('requestgroup',select,checkedRoom)">确定</el-button>
     </div>
     <ul class="ng-roomGroup">
       <slot v-if="lp == ''"></slot>
@@ -21,13 +25,13 @@
           <div class="ng-bntgroup">
             <div>
               <div class="ng-fromtitle">基础管理</div>
-              <el-button size="mini" >管理文件</el-button>
-              <el-button size="mini" type="danger" @click="$emit('request','Room_Del',item.uid,null,index)">删除房间</el-button>
+              <el-button size="small" >管理文件</el-button>
+              <el-button size="small" type="danger" @click="$emit('request','Room_Del',item.uid,null,index)">删除房间</el-button>
             </div>
             <div>
             <div class="ng-fromtitle">录制弹幕</div>
               <el-switch
-                size="mini"
+                size="small"
                 v-model="item.IsRecDanmu"
                 active-color="#13ce66"
                 inactive-color="#c6cdc9"
@@ -69,11 +73,9 @@
               <div class="ng-roomtitle">{{ item.title }}</div>
               <div class="ng-hostgroup">
                 <div class="ng-hostname">{{ item.uname }}</div>
-                <i
-                  class="el-icon-setting ng-bticon"
-                  style="margin-right: 7px"
-                  @click="item.show = true"
-                />
+                <el-icon class="ng-bticon" style="margin-right: 7px" @click="item.show = true">
+                  <tools />
+                </el-icon>
                 <el-switch
                   v-model="item.IsAutoRec"
                   active-color="#13ce66"
