@@ -19,9 +19,23 @@ jobs:
           node-version: 16
       - run: npm install
       - run: npm run build
-
-  publish-gpr:
+  zip:
     needs: build
+    runs-on: ubuntu-latest
+    steps: 
+      - name: Zip
+        run: |
+          echo cd ${{ github.workspace }}
+          cd ${{ github.workspace }}
+          echo ls
+          ls
+          echo zip ./dist
+          zip ./dict
+          ls
+
+
+  publish:
+    needs: [zip,build]
     runs-on: ubuntu-latest
     steps:
       - name: Release
