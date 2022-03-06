@@ -1,7 +1,7 @@
 # This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
 # For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
 
-name: vue项目Action
+name: Node.js CI
 
 on:
   push:
@@ -10,32 +10,26 @@ on:
     branches: [ main ]
 
 jobs:
-  check:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2.3.1
-      
-      - name: Use Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: '12.x'
-
-      - name: 代码质量检查
-        user: npm run lint
-
   build:
-    needs: check
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [12.x, 14.x, 16.x]
     steps:
-      - name: 安装依赖
-        run: npm install
+    - name: 即将开始工作
+      run: echo 感谢提交！即将开始工作！
 
-      - name: 编译项目到静态文件
-        run: npm run build
+    - name: Checkout源代码到环境
+      uses: actions/checkout@v2.3.1
 
-  pull:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: 压缩以准备发布
-        run: pwd
+    - name: 代码质量检查
+      user: npm run lint
+    
+    - name: 安装依赖
+      run: npm install
+
+    - name: 编译项目到静态文件
+      run: npm run build
+ 
+    - name: 压缩以准备发布
+      run: pwd
