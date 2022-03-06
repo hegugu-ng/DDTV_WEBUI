@@ -10,7 +10,7 @@ on:
     branches: [ main ]
 
 jobs:
-  检查:
+  check:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -25,8 +25,8 @@ jobs:
     - name: 代码质量检查
       user: npm run lint
 
-  编译:
-    needs: 检查
+  build:
+    needs: check
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -39,8 +39,8 @@ jobs:
       - name: 编译项目到静态文件
         run: npm run build
 
-  发布:
-    needs: 编译
+  pull:
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - name: 压缩以准备发布
