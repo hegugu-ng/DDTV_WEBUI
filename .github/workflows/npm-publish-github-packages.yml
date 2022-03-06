@@ -32,6 +32,9 @@ jobs:
           ls
 
       - name: 发布Release
+        if: github.event_name != 'pull_request'
         uses: softprops/action-gh-release@v1
         with:
+          prerelease: true
+          name: '版本发行'
           files: ${{ github.workspace }}/dist.zip
