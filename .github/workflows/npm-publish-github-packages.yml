@@ -36,5 +36,4 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           prerelease: true
-          name: '版本发行'
           files: ${{ github.workspace }}/dist.zip
