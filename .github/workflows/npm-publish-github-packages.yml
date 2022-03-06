@@ -21,17 +21,20 @@ jobs:
         with:
           node-version: 16
       - name: 代码质量检测
-        run: npm install
+        run: npm run lint
       - name: 安装依赖
         run: npm install
       - name: 编译
         run: npm run build
       - name: 压缩
         run: |
-          echo 定位到工作目录> ${{ github.workspace }}
+          echo cd ${{ github.workspace }}
           cd ${{ github.workspace }}
-          echo 准备将 dist 进行压缩
+          echo ls
+          ls
+          echo zip -q -r dist.zip ./dist
           zip -q -r dist.zip ./dist
+          ls
 
       - name: 发布Release
         uses: softprops/action-gh-release@v1
