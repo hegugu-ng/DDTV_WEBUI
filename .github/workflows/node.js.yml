@@ -26,10 +26,11 @@ jobs:
     - name: 编译
     - run: npm run build
 
-  release:
+  publish:
     needs: build
     runs-on: ubuntu-latest
-
+    
+    steps:
     - name: hi
       uses: echo hello!
 
