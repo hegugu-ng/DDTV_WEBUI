@@ -13,24 +13,27 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+      - name: CheckOut源代码
+        uses: actions/checkout@v2
+
+      - name: 安装node.Js环境
+        uses: actions/setup-node@v2
         with:
           node-version: 16
-      - run: npm install
-      - run: npm run build
-      - name: Zip
+      - name: 代码质量检测
+        run: npm install
+      - name: 安装依赖
+        run: npm install
+      - name: 编译
+        run: npm run build
+      - name: 压缩
         run: |
-          echo cd ${{ github.workspace }}
+          echo 定位到工作目录> ${{ github.workspace }}
           cd ${{ github.workspace }}
-          echo ls
-          ls
-          echo zip -q -r dist.zip ./dist
+          echo 准备将 dist 进行压缩
           zip -q -r dist.zip ./dist
-          ls
 
-      - name: Release
+      - name: 发布Release
         uses: softprops/action-gh-release@v1
-        if: startsWith(github.ref, 'refs/tags/')
         with:
           files: ${{ github.workspace }}/dist.zip
