@@ -19,10 +19,6 @@ jobs:
           node-version: 16
       - run: npm install
       - run: npm run build
-  zip:
-    needs: build
-    runs-on: ubuntu-latest
-    steps: 
       - name: Zip
         run: |
           echo cd ${{ github.workspace }}
@@ -33,13 +29,8 @@ jobs:
           zip -q -r dist.zip ./dist
           ls
 
-
-  publish:
-    needs: [zip,build]
-    runs-on: ubuntu-latest
-    steps:
       - name: Release
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
         with:
-          files: Release.txt
+          files: ${{ github.workspace }}/dist.zip
