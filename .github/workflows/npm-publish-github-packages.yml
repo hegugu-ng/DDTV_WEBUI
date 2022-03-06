@@ -29,8 +29,8 @@ jobs:
           cd ${{ github.workspace }}
           echo ls
           ls
-          echo zip ./dist
-          zip ./dict
+          echo zip -q -r dist.zip ./dist
+          zip -q -r dist.zip ./dist
           ls
 
 
