@@ -26,7 +26,8 @@
             <div>
               <div class="ng-fromtitle">基础管理</div>
               <el-button size="small" >管理文件</el-button>
-              <el-button size="small" type="danger" @click="$emit('request','Room_Del',item.uid,null,index)">删除房间</el-button>
+              <el-button size="small" type="danger" @click="requestApi('Room_Del',item.uid,null,index)">删除房间</el-button>
+              <el-button size="small" type="danger" @click="requestApi('Rec_CancelDownload',item.uid,null,index)">停止录制</el-button>
             </div>
             <div>
             <div class="ng-fromtitle">录制弹幕</div>
@@ -35,7 +36,7 @@
                 v-model="item.IsRecDanmu"
                 active-color="#13ce66"
                 inactive-color="#c6cdc9"
-                @change="$emit('request','Room_DanmuRec',item.uid,item.IsRecDanmu,index)"
+                @change="requestApi('Room_DanmuRec',item.uid,item.IsRecDanmu,index)"
               />
             </div>
           </div>
@@ -45,16 +46,9 @@
           <div class="ng-roomCover" >
             <div class="ng-isLive ng-floatbar" v-if="item.live_status == 1">正在直播</div>
             <div class="ng-floatbar">
-              <el-checkbox
-                class="ng-checkboox"
-                v-model="item.check"
-                @change="handleCheckedRoomChange"
-              ></el-checkbox>
+              <el-checkbox class="ng-checkboox" v-model="item.check" @change="handleCheckedRoomChange"></el-checkbox>
             </div>
-            <div
-              class="ng-clink"
-              :onclick="`window.open('https://live.bilibili.com/${item.room_id}')`"
-            ></div>
+            <div class="ng-clink" :onclick="`window.open('https://live.bilibili.com/${item.room_id}')`"></div>
             <img class="ng-image" referrerPolicy="no-referrer" :src="item.cover_from_user"/>
             <div class="ng-roomType ng-floatbar">{{ item.st }}</div>
           </div>
@@ -63,24 +57,17 @@
               <div class="ng-face">
                 <img class="ng-image" referrerPolicy="no-referrer" :src="item.face"/>
               </div>
-              <!-- <div
-                class="ng-pendant"
-                :style="{ 'background-image': 'url(' + item.pendant + ')' }"
-              ></div> -->
-              <!-- <div class="ng-userOfficial ng-ao-p"></div> -->
             </div>
             <div class="ng-roomnameCard">
               <div class="ng-roomtitle">{{ item.title }}</div>
               <div class="ng-hostgroup">
                 <div class="ng-hostname">{{ item.uname }}</div>
-                <el-icon class="ng-bticon" style="margin-right: 7px" @click="item.show = true">
-                  <tools />
-                </el-icon>
+                <ng-svg icon-class="setting" class="ng-bticon" @click="item.show = true"/>
                 <el-switch
                   v-model="item.IsAutoRec"
                   active-color="#13ce66"
                   inactive-color="#c6cdc9"
-                  @change="$emit('request','Room_AutoRec',item.uid,item.IsAutoRec,index)"
+                  @change="requestApi('Room_AutoRec',item.uid,item.IsAutoRec,index)"
                 ></el-switch>
               </div>
             </div>
@@ -94,6 +81,8 @@
   </div>
 </template>
 <script>
+import { postFormAPI } from "../../api";
+import { room_data } from "../../utils/data_cli";
 export default {
   name: "RoomGroupV2",
   props: ["room"],
@@ -162,6 +151,26 @@ export default {
     }, 10000)
 },
   methods: {
+    requestApi: async function (cmd, uid, data, index) {
+      console.log(this.room[index])
+      this.room[index].load = true;
+      let res = { code: -1 };
+      try {
+        if (cmd == "Room_AutoRec") res = await this.Room_AutoRec(uid, data);
+        if (cmd == "Room_DanmuRec") res = await this.Room_DanmuRec(uid, data);
+        if (cmd == "Room_Del") res = await this.Room_Del(uid);
+        if (cmd == "Rec_CancelDownload") res = await this.Rec_CancelDownload(uid)
+        // 抛出错误
+        if (res.code != 0) throw new Error("服务器返回错误");
+        if (cmd == "Room_Del") this.room.splice(index, 1);
+        if (cmd == "Rec_CancelDownload") this.room.splice(index, 1);
+      } catch (err) {
+        if (cmd == "Room_AutoRec") this.room[index].IsAutoRec = !data;
+        if (cmd == "Room_DanmuRec") this.room[index].IsRecDanmu = !data;
+      } finally {
+        this.room[index].load = false;
+      }
+    },
     formatSeconds(value) {
       var theTime = parseInt(value); // 秒
       var middle = 0; // 分
@@ -271,6 +280,50 @@ export default {
         this.checkAll = false
       }
     },
+    Room_AllInfo: async function () {
+      let res = await postFormAPI("Room_AllInfo");
+      let data = res.data;
+      if (data.code == 0) {
+        await room_data(this, data.data);
+      }
+    },
+    Room_AutoRec: async function (uid, data) {
+      let param = {
+        UID: uid,
+        IsAutoRec: data,
+      };
+      let res = await postFormAPI("Room_AutoRec", param);
+      return res.data;
+    },
+    Room_DanmuRec: async function (uid, data) {
+      let param = {
+        UID: uid,
+        IsRecDanmu: data,
+      };
+      let res = await postFormAPI("Room_DanmuRec", param);
+      return res.data;
+    },
+    Room_Del: async function (uid) {
+      let param = {
+        UID: uid,
+      };
+      let res = await postFormAPI("Room_Del", param);
+      return res.data;
+    },
+    Room_Add: async function(uid){
+      let param = {
+        UID: uid,
+      };
+      let res = await postFormAPI("Room_Add", param);
+      return res.data;
+    },
+    Rec_CancelDownload: async function(uid){
+      let param = {
+        UID: uid,
+      };
+      let res = await postFormAPI("Rec_CancelDownload", param);
+      return res.data;
+    }
   },
 beforeDestroy() {
     if(this.timer) { //如果定时器还在运行 或者直接关闭，不用判断
@@ -284,6 +337,11 @@ beforeDestroy() {
 <style>
 .ng-bntgroup{
   padding: 0px 10px 0px 10px;
+}
+.icon-img{
+  vertical-align: middle;
+  background-repeat: no-repeat;
+  background-image: url('../../assets/icons.png');
 }
 .ng-roomGroup {
   /* position: absolute; */

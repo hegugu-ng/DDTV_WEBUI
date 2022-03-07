@@ -1,8 +1,13 @@
 import { createApp } from 'vue'
 import App from './App.vue'
 
-// 创建app
 const app = createApp(App)
+
+import SvgIcon from '@/components/svgIcon' 
+app.component('ng-svg', SvgIcon)
+
+import './icons'
+
 
 import router from './router'
 import store from './store'
@@ -18,7 +23,6 @@ for (const iconName in ElIconModules) {
     app.component(iconName, item)
   }
 }
-
 app.use(ElementPlus)
 
 

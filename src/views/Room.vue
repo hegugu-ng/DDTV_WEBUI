@@ -1,49 +1,53 @@
 <template>
   <div class="room">
-    <el-drawer title="添加房间" v-model="drawer" :direction="direction" :before-close="handleClose" size="60%">
-      <div class="ng-bntgroup">
-        <el-input size="small" v-model="addkeywords" placeholder="搜索 房间号/昵称" clearable>
-          <el-icon style="vertical-align: middle;">
-            <search />
-          </el-icon>
-        </el-input>
-        <div class="ng-ultitle">找到{{ seview.length }}位主播</div>
-      </div>
-      
+    <el-drawer v-model="drawer" :direction="direction" :before-close="handleClose" size="60%">
+      <template #title>
+        <div>
+          <div>添加房间</div>
+          <el-input style="margin-top: 10px" size="small" v-model="addkeywords" placeholder="搜索 房间号/昵称" clearable>
+            <el-icon style="vertical-align: middle;">
+              <search />
+            </el-icon>
+          </el-input>
+          <div class="ng-ultitle">找到{{ seview.length }}位主播</div>
+        </div>
+      </template>
 
-      <div class="ng-bntgroup" v-if="seview.length != 0">
-        <ul class="ng-userGroup">
-          <li class="ng-user-item" v-for="(item, index) in seview" :key="index" @click="open(item.uname,item.uid,'添加房间',Room_Add)">
-            <div class="ng-user-itemvi">
-              <div class="ng-faceGroup-Big ng-faceflex">
-                <div class="ng-face-Big">
-                  <img
-                    class="ng-image"
-                    referrerPolicy="no-referrer"
-                    :src="`https:${item.uface}@60w_60h_1c_1s.webp`"
-                  />
+      <template class="drawer"  #default>
+        <div class="ng-bntgroup" v-if="seview.length != 0">
+          <ul class="ng-userGroup">
+            <li class="ng-user-item" v-for="(item, index) in seview" :key="index" @click="open(item.uname,item.uid,'添加房间',Room_Add)">
+              <div class="ng-user-itemvi">
+                <div class="ng-faceGroup-Big ng-faceflex">
+                  <div class="ng-face-Big">
+                    <img
+                      class="ng-image"
+                      referrerPolicy="no-referrer"
+                      :src="`https:${item.uface}@60w_60h_1c_1s.webp`"
+                    />
+                  </div>
+                </div>
+                <div class="ng-userinfo">
+                  <div v-html="item.uname" class="ng-username"></div>
+                  <div
+                    class="ng-liveStuat"
+                    :class="item.live_status == 0 ? 'nolive' : 'live'"
+                  >
+                    {{ item.live_status == 0 ? "未开播" : "直播中" }}
+                  </div>
+                  <div class="ng-ps ng-username">
+                    {{ item.cate_name == "" ? "未选择分区" : item.cate_name }}
+                  </div>
                 </div>
               </div>
-              <div class="ng-userinfo">
-                <div v-html="item.uname" class="ng-username"></div>
-                <div
-                  class="ng-liveStuat"
-                  :class="item.live_status == 0 ? 'nolive' : 'live'"
-                >
-                  {{ item.live_status == 0 ? "未开播" : "直播中" }}
-                </div>
-                <div class="ng-ps ng-username">
-                  {{ item.cate_name == "" ? "未选择分区" : item.cate_name }}
-                </div>
+              <div class="iconbar" v-if="item.inlist">
+                <div class="inserver"></div>
               </div>
-            </div>
-            <div class="iconbar" v-if="item.inlist">
-              <div class="inserver"></div>
-            </div>
-          </li>
-        </ul>
-      </div>
-      <el-empty v-else description="没有符合的搜索结果"></el-empty>
+            </li>
+          </ul>
+        </div>
+        <el-empty v-else description="没有符合的搜索结果"></el-empty>
+      </template>
       </el-drawer>
 
     <ng-roomcard :room="room" @request="test" @requestgroup="test2">
@@ -181,15 +185,19 @@ export default {
       return res.data;
     }
   },
-  beforeDestroy() {
-    if(this.timer) { //如果定时器还在运行 或者直接关闭，不用判断
-        clearInterval(this.timer); //关闭
-    }
-}
-
+  destroyed() {
+    clearInterval(this.timer); //关闭
+  }
 };
 </script>
 <style>
+.el-drawer__body{
+  padding: 0!important;
+}
+.el-drawer__header{
+  align-items: flex-start!important;
+  margin-bottom: 10px!important;
+}
 .iconbar {
   position: absolute;
   right: -20px;

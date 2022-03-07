@@ -3,7 +3,7 @@
     <transition name = "fade">
       <div class="banner" v-if="connectStatus.show">
         <div class="content disconnected">
-          <i class="el-icon-link icon"></i>
+          <ng-svg class="icon" icon-class="link"/>
           <div class="msg">{{ connectStatus.msg }}</div>
         </div>
       </div>
