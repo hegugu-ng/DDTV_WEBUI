@@ -5,6 +5,7 @@ import Room from '../views/Room.vue'
 import Setting from '../views/Setting.vue'
 import Login from '../views/Login.vue'
 import Flv from '../views/flv.vue'
+import About from '../views/About.vue'
 
 import {isAuthenticated} from '../utils/authenticated'
 
@@ -19,6 +20,16 @@ const routes = [
       login: true,
       show: true,
       title: '概览'
+    }
+  },
+  {
+    path: '/about',
+    name: 'About',
+    component: About,
+    meta: {
+      login: true,
+      show: true,
+      title: '关于'
     }
   },
   {

@@ -5,15 +5,13 @@
           <div class="bar-item" v-for="(item , count) in info" :key="count" @click="$router.push({path:item.router})">
             <el-tooltip class="item" effect="dark"  :content="item.title" placement="right" :disabled="!navBar">
               <button class="ddtv-ui-bt nav-bt" :style="itemcss">
-                <el-icon class="nav-icon">
-                  <component :is="item.icon" />
-                </el-icon>
+                <ng-svg class="nav-icon" :icon-class="item.icon" />
                 <div :class="item.router == $route.path ?'title navon':'title'" v-show="titleshow">{{ item.title }}</div>
               </button>
             </el-tooltip>
           </div>
         </div>
-        <div class="bar-item" :style="itemcss">
+        <div class="bar-item">
           <button class="ddtv-ui-bt nav-bt" :style="itemcss">
             <el-icon class="nav-icon">
               <more-filled />
@@ -40,11 +38,11 @@ export default {
       itemcss:null,
       titleshow:null,
       info:[
-        {title:"概览",router:'/',icon:'home-filled'},
-        {title:"房间配置",router:'/room',icon:'menu'},
-        {title:"系统设置",router:'/setting',icon:'tools'},
-        {title:"文件管理",router:'/ernjisn',icon:'folder-opened'},
-        {title:"任务管理",router:'/event',icon:'operation'},
+        {title:"概览",router:'/',icon:'home'},
+        {title:"房间配置",router:'/room',icon:'grid'},
+        {title:"系统设置",router:'/setting',icon:'setting'},
+        {title:"文件管理",router:'/ernjisn',icon:'folder'},
+        {title:"任务管理",router:'/event',icon:'rank_fill'},
       ]
     }
   },

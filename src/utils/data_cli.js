@@ -94,6 +94,7 @@ export async function room_data(self, arr) {
             if (ordata.title != ondata.title) self.room[p].title = ordata.title
             if (ordata.IsAutoRec != ondata.IsAutoRec) self.room[p].IsAutoRec = ordata.IsAutoRec
             if (ordata.IsRecDanmu != ondata.IsRecDanmu) self.room[p].IsRecDanmu = ordata.IsRecDanmu
+            if (ordata.IsDownload != ondata.IsDownload) self.room[p].IsDownload = ordata.IsDownload
         }
     }
     // 新增 onlyArr
@@ -121,6 +122,7 @@ export async function room_data(self, arr) {
                     // 关键帧
                     "keyframe": adddata.keyframe,
                     //
+                    "IsDownload":adddata.IsDownload,
                     "st":'',
                     "show": false,
                     "check":false,

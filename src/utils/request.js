@@ -10,7 +10,7 @@ if (window.apiObj.apiUrl == false) host = location.protocol + '//' + location.ho
 
 const service = axios.create({
     baseURL: host,
-    timeout: 5 * 1000,
+    // timeout: 5 * 1000,
     transformRequest: [function (data) {
         // 造一个表单
         let param = new window.FormData();

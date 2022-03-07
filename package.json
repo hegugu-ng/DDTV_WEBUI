@@ -34,6 +34,7 @@
     "axios": "^0.26.0",
     "eslint": "^8.10.0",
     "eslint-plugin-vue": "^8.5.0",
+    "svg-sprite-loader": "^6.0.11",
     "vue-cli-plugin-element": "^1.0.1",
     "vue-template-compiler": "^2.6.14"
   },
