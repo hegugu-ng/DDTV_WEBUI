@@ -1,5 +1,5 @@
 <template>
-  <div class="footbar" v-if="info.show && $router.name == 'Login'">
+  <div class="footbar">
     <a
       class="bartext"
       target="_blank"
@@ -12,10 +12,9 @@
     }}</a>
     <div class="gabeian" target="_blank" :href="info.GA.link" v-if="info.GA.show">
       <img
-        class="icon"
-        width="15px"
-        height="15px"
+        class="gaicon"
         :src="require('../assets/img/gaba.png')"
+        alt="公安备案"
       />
       <a class="text bartext" target="_blank" :href="info.GA.link" >{{ info.GA.text }}</a>
     </div>
@@ -88,8 +87,10 @@ a:active {
   line-height: 20px;
   margin: 0px 0px 0px 5px;
 }
-.gabeian .icon {
+.gaicon {
   float: left;
+  width: 15px;
+  height: 15px
 }
 </style>
 

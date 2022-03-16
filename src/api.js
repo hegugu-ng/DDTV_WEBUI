@@ -19,6 +19,10 @@ export function postFormAPI(url,params=undefined){
 
 
 // get请求
+export function getListAPIv2(url,params){
+    return http.get(url,params)
+}
+
 export function getListAPI(url,params){
     return http.get(`${resquest}/${url}`,params)
 }

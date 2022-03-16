@@ -1,9 +1,9 @@
 import { createApp } from 'vue'
 import App from './App.vue'
-
+import 'default-passive-events'
 const app = createApp(App)
 
-import SvgIcon from '@/components/svgIcon' 
+import SvgIcon from '@/components/svgIcon'
 app.component('ng-svg', SvgIcon)
 
 import './icons'
