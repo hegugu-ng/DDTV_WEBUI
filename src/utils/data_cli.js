@@ -132,7 +132,6 @@ export async function room_data(self, arr) {
 
 
                 }
-            console.log(11)
             self.room.push(pushdata);
         }
     }

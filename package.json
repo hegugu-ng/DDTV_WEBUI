@@ -32,6 +32,7 @@
     "@vue/cli-service": "^5.0.1",
     "ansi-regex": "^6.0.1",
     "axios": "^0.26.0",
+    "compression-webpack-plugin": "^9.2.0",
     "eslint": "^8.10.0",
     "eslint-plugin-vue": "^8.5.0",
     "svg-sprite-loader": "^6.0.11",

@@ -252,7 +252,7 @@ export default {
   display: flex
 }
 .chatGroup{
-  width: 320px;
+  width: 370px;
   background-color: #eaedf4;
 }
 .chat-d{
@@ -269,12 +269,13 @@ export default {
   flex-direction: row-reverse;
 }
 .chat-face{
-  width: 50px;
-  height: 50px;
+  width: 45px;
+  height: 45px;
   border-radius: 50%;
   overflow: hidden;
-  margin-top: 5px;
+  margin-top: 8px;
   flex-shrink: 0;
+  border: 1px solid #e3dddd;
 }
 .chat-msg{
   margin-bottom: 13px;
@@ -293,13 +294,14 @@ export default {
   /* position: absolute; */
   text-align:left;
   padding: 10px 10px 10px 10px;
-  border-radius: 7px;
+  border-radius: 17px;
   display: inline-block;
   background-color: #fff;
 
 }
 .chat-msgbox-right{
-  background-color: #b2e281;
+  background-color: #00a8ff;
+  color: #fff;
 }
 
 .chat-left_triangle {
@@ -309,7 +311,9 @@ export default {
   border-width: 9px;
   border-style: solid;
   border-color: transparent white transparent transparent;
-  top: 25px
+  top: 27px;
+  left: 2px;
+  margin-left: -7px;
 }
 
 .chat-right_triangle {
@@ -318,8 +322,10 @@ export default {
   width: 0px;
   border-width: 9px;
   border-style: solid;
-  border-color: transparent transparent transparent #b2e281;
-  top: 25px
+  border-color: transparent transparent transparent #00a8ff;
+  top: 27px;
+  left: -2px;
+  margin-right: -7px;
 }
 
 body {

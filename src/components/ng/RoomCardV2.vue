@@ -62,7 +62,7 @@
               <div class="ng-roomtitle">{{ item.title }}</div>
               <div class="ng-hostgroup">
                 <div class="ng-hostname">{{ item.uname }}</div>
-                <ng-svg icon-class="setting" class="ng-bticon" @click="item.show = true"/>
+                <ng-svg icon-class="setting2" :size="{width: '22px',height: '22px'}" class="ng-bticon" @click="item.show = true"/>
                 <el-switch
                   v-model="item.IsAutoRec"
                   active-color="#13ce66"
@@ -100,10 +100,6 @@ export default {
         {
           value: "stoprec",
           label: "停止录制",
-        },
-        {
-          value: "deleteandstoprec",
-          label: "删除房间并停止录制",
         },
         {
           value: "delete",

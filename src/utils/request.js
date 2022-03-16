@@ -1,7 +1,7 @@
 import axios from 'axios'
 import Router from '../router'
 import Store from '../store'
-import {clearCookieByKey} from '../utils/cookie'
+import {clearCookie} from '../utils/cookie'
 axios.defaults.withCredentials=true;
 
 let host = window.apiObj.apiUrl
@@ -31,7 +31,12 @@ service.interceptors.request.use(config => {
 
 service.interceptors.response.use(response => {
     // 将json字符串转化为json对象
-    var jsondata = eval('(' + response.data + ')')
+    try {
+        var jsondata = eval('(' + response.data + ')');
+    }
+    catch(err) {
+        var jsondata = response.data;
+    }
     console.debug("[UI] 收到数据返回", jsondata)
     response.data = jsondata
     // 吊销错误消息，推送成功信息
@@ -45,7 +50,7 @@ service.interceptors.response.use(response => {
         }
     }
     if(response.data.code == 6000) {
-        clearCookieByKey("DDTVUser")
+        clearCookie()
         Router.push("/login")
     }
     return response
