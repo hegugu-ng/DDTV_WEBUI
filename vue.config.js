@@ -11,7 +11,7 @@ module.exports = {
     config
     .plugin('html')
     .tap(args => {
-      args[0].title= 'NGWORKS-中文vup创作团队'
+      args[0].title= 'DDTV - 你的最强B站录播机'
       return args
     })
     config.module.rules.delete("svg"); //重点:删除默认配置中处理svg,
