@@ -124,7 +124,6 @@ export async function room_data(self, arr) {
                     //
                     "IsDownload":adddata.IsDownload,
                     "st":'',
-                    "show": false,
                     "check":false,
                     "IsAutoRec":adddata.IsAutoRec,
                     "IsRecDanmu":adddata.IsRecDanmu,

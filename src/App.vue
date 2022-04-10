@@ -69,9 +69,12 @@ export default {
 html{
    touch-action:none;
 }
+div{
+  --font-mono: "Roboto Mono", Menlo, monospace;
+  --font-normal: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, "PingFang SC", "Microsoft YaHei", "\5fae\8f6f\96c5\9ed1", Arial, sans-serif;
+}
 body {
   font-size: 16px;
-  font-family: Roboto, Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;

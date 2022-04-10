@@ -17,9 +17,11 @@
       <slot v-if="lp == ''"></slot>
       <li class="RoomCardV2" v-for="(item, index) in lproom.length == 0 && lp == '' ? room:lproom" :key="index" v-loading="item.load">
 
-        <div class="ng-roomManager" v-if="item.show">
+        <div class="ng-roomManager" :id="'m'+index">
           <div class="ng-configbar">
-            <i class="el-icon-back ng-bticon" @click="item.show = false" />
+            <el-icon class="el-icon-back ng-bticon"  @click="stemo('#m'+index,'0%')">
+              <arrow-left />
+            </el-icon>
             <div class="ng-hostname">{{ item.uname }}</div>
           </div>
           <div class="ng-bntgroup">
@@ -27,17 +29,17 @@
               <div class="ng-fromtitle">基础管理</div>
               <el-button size="small" >管理文件</el-button>
               <el-button size="small" type="danger" @click="requestApi('Room_Del',item.uid,null,index)">删除房间</el-button>
-              <el-button size="small" type="danger" @click="requestApi('Rec_CancelDownload',item.uid,null,index)">停止录制</el-button>
             </div>
             <div>
             <div class="ng-fromtitle">录制弹幕</div>
               <el-switch
                 size="small"
                 v-model="item.IsRecDanmu"
-                active-color="#13ce66"
-                inactive-color="#c6cdc9"
+                active-color="#3bdd83"
+                inactive-color="#a0b5a9"
                 @change="requestApi('Room_DanmuRec',item.uid,item.IsRecDanmu,index)"
               />
+              <el-button v-if="item.IsDownload" style="margin-left: 12px;" size="small" type="danger" @click="requestApi('Rec_CancelDownload',item.uid,null,index)">停止录制</el-button>
             </div>
           </div>
         </div>
@@ -62,11 +64,11 @@
               <div class="ng-roomtitle">{{ item.title }}</div>
               <div class="ng-hostgroup">
                 <div class="ng-hostname">{{ item.uname }}</div>
-                <ng-svg icon-class="setting2" :size="{width: '22px',height: '22px'}" class="ng-bticon" @click="item.show = true"/>
+                <ng-svg icon-class="setting2" :size="{width: '22px',height: '22px'}" class="ng-bticon" @click="stemo('#m'+index,'100%')"/>
                 <el-switch
                   v-model="item.IsAutoRec"
-                  active-color="#13ce66"
-                  inactive-color="#c6cdc9"
+                  active-color="#3bdd83"
+                  inactive-color="#6b997f"
                   @change="requestApi('Room_AutoRec',item.uid,item.IsAutoRec,index)"
                 ></el-switch>
               </div>
@@ -83,6 +85,7 @@
 <script>
 import { postFormAPI } from "../../api";
 import { room_data } from "../../utils/data_cli";
+import TweenLite from 'gsap';
 export default {
   name: "RoomGroupV2",
   props: ["room"],
@@ -147,6 +150,9 @@ export default {
     }, 10000)
 },
   methods: {
+    stemo:function(id,height){
+      TweenLite.to(id,{height:height})
+    },
     requestApi: async function (cmd, uid, data, index) {
       console.log(this.room[index])
       this.room[index].load = true;
@@ -276,6 +282,7 @@ export default {
         this.checkAll = false
       }
     },
+
     Room_AllInfo: async function () {
       let res = await postFormAPI("Room_AllInfo");
       let data = res.data;
@@ -371,7 +378,7 @@ beforeDestroy() {
 .ng-fromtitle{
   font-size: .8rem;
   padding: .5rem 0rem .5rem 0rem;
-  color: #888;
+  color: #161313;;
 }
 .RoomCardV2 {
   display: inline-block;
@@ -389,7 +396,7 @@ beforeDestroy() {
   transition: transform 0.3s cubic-bezier(0.63, -0.01, 0.59, 1);
 }
 .ng-roomManager {
-  height: 80%;
+  height: 0%;
   width: 100%;
   position: absolute;
   z-index: 101;
@@ -397,7 +404,8 @@ beforeDestroy() {
   bottom: 0;
   left: 0;
   right: 0;
-  background: rgb(255, 255, 255);
+  /* background: rgb(255, 255, 255); */
+  backdrop-filter: blur(10px);
   overflow: hidden;
 }
 .ng-configbar {
@@ -515,7 +523,7 @@ beforeDestroy() {
   color: #333;
   text-overflow: ellipsis;
   overflow: hidden;
-  margin-bottom: 8px;
+  /* margin-bottom: 8px; */
   display: -webkit-box;
   -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
@@ -527,8 +535,8 @@ beforeDestroy() {
   align-items: center;
 }
 .ng-hostname {
-  font-size: 14px;
-  color: #999;
+  font-size: 0.6em;
+  color: #3b2929;
   margin-top: 1px;
   text-overflow: ellipsis;
   overflow: hidden;

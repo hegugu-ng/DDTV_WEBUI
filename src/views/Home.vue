@@ -38,7 +38,8 @@ export default {
   },
   data() {
     return {
-      monitor:window.apiObj.monitor,
+      monitor:false,
+      // monitor:window.apiObj.monitor,
       mount: window.apiObj.mount,
       lp: "",
       options: [
@@ -89,8 +90,8 @@ export default {
       this.CpuUsage();
       this.MemUsage();
       this.Lan();
-      this.UpdateDataView();
     }
+    this.UpdateDataView();
     this.UpdateRoomView();
   },
   methods: {
@@ -183,6 +184,7 @@ export default {
       }
       return res;
     },
+
     UpdateDataView: async function () {
       let data = await this.System_Resources();
       let room = await this.Rec_RecordingInfo_Lite();
@@ -193,7 +195,8 @@ export default {
         dl_all += item.TotalDownloadCount;
       }
       let HDD = {};
-      if (data.Platform != "Linux") HDD = response.data.Package[0].HDDInfo[0];
+      console.log(data)
+      if (data.Platform != "Linux") HDD = data.HDDInfo[0];
       else {
         let dish = data.HDDInfo;
         var dishlen = dish.length;
@@ -249,6 +252,7 @@ export default {
       return res.data.data;
     },
     System_Resources: async function () {
+      console.log(14444)
       let res = await postFormAPI("System_Resources");
       return res.data.data;
     },

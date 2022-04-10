@@ -30,13 +30,9 @@ service.interceptors.request.use(config => {
 })
 
 service.interceptors.response.use(response => {
-    // 将json字符串转化为json对象
-    try {
-        var jsondata = eval('(' + response.data + ')');
-    }
-    catch(err) {
-        var jsondata = response.data;
-    }
+
+    var jsondata = response.data;
+
     console.debug("[UI] 收到数据返回", jsondata)
     response.data = jsondata
     // 吊销错误消息，推送成功信息
