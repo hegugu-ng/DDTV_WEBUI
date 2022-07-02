@@ -38,8 +38,7 @@ export default {
   },
   data() {
     return {
-      monitor:false,
-      // monitor:window.apiObj.monitor,
+      monitor:window.apiObj.monitor,
       mount: window.apiObj.mount,
       lp: "",
       options: [

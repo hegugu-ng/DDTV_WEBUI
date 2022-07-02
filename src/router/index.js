@@ -6,6 +6,8 @@ import Setting from '../views/Setting.vue'
 import Login from '../views/Login.vue'
 import Flv from '../views/flv.vue'
 import About from '../views/About.vue'
+import Files from '../views/Files.vue'
+import geetest from '../views/geetest.vue'
 
 import {isAuthenticated} from '../utils/authenticated'
 
@@ -43,6 +45,16 @@ const routes = [
     }
   },
   {
+    path: '/files/:path(.*)',
+    name: 'Files',
+    component: Files,
+    meta: {
+      login: true,
+      show: true,
+      title: '文件管理'
+    }
+  },
+  {
     path: '/setting',
     name: 'Setting',
     component: Setting,
@@ -60,6 +72,16 @@ const routes = [
       login: false,
       show: false,
       title: '登录'
+    }
+  },
+  {
+    path: '/gt',
+    name: 'gt',
+    component: geetest,
+    meta: {
+      login: false,
+      show: false,
+      title: '极验验证'
     }
   },
   {
@@ -82,15 +104,16 @@ const router = createRouter({
 
 router.beforeEach(async (to, from, next) => {
   // 动态添加 title 后面拼接一个名称
-  document.title = `DDTV - ${to.meta.title}`
+  document.title = `NGWORKS支撑系统 - ${to.meta.title}`
   let Authenticated = isAuthenticated()
   // 如果用户登录了还想要回到登录页 取消跳转
   if (to.path == '/login' && Authenticated) {
     next({ path: from.path })
   }
-  // 判断鉴权  逻辑:如果在除了 Login 的其他页面 且没有登录状态的 定向到登录页
-  if (to.name !== 'Login' && !Authenticated) next({path: '/login' })
-  else next()
+  // // 判断鉴权  逻辑:如果在除了 Login 的其他页面 且没有登录状态的 定向到登录页
+  // if (to.name !== 'Login' && to.name !== 'geetest' && !Authenticated) next({path: '/login' })
+  // else 
+  next()
 })
 
 

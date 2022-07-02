@@ -5,16 +5,27 @@
         <i class="el-icon-setting ng-network" @click="atinput = !atinput"></i>
         <div class="title">欢迎回来！</div>
         <div class="rd-title">登录以继续</div>
-        <form>
+        <form @submit.prevent="onSubmit">
           <div class="input-title">用户名</div>
-          <input class="ng-input" v-model="login.loginname" placeholder="请输入用户名" autocomplete="username"/>
+          <input
+            class="ng-input"
+            v-model="login.loginname"
+            placeholder="请输入用户名"
+            autocomplete="username"
+          />
           <div class="input-title">密码</div>
-          <input class="ng-input" type="password" v-model="login.password" placeholder="请输入密码" autocomplete="current-password" @keyup.enter="userlogin()"/>
+          <input
+            class="ng-input"
+            type="password"
+            v-model="login.password"
+            placeholder="请输入密码"
+            autocomplete="current-password"
+          />
           <div style="display: flex; align-items: center; margin-bottom: 10px">
             <input type="checkbox" id="save7days" v-model="login.save7days" />
             <label class="ng-check-ladel" for="save7days">七天内免登录</label>
           </div>
-          <button class="ng-login" @click.prevent="userlogin()"  >登录</button>
+          <button class="ng-login" id="btn">登录</button>
         </form>
       </div>
       <div v-else>
@@ -44,15 +55,15 @@
   </div>
 </template>
 <script>
-import { postFormAPI } from "../api";
+import { postFormAPI, getListAPIv2,postListAPIv2 } from "../api";
+import gt from "../utils/gt";
 export default {
   name: "Room",
-  components: {
-  },
+  components: {},
   data() {
     return {
       atinput: true,
-      load:false,
+      load: false,
       login: {
         loginname: null,
         password: null,
@@ -64,6 +75,41 @@ export default {
         save: true,
       },
     };
+  },
+  mounted: async function () {
+    let loginfun = this.userlogin;
+    console.log("gt", gt);
+    let res = await getListAPIv2(`/register?t=${new Date().getTime()}`);
+    let gt_ = res.data.gt;
+    let challenge = res.data.challenge;
+    let offline = res.data.success;
+    let new_captcha = res.data.new_captcha;
+    var btn = document.getElementById("btn");
+    let gt_config = {
+      product: "bind",
+      gt: gt_,
+      challenge: challenge,
+      offline: !offline,
+      new_captcha: new_captcha,
+    };
+    let handle = function (captchaObj) {
+      captchaObj
+        .onReady(function () {
+          console.log("极验已经准备好了");
+        })
+        .onSuccess(function () {
+          var result = captchaObj.getValidate();
+          loginfun(result)
+        });
+      // .onError(function () {
+      //   console.log("验证失败")
+      // });
+      btn.onclick = function () {
+        captchaObj.verify();
+      };
+    };
+
+    initGeetest(gt_config, handle);
   },
   methods: {
     /**
@@ -81,15 +127,16 @@ export default {
     /**
      * 本函数会进行一个Cookie保存操作
      */
-    saveCookies(Cookie){
-      if(this.login.save7days){
+    saveCookies(Cookie) {
+      let CookieDomain = window.apiObj.cookieDomain 
+      if (this.login.save7days) {
         var d = new Date();
-        d.setTime(d.getTime()+(7*24*60*60*1000));
+        d.setTime(d.getTime() + 7 * 24 * 60 * 60 * 1000);
         var expires = d.toGMTString();
-        document.cookie=`token=${Cookie}; expires=${expires}; path=/`;
-        console.log(`token=${Cookie}; expires=${expires}; path=/`)
-      }else{
-        document.cookie=`token=${Cookie}; path=/`;
+        document.cookie = `DDTVUser=${Cookie};domain=${CookieDomain};expires=${expires}; path=/`;
+        console.log(`DDTVUser=${Cookie};domain=${CookieDomain};expires=${expires}; path=/`);
+      } else {
+        document.cookie = `DDTVUser=${Cookie};domain=${CookieDomain};path=/`;
       }
     },
     /**
@@ -98,23 +145,32 @@ export default {
      * @param {loginname} 登录名  str
      * @param {password}  密码  str
      */
-    userlogin: async function () {
+    userlogin: async function (result) {
       // 构建请求参数
       this.load = true;
+      if (!result) {
+        this.openWindows(res.data.massage, "登录出现问题");
+        this.load = false;
+        return
+      }
       let param = {
         UserName: this.login.loginname,
         Password: this.login.password,
-        CookieExpires:this.login.save7days
+        CookieExpires: this.login.save7days,
+        geetest_challenge: result.geetest_challenge,
+        geetest_validate: result.geetest_validate,
+        geetest_seccode: result.geetest_seccode,
       };
       // 发请求
       try {
-        let res = await postFormAPI("Login", param);
-        if (res.data.code != 0)
+        let res = await postListAPIv2("/apiv2/Login", param);
+        if (res.data.code != 0){
           this.openWindows(res.data.massage, "登录出现问题");
+        }
         else {
-          // this.saveCookies(res.data.data.Cookie)
+          this.saveCookies(res.data.data.Cookie)
           // console.log("跳转路由")
-          this.$router.push("/")
+          this.$router.push("/");
         }
       } catch (err) {
         console.error("登录请求出错，请检查网络连接与网站配置。");
