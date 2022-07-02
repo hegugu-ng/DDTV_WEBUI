@@ -14,10 +14,9 @@ export function postFormAPI(url,params=undefined){
     else params = {'CMD': url}
     return http.post(`${resquest}/${url}`,params)
 }
-
-
-
-
+export function postListAPIv2(url,params=undefined){
+    return http.post(url,params)
+}
 // get请求
 export function getListAPIv2(url,params){
     return http.get(url,params)
