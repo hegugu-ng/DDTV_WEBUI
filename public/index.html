@@ -1,27 +1,41 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
+
+  <!DOCTYPE html>
+  <html lang="zh-CN">
+
   <head>
     <meta charset="utf-8">
-    <meta
-      name="description"
-      content="NGWORKS是中文VUP创作团队,渴望以专业化的创作流程,给您带来欢乐。"
-    />
-    <meta
-      name="keywords"
-      content="NGWORKS,ngworks,VUP,禾咕咕,虚拟主播,虚拟偶像"
-    />
+    <meta name="description" content="NGWORKS是中文VUP创作团队,渴望以专业化的创作流程,给您带来欢乐。" />
+    <meta name="keywords" content="NGWORKS,ngworks,VUP,禾咕咕,虚拟主播,虚拟偶像" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <script src="./config/config.js"></script>
     <script src="./config/barinfo.js"></script>
     <link rel="icon" href="<%= BASE_URL %>favicon.ico">
-    <title><%= htmlWebpackPlugin.options.title %></title>
+    <title>
+      <%= htmlWebpackPlugin.options.title %>
+    </title>
+    <style>
+      #shuiyin {
+        position: fixed !important;
+        inset: 0px !important;
+        overflow: hidden !important;
+        display: block !important;
+        opacity: 1 !important;
+        z-index: 10001 !important;
+        pointer-events: none !important;
+        background: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MjBweCIgaGVpZ2h0PSIyMjBweCI+CiAgICAgICAgICAgICAgICA8dGV4dCB4PSIwcHgiIHk9IjE1MHB4IiBkeT0iMTRweCIKICAgICAgICAgICAgICAgICAgICB0ZXh0LWFuY2hvcj0ic3RhcnQiCiAgICAgICAgICAgICAgICAgICAgc3Ryb2tlPSIjMTg2M0ZGIgogICAgICAgICAgICAgICAgICAgIHN0cm9rZS1vcGFjaXR5PSIwLjEiCiAgICAgICAgICAgICAgICAgICAgZmlsbD0ibm9uZSIKICAgICAgICAgICAgICAgICAgICB0cmFuc2Zvcm09InJvdGF0ZSgtMTUsMCAxNTApIgogICAgICAgICAgICAgICAgICAgIGZvbnQtd2VpZ2h0PSIxMDAiCiAgICAgICAgICAgICAgICAgICAgZm9udC1zaXplPSIxNCIKICAgICAgICAgICAgICAgICAgICBmb250LWZhbWlseT0ibWljcm9zb2Z0IHlhaGUiCiAgICAgICAgICAgICAgICAgICAgPgogICAgICAgICAgICAgICAgICAgIEREVFYgV0VCIFVJIOa1i+ivleeJiOacrFYxLjIuMiBCeSBOR1dPUktTCiAgICAgICAgICAgICAgICA8L3RleHQ+CiAgICAgICAgICAgIDwvc3ZnPg==);
+      }
+    </style>
   </head>
+
   <body>
     <noscript>
-      <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+      <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled.
+          Please enable it to continue.</strong>
     </noscript>
+    <div id="shuiyin"></div>
     <div id="app"></div>
     <!-- built files will be auto injected -->
   </body>
-</html>
+
+  </html>

@@ -2,20 +2,18 @@
     <div class="nav" :style="{width:dw + 'px'}" id="navbar" v-show="$route.meta.show &&  screenWidth> 1024" >
         <div class="logo"></div>
         <div class="router-bar">
-          <div class="bar-item" v-for="(item , count) in info" :key="count" @click="$router.push({path:item.router})">
+          <div  v-for="(item , count) in info" :key="count" @click="$router.push({path:item.router})" :class="item.router == $route.path ?'bar-item navon':'bar-item'">
             <el-tooltip class="item" effect="dark"  :content="item.title" placement="right" :disabled="!navBar">
               <button class="ddtv-ui-bt nav-bt" :style="itemcss">
                 <ng-svg class="nav-icon" :icon-class="item.icon" />
-                <div :class="item.router == $route.path ?'title navon':'title'" v-show="titleshow">{{ item.title }}</div>
+                <div class="title" v-show="titleshow">{{ item.title }}</div>
               </button>
             </el-tooltip>
           </div>
         </div>
-        <div class="bar-item">
+        <div :class="'/about' == $route.path ?'bar-item navon':'bar-item'" @click="$router.push({path:'/about'})">
           <button class="ddtv-ui-bt nav-bt" :style="itemcss">
-            <el-icon class="nav-icon">
-              <more-filled />
-            </el-icon>
+            <ng-svg class="nav-icon" icon-class="more" />
             <div class="title" v-if="titleshow">更多</div>
           </button>
         </div>
@@ -39,7 +37,7 @@ export default {
       titleshow:null,
       info:[
         {title:"概览",router:'/',icon:'home'},
-        {title:"房间配置",router:'/room',icon:'grid'},
+        {title:"房间配置",router:'/room',icon:'roomsettimg'},
         {title:"系统设置",router:'/setting',icon:'setting'},
         {title:"文件管理",router:'/files',icon:'folder'},
         {title:"任务管理",router:'/event',icon:'rank_fill'},
@@ -48,7 +46,7 @@ export default {
   },
   beforeMount() {  
     // 在挂载页面前 规定起始宽度，避免闪烁
-    if (document.documentElement.clientWidth < 1300) this.NavOff()
+    if (document.documentElement.clientWidth < 1400) this.NavOff()
     else this.NavOn()
   }, 
   watch:{
@@ -82,14 +80,15 @@ export default {
 
 <style scoped>
 .nav{
-  width: 220px;
+  width: 208px;
   z-index: 2;
-  background-color: #fff;
+  background-color: #05072b;
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
-  box-shadow: 2px 0 10px rgb(0 0 0 / 10%);
-  border-right: 1px solid #e6e4e4;
+  /* box-shadow: 2px 0 10px rgb(0 0 0 / 10%); */
+  /* border-right: 1px solid #e6e4e4; */
+  box-shadow: 2px 0 6px 0 rgb(0 21 41 / 35%);
 }
 .view {
   flex: auto 1 1;
@@ -111,6 +110,7 @@ export default {
 }
 .bar-item{
   height: 44px;
+  transition: .5s ease-in-out;
   /* background-color: darkseagreen; */
 }
 .nav-bt{
@@ -124,7 +124,7 @@ export default {
   padding:0;
 }
 .nav-bt:hover{
-  background: #ebf8f3;
+  background: #001b54;
 }
 .nav-icon{
   font-size: 25px;
@@ -132,9 +132,11 @@ export default {
 .title{
   flex-shrink: 0;
   font-size: 16px;
-  padding-left: 7px;
+  padding-left: 15px;
+  color: #fff;
 }
 .navon{
-  color: #42b983;
+  transition: .5s ease-in-out;
+  background-color: #1863ff;
 }
 </style>

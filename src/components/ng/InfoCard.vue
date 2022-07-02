@@ -18,9 +18,11 @@ export default {
 <style>
 .ng-info-card {
   background-color: #fff;
-  border: 1px solid #e5dbdb;
-  border-radius: 5px;
+  border: 1px solid #ebeef5;  
+  border-radius: 10px;
   padding: 20px;
+  box-shadow: 0 2px 12px 0 rgb(0 0 0 / 10%);
+  color: #242f57;
 }
 .ng-info-card > .title {
   display: flex;
@@ -34,6 +36,6 @@ export default {
 }
 .ng-info-card > .title > .date {
   font-size: 13px;
-  color: #d3d3d3;
+  /* color: #d3d3d3; */
 }
 </style>
