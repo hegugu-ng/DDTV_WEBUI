@@ -29,8 +29,8 @@ const routes = [
     name: 'About',
     component: About,
     meta: {
-      login: true,
-      show: true,
+      login: false,
+      show: false,
       title: '关于'
     }
   },
