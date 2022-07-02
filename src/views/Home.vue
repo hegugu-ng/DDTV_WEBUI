@@ -14,7 +14,7 @@
       </div>
     </div>
 
-    <ng-infocard title="录制中房间管理" update="刚刚" style="margin-top: 1vh">
+    <ng-infocard title="录制中房间管理" update="刚刚" style="margin-top: 3vh">
       <ng-roomcard :room="room" @requestApi="requestApi"></ng-roomcard>
     </ng-infocard>
   </div>
@@ -267,7 +267,7 @@ export default {
 <style>
 .home {
   padding: 10px;
-  background-color: #f1f1f1f1;
+  /* background-color: #fff; */
 }
 .ng-table-group{
   display:flex;

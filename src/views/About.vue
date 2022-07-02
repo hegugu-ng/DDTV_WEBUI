@@ -85,6 +85,20 @@ export default {
         },
         {
           event:"message",
+          face:"https://i2.hdslb.com/bfs/face/c21f7053c896130d10ca31cd362b4d83708ca657.jpg@240w_240h_1c_1s.webp",
+          nick:"蓝的温柔像羽毛",
+          message:"#",
+          type: 'left'
+        },
+        {
+          event:"message",
+          face:"https://i2.hdslb.com/bfs/face/c21f7053c896130d10ca31cd362b4d83708ca657.jpg@240w_240h_1c_1s.webp",
+          nick:"蓝的温柔像羽毛",
+          message:"你知道我要查什么的",
+          type: 'left'
+        },
+        {
+          event:"message",
           face: "https://i1.hdslb.com/bfs/face/2f30ce11b11d2412c94d417d1e13899f575ab827.jpg@240w_240h_1c_1s.webp",
           nick: "禾咕咕Official",
           message: "在写了在写了",
