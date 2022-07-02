@@ -2,7 +2,7 @@
     <div class="nav" :style="{width:dw + 'px'}" id="navbar" v-show="$route.meta.show &&  screenWidth> 1024" >
         <div class="logo"></div>
         <div class="router-bar">
-          <div  v-for="(item , count) in info" :key="count" @click="$router.push({path:item.router})" :class="item.router == $route.path ?'bar-item navon':'bar-item'">
+          <div class="bar-item"  v-for="(item , count) in info" :key="count" @click="$router.push({path:item.router})" :style="item.router == $route.path ?'background-color: #1863ff;':''">
             <el-tooltip class="item" effect="dark"  :content="item.title" placement="right" :disabled="!navBar">
               <button class="ddtv-ui-bt nav-bt" :style="itemcss">
                 <ng-svg class="nav-icon" :icon-class="item.icon" />
@@ -109,9 +109,12 @@ export default {
   flex-shrink: 0
 }
 .bar-item{
-  height: 44px;
-  transition: .5s ease-in-out;
+  height: 56px;
+  transition: .25s ease-in-out;
   /* background-color: darkseagreen; */
+}
+.bar-item:hover{
+  background: #001b54;
 }
 .nav-bt{
   width: 100%;
@@ -123,9 +126,6 @@ export default {
   align-items: center;
   padding:0;
 }
-.nav-bt:hover{
-  background: #001b54;
-}
 .nav-icon{
   font-size: 25px;
 }
@@ -134,9 +134,5 @@ export default {
   font-size: 16px;
   padding-left: 15px;
   color: #fff;
-}
-.navon{
-  transition: .5s ease-in-out;
-  background-color: #1863ff;
 }
 </style>

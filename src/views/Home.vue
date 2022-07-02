@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <!--核心数据-->
-    <ng-infocard title="核心数据" update="23秒前">
+    <ng-infocard title="核心数据" :update="coreUpdateTime_time">
       <ng-datagroup :CardItem="CoreData"></ng-datagroup>
     </ng-infocard>
     <div class="ng-table-group" v-if="monitor">
@@ -14,7 +14,7 @@
       </div>
     </div>
 
-    <ng-infocard title="录制中房间管理" update="刚刚" style="margin-top: 3vh">
+    <ng-infocard title="录制中房间管理" :update="liveUpdateTime_time" style="margin-top: 3vh">
       <ng-roomcard :room="room" @requestApi="requestApi"></ng-roomcard>
     </ng-infocard>
   </div>
@@ -40,6 +40,10 @@ export default {
     return {
       monitor:window.apiObj.monitor,
       mount: window.apiObj.mount,
+      coreUpdateTime: null,
+      coreUpdateTime_time :"",
+      liveUpdateTime: null,
+      liveUpdateTime_time :"",
       lp: "",
       options: [
         {
@@ -82,6 +86,9 @@ export default {
         { title: "流量", key: "ll" },
         { title: "开播人数", key: "live" },
       ],
+      timer_core: null,
+      timer_liveroom: null,
+      updateTimeManger: null,
     };
   },
   mounted: function () {
@@ -90,10 +97,46 @@ export default {
       this.MemUsage();
       this.Lan();
     }
+    // this.timer_core = (() => {    this.UpdateDataView }, 1000);
+    this.timer_core = setInterval(this.UpdateDataView, 30000);
+    this.timer_liveroom = setInterval(this.UpdateRoomView, 20000);
+    this.updateTimeManger = setInterval(this.Updatetime, 2000);
     this.UpdateDataView();
     this.UpdateRoomView();
   },
+  beforeUnmount() {
+    clearInterval(this.timer_core);
+    clearInterval(this.timer_liveroom);
+    console.log("beforeUnmount");
+  },
   methods: {
+    isNull(value) {
+      if (!value && typeof value != "undefined" && value != 0) {
+          return true;
+      } else {
+          return false;
+      }
+    },
+    Updatetime(){
+      var time = new Date();
+      let NowTime = time.getTime();
+      let coreUp,liveUp;
+      if (this.isNull(this.coreUpdateTime)) coreUp = "更新中";
+      else coreUp = Math.round((NowTime - this.coreUpdateTime)/1000);
+
+      if (this.isNull(this.liveUpdateTime)) coreUp = "更新中";
+      else liveUp = Math.round((NowTime - this.liveUpdateTime)/1000);
+
+      if (coreUp < 8) coreUp = "刚刚";
+      else coreUp = coreUp + "秒前更新"
+
+      if (liveUp < 8) liveUp = "刚刚";
+      else liveUp = liveUp + "秒前更新"
+
+
+      this.coreUpdateTime_time  = coreUp;
+      this.liveUpdateTime_time = liveUp;
+    },
     requestApi(type, roomid, data) {
       console.log(type, roomid, data);
       // 分配一下
@@ -185,6 +228,7 @@ export default {
     },
 
     UpdateDataView: async function () {
+      this.coreUpdateTime_time = "更新中";
       let data = await this.System_Resources();
       let room = await this.Rec_RecordingInfo_Lite();
       let allroom = await this.Room_AllInfo();
@@ -194,7 +238,6 @@ export default {
         dl_all += item.TotalDownloadCount;
       }
       let HDD = {};
-      console.log(data)
       if (data.Platform != "Linux") HDD = data.HDDInfo[0];
       else {
         let dish = data.HDDInfo;
@@ -225,8 +268,11 @@ export default {
               : (dl_all / 1000000).toFixed(2) + "MB",
         },
       ];
+      var time = new Date();
+      this.coreUpdateTime = time.getTime(); //获取当前时间,毫秒数
     },
     UpdateRoomView: async function () {
+      this.liveUpdateTime_time = "更新中";
       let liveroom = await this.Rec_RecordingInfo_Lite();
       let allroom = await this.Room_AllInfo();
       let datalen = liveroom.length,
@@ -245,6 +291,8 @@ export default {
         }
       }
       await room_data(this, liveroomdata);
+      var time = new Date();
+      this.liveUpdateTime = time.getTime();
     },
     Room_AllInfo: async function () {
       let res = await postFormAPI("Room_AllInfo");
