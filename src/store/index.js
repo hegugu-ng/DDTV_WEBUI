@@ -15,11 +15,7 @@ const store = createStore({
       },
       beforestatus: null,
       // 日志
-      log: [{
-        "level": 'info',
-        "msg": '欢迎使用DDTV欢迎使用DDTV欢迎使用DDTV欢迎使用DDTV欢迎使用DDTV欢迎使用DDTV欢迎使用DDTV欢迎使用DDTV',
-        "time": '2022/1/4 下午6:36:49'
-      }],
+      log: [],
       screenWidth: document.documentElement.clientWidth,
       // 正在直播的房间
       Is_live: [],
@@ -35,7 +31,12 @@ const store = createStore({
     navBar: state => state.screenWidth < 1300 ? true : false,
   },
   mutations: {
-    addLog: (state, playload) => state.log.push(playload),
+    addLog(state, playload) {
+      var date = new Date();
+      var nowStr = date.toLocaleString('zh', { hour12: true });
+      var playload = { "level": playload.lv, "msg": playload.msg, "time": nowStr };
+      state.log.push(playload);
+    },
     clearLog: state => state.log = [],
     setStatus: (state, playload) => state.connectStatus = playload,
     screenWidth: (state, playload) => state.screenWidth = playload,

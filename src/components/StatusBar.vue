@@ -6,22 +6,13 @@
         <div class="pane-toolbar">
           <div class="title">日志</div>
           <button type="button" class="ddtv-ui-bt toolbar-button flat icon-button" @click="ToBottom('#logsbox');Scroll = true">
-            <div class="bt-content">
-              <i class="el-icon-download"></i>
-              <span class="default-slot"></span>
-            </div>
+            <el-icon :size="15"><Top /></el-icon>
           </button>
           <button type="button" class="ddtv-ui-bt toolbar-button flat icon-button" @click="clearLog()">
-            <div class="bt-content">
-              <i class="el-icon-delete-solid"></i>
-              <span class="default-slot"></span>
-            </div>
+            <el-icon :size="15"><Delete /></el-icon>
           </button>
           <button type="button" class="ddtv-ui-bt toolbar-button flat icon-button" @click="show = false">
-            <div class="bt-content">
-              <i class="el-icon-close"></i>
-              <span class="default-slot"></span>
-            </div>
+            <el-icon :size="15"><Close /></el-icon>
           </button>
         </div>
         <div class="logs" id="logsbox" @mousewheel="Scroll = false">
@@ -37,26 +28,24 @@
     </transition>
     <div class="content">
       <div class="section action current-project">
-        <i class="el-icon-s-home icon-bar"></i>
+        <el-icon :size="15"><HomeFilled /></el-icon>
       </div>
       <div class="section action console-log"  @click="show = !show">
         <i class="el-icon-s-order icon-bar"></i>
         <div class="massgelist">
-          <transition-group name="slide-fade" appear>
-            <div class="logger-message" v-for="(item,count) in logpool" :key="count" :v-if="false">
-              <ng-lever :level="item.level" :levelshow="item.level != null ? true:false"></ng-lever>
-              <div class="message" :class="item.level != null ? 'm12':null">{{ item.msg }}</div>
-              <div class="date" v-if="item.time">{{ item.time }}</div>
-            </div>
-          </transition-group>
+          <div class="logger-message a-brush-move-in-top" style="padding: 2px 2px;" v-for="(item,count) in logpool" :key="count" :v-if="false">
+            <ng-lever :level="item.level" :levelshow="item.level != null ? true:false"></ng-lever>
+            <div class="message"  :class="item.level != null ? 'm12':null">{{ item.msg }}</div>
+            <div class="date" v-if="item.time">{{ item.time }}</div>
+          </div>
         </div>
 
       </div>
       <div class="section action current-project" >
-        <i class="el-icon-question icon-bar"></i>
+        <el-icon :size="15"><ChatLineRound /></el-icon>
       </div>
       <div class="section action current-project" @click="reload()">
-        <i class="el-icon-refresh icon-bar"></i>
+        <el-icon :size="15"><Refresh /></el-icon>
       </div>
     </div>
   </div>
@@ -89,12 +78,10 @@ export default {
       // 当用户删除了日志
       if (val == null) val = nulldata;
       if (oldval == null) oldval = nulldata;
-      this.logpool=[oldval,val];
+      // this.logpool=[oldval];
       // 当显示日志模块的时候，同时符合自动滚动的条件，进行自动滚动
       if (this.Scroll && this.show) this.ToBottom('#logsbox');
-      setTimeout(() => {
-        this.logpool=[val];
-      },150)   
+      this.logpool=[val];
       this.logprint(val.level,val.msg,val.time)
     },
     // 监听用户触发日志模块的情况并处理
@@ -115,7 +102,7 @@ export default {
     },
     logprint(level,msg,time){
       // 将日志打印到控制台
-      let data = "后端日志：" + msg + "  - ["+time+"]";
+      let data = "[UI]：" + msg + "  - ["+time+"]";
       if (level == "info" || level == null) console.info(data);
       if (level == "error") console.error(data);
       if (level == "warn") console.warn(data);
@@ -133,6 +120,20 @@ export default {
 </script>
 
 <style scoped>
+.a-brush-move-in-top{
+  animation: brush-move-in-top cubic-bezier(.22,.58,.12,.98) .4s;
+}
+@keyframes brush-move-in-top {
+    from {
+        opacity: 0;
+        transform: translate(0,20px)
+    }
+
+    to {
+        opacity: 1;
+        transform: translate(0,0)
+    }
+}
 .ddtv-ui-bt.icon-button {
   padding: 0;
   width: 32px;
@@ -184,7 +185,7 @@ export default {
   align-items: baseline;
   font-family: Roboto Mono,monospace;
   box-sizing: border-box;
-  padding: 2px 4px;
+  padding: 2px 20px;
   flex: 100% 1 1;
 }
 .pane-toolbar {
@@ -221,7 +222,7 @@ export default {
 }
 .logs {
   grid-area: logs;
-  padding: 0 16px;
+  /* padding: 0 16px; */
   overflow-x: hidden;
   overflow-y: auto;
 }
@@ -251,7 +252,7 @@ export default {
   opacity: 0;
 }
 .logger-view .logger-message:hover {
-    background: rgb(66 185 131 / 10%);
+    background: rgba(107, 88, 111, 0.1);
 }
 .status-bar .section.action {
     -webkit-user-select: none;

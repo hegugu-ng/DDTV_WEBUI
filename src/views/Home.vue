@@ -124,7 +124,7 @@ export default {
       if (this.isNull(this.coreUpdateTime)) coreUp = "更新中";
       else coreUp = Math.round((NowTime - this.coreUpdateTime)/1000);
 
-      if (this.isNull(this.liveUpdateTime)) coreUp = "更新中";
+      if (this.isNull(this.liveUpdateTime)) liveUp = "更新中";
       else liveUp = Math.round((NowTime - this.liveUpdateTime)/1000);
 
       if (coreUp < 8) coreUp = "刚刚";
@@ -299,7 +299,6 @@ export default {
       return res.data.data;
     },
     System_Resources: async function () {
-      console.log(14444)
       let res = await postFormAPI("System_Resources");
       return res.data.data;
     },
