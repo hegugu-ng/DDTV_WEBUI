@@ -20,7 +20,7 @@ export default {
   border: 1px solid #ebeef5;  
   border-radius: 10px;
   /* padding: 20px; */
-  box-shadow: 0 2px 12px 0 rgb(0 0 0 / 10%);
+  box-shadow: 0 2px 22px 0 rgb(0 0 0 / 10%);
   color: #242f57;
 }
 .ng-info-card > .title {
