@@ -48,8 +48,12 @@ export default {
   beforeDestroy: function () {
     window.removeEventListener('resize', this.handleResize)
   },  
+  mounted(){
+    this.addLog({lv:'info',msg:'欢迎使用DDTV'});
+    this.addLog({lv:'warn', msg:'此为DDTV WEB UI 预览版本，可能存在问题，不建议使用于生产环境'})
+  },
   methods: {
-    ...mapMutations(['screenWidth']),
+    ...mapMutations(['screenWidth','addLog']),
     handleResize () {
       // 同步新的屏幕宽度到 store
       this.screenWidth(document.documentElement.clientWidth)

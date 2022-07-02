@@ -21,8 +21,9 @@
 </template>
 
 <script>
-import { mapGetters,mapState } from 'vuex';
+import { mapGetters,mapState,mapMutations } from 'vuex';
 import TweenLite from 'gsap';
+
 export default {
   name: "navBar",
   computed:{
@@ -60,15 +61,17 @@ export default {
     }
   },
   methods:{
+    ...mapMutations(['addLog']),
     NavOn:function(){
       this.titleshow = true
-      console.debug("[UI] 导航栏展开")
+      this.addLog({lv:'debug',msg:'导航栏展开'})
+      // console.debug("[UI] 导航栏展开")
       this.dw = 220;
       this.itemcss = {'justify-content': 'flex-start','padding-left': '10px'};
     },
     NavOff:function(){
       this.titleshow = false
-      console.debug("[UI] 导航栏收缩")
+      this.addLog( {lv:'debug',msg:'导航栏收缩'})
       this.dw = 46;
       this.itemcss = {'justify-content': 'center'}
     }
