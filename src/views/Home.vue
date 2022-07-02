@@ -127,10 +127,10 @@ export default {
       if (this.isNull(this.liveUpdateTime)) liveUp = "更新中";
       else liveUp = Math.round((NowTime - this.liveUpdateTime)/1000);
 
-      if (coreUp < 8) coreUp = "刚刚";
+      if (coreUp < 8 || coreUp == "更新中") coreUp = "刚刚";
       else coreUp = coreUp + "秒前更新"
 
-      if (liveUp < 8) liveUp = "刚刚";
+      if (liveUp < 8 || coreUp == "更新中") liveUp = "刚刚";
       else liveUp = liveUp + "秒前更新"
 
 
