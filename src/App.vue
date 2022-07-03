@@ -11,6 +11,9 @@
         <TitleBar/>
         <!--路由视图-->
         <div class="router scrollbar">
+          <template>
+            <el-backtop :right="100" :bottom="100" />
+          </template>
           <router-view />
         </div>
       </div>
