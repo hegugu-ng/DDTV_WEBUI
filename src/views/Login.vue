@@ -7,20 +7,10 @@
         <div class="rd-title">登录以继续</div>
         <form @submit.prevent="onSubmit">
           <div class="input-title">用户名</div>
-          <input
-            class="ng-input"
-            v-model="login.loginname"
-            placeholder="请输入用户名"
-            autocomplete="username"
-          />
+          <input class="ng-input" v-model="login.loginname" placeholder="请输入用户名" autocomplete="username" />
           <div class="input-title">密码</div>
-          <input
-            class="ng-input"
-            type="password"
-            v-model="login.password"
-            placeholder="请输入密码"
-            autocomplete="current-password"
-          />
+          <input class="ng-input" type="password" v-model="login.password" placeholder="请输入密码"
+            autocomplete="current-password" />
           <div style="display: flex; align-items: center; margin-bottom: 10px">
             <input type="checkbox" id="save7days" v-model="login.save7days" />
             <label class="ng-check-ladel" for="save7days">七天内免登录</label>
@@ -33,18 +23,9 @@
         <div class="title">设置</div>
         <div class="rd-title">链接到NGWORKS事件中心</div>
         <div class="input-title">APPID</div>
-        <input
-          class="ng-input"
-          v-model="ngevent.appid"
-          placeholder="请输入你的appid"
-        />
+        <input class="ng-input" v-model="ngevent.appid" placeholder="请输入你的appid" />
         <div class="input-title">NGKEY</div>
-        <input
-          class="ng-input"
-          type="password"
-          v-model="ngevent.key"
-          placeholder="请输入NGKEY"
-        />
+        <input class="ng-input" type="password" v-model="ngevent.key" placeholder="请输入NGKEY" />
         <div style="display: flex; align-items: center; margin-bottom: 10px">
           <input type="checkbox" id="save" v-model="ngevent.save" />
           <label class="ng-check-ladel" for="save">记住我</label>
@@ -55,7 +36,7 @@
   </div>
 </template>
 <script>
-import { postFormAPI, getListAPIv2,postListAPIv2 } from "../api";
+import { postFormAPI, getListAPIv2, postListAPIv2 } from "../api";
 import gt from "../utils/gt";
 export default {
   name: "Room",
@@ -127,8 +108,12 @@ export default {
     /**
      * 本函数会进行一个Cookie保存操作
      */
+    is_login: async function () {
+      let res = await postListAPIv2("/api/Login_State");
+      return res
+    },
     saveCookies(Cookie) {
-      let CookieDomain = window.apiObj.cookieDomain 
+      let CookieDomain = window.apiObj.cookieDomain
       if (this.login.save7days) {
         var d = new Date();
         d.setTime(d.getTime() + 7 * 24 * 60 * 60 * 1000);
@@ -164,13 +149,18 @@ export default {
       // 发请求
       try {
         let res = await postListAPIv2("/api/Login", param);
-        if (res.data.code != 0){
+        let loginres = await postFormAPI("Login_State");
+        if (res.data.code != 0) {
           this.openWindows(res.data.massage, "登录出现问题");
         }
         else {
           this.saveCookies(res.data.data.Cookie)
-          // console.log("跳转路由")
-          this.$router.push("/");
+          console.log(loginres)
+          if (loginres.data.data.LoginState != 1) {
+            this.$router.push("/blogin");
+          } else {
+            this.$router.push("/");
+          }
         }
       } catch (err) {
         console.error("登录请求出错，请检查网络连接与网站配置。");
@@ -197,15 +187,18 @@ export default {
   background-color: #484676;
   background-image: linear-gradient(90deg, #484676 0%, #00c6cd 75%);
 }
+
 .ng-network {
   float: right;
   font-weight: bold;
   color: #474747;
   cursor: pointer;
 }
+
 .ng-network:hover {
   color: #8d8080;
 }
+
 .viewBox {
   background-color: #fff;
   width: 250px;
@@ -213,20 +206,24 @@ export default {
   box-shadow: 0px 0px 50px 20px #00000036;
   padding: 25px 25px 25px 25px;
 }
+
 .rd-title {
   font-size: 14px;
   color: #000000;
   font-weight: normal;
   padding-bottom: 20px;
 }
+
 .title {
   font-size: 28px;
   font-weight: bold;
 }
+
 .input-title {
   font-size: 12px;
   font-weight: bold;
 }
+
 .ng-input {
   background: none;
   outline: none;
@@ -236,13 +233,16 @@ export default {
   border-bottom: 1px solid #e8e0e0;
   margin-bottom: 14px;
 }
+
 .ng-input:focus {
   border: none;
   border-bottom: 1px solid rgb(0, 0, 0);
 }
+
 .ng-check-ladel {
   font-size: 12px;
 }
+
 .ng-login {
   background: #7e7bdf;
   outline: none;
