@@ -23,11 +23,11 @@
             <el-switch class="live-switch" :v-model="true" active-color="#46d485" inactive-color="#efe3e3"></el-switch>
         </ng-infocard>
 
-        <ng-infocard title="文件自动分片" update="" style="margin-top:10px">
+        <ng-infocard title="B站登录设置" update="" style="margin-top:10px">
             <p class="info-text-box info-text-war">
-                本开关用于配置全局的弹幕录制，如若关闭，将不会录制弹幕，即使房间开启了录制弹幕。
+                DDTV的一些功能依赖于B站账号，故需要登录B站账号才能使用。
             </p>
-            <el-switch class="live-switch" :v-model="true" active-color="#46d485" inactive-color="#efe3e3"></el-switch>
+            <el-button type="success" @click="$router.push('/blogin')">前往登录管理</el-button>
         </ng-infocard>
 
     </div>

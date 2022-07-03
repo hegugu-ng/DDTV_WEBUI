@@ -8,6 +8,8 @@ import Flv from '../views/flv.vue'
 import About from '../views/About.vue'
 import Files from '../views/Files.vue'
 import geetest from '../views/geetest.vue'
+import blogin from '../views/blogin.vue'
+
 
 import {isAuthenticated} from '../utils/authenticated'
 
@@ -94,6 +96,17 @@ const routes = [
       title: 'FLV'
     }
   },
+  {
+    path: '/blogin',
+    name: 'blogin',
+    component: blogin,
+    meta: {
+      login: true,
+      show: true,
+      title: '登录B站'
+    }
+  },
+
 ]
 
 const router = createRouter({

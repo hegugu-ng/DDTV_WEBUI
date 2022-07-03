@@ -22,7 +22,10 @@ export function getListAPIv2(url,params){
     return http.get(url,params)
 }
 
-export function getListAPI(url,params){
+export function getListAPI(url,params=undefined){
+    if (params) params.CMD = url
+    else params = {'CMD': url}
+
     return http.get(`${resquest}/${url}`,params)
 }
 
