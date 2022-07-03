@@ -151,7 +151,7 @@ export default {
             let param = {
                 Size: Data
             };
-            if (Data < 104857600){
+            if (Data < 104857600 && Data > 0){
                 this.$message({type: 'error',message: "操作失败！不应该小于100MB。"});
                 this.value = "MB"
                 this.num = 100
