@@ -83,7 +83,7 @@ export default {
   mounted:async function() {
     console.debug("[UI] 挂载房间配置页面");
     await this.Room_AllInfo();
-    this.timer = setInterval(this.Room_AllInfo, 2000);
+    this.timer = setInterval(this.Room_AllInfo, 5000);
   },
   beforeUnmount() {
     clearInterval(this.timer);
