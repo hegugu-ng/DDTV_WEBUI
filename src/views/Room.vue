@@ -83,10 +83,12 @@ export default {
   mounted:async function() {
     console.debug("[UI] 挂载房间配置页面");
     await this.Room_AllInfo();
-    this.timer = setInterval(() => {
-      this.Room_AllInfo();
-    }, 10000)
+    this.timer = setInterval(this.Room_AllInfo, 2000);
   },
+  beforeUnmount() {
+    clearInterval(this.timer);
+  },
+
   watch:{
     addkeywords:async function(newval){
       if(newval!= ''){
@@ -185,9 +187,6 @@ export default {
       return res.data;
     }
   },
-  destroyed() {
-    clearInterval(this.timer); //关闭
-  }
 };
 </script>
 <style>

@@ -47,7 +47,7 @@ const routes = [
     }
   },
   {
-    path: '/files/:path(.*)',
+    path: '/files',
     name: 'Files',
     component: Files,
     meta: {
