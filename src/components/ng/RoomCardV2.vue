@@ -1,25 +1,30 @@
 <template>
   <div>
     <div class="ng-lookup">
-      <el-checkbox size="small" class="ng-checkboox right10" :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange" border>全选</el-checkbox>
+      <el-checkbox size="small" class="ng-checkboox right10" :indeterminate="isIndeterminate" v-model="checkAll"
+        @change="handleCheckAllChange" border>全选</el-checkbox>
       <el-input class="ng-roominput right10" size="small" v-model="lp" placeholder="搜索UID/房间号/昵称/标题" clearable>
         <template #prefix>
-          <el-icon class="el-input__icon"><search /></el-icon>
+          <el-icon class="el-input__icon">
+            <search />
+          </el-icon>
         </template>
       </el-input>
       <el-select class="ng-todo right10" v-model="select" size="small" placeholder="执行的操作">
         <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
         </el-option>
       </el-select>
-      <el-button :disabled="select == ''" size="small" @click="$emit('requestgroup',select,checkedRoom)">确定</el-button>
+      <el-button :disabled="select == ''" size="small" @click="$emit('requestgroup', select, checkedRoom)">确定
+      </el-button>
     </div>
     <ul class="ng-roomGroup">
       <slot v-if="lp == ''"></slot>
-      <li class="RoomCardV2" v-for="(item, index) in lproom.length == 0 && lp == '' ? room:lproom" :key="index" v-loading="item.load">
+      <li class="RoomCardV2" v-for="(item, index) in lproom.length == 0 && lp == '' ? room : lproom" :key="index"
+        v-loading="item.load">
 
-        <div class="ng-roomManager" :id="'m'+index">
+        <div class="ng-roomManager" :id="'m' + index">
           <div class="ng-configbar">
-            <el-icon class="el-icon-back ng-bticon"  @click="stemo('#m'+index,'0%')">
+            <el-icon class="el-icon-back ng-bticon" @click="stemo('#m' + index, '0%')">
               <arrow-left />
             </el-icon>
             <div class="ng-hostname">{{ item.uname }}</div>
@@ -27,59 +32,52 @@
           <div class="ng-bntgroup">
             <div>
               <div class="ng-fromtitle">基础管理</div>
-              <el-button size="small" >管理文件</el-button>
-              <el-button size="small" type="danger" @click="requestApi('Room_Del',item.uid,null,index)">删除房间</el-button>
+              <el-button size="small">管理文件</el-button>
+              <el-button size="small" type="danger" @click="requestApi('Room_Del', item.uid, null, index)">删除房间
+              </el-button>
             </div>
             <div>
-            <div class="ng-fromtitle">录制弹幕</div>
-              <el-switch
-                size="small"
-                v-model="item.IsRecDanmu"
-                active-color="#3bdd83"
-                inactive-color="#a0b5a9"
-                @change="requestApi('Room_DanmuRec',item.uid,item.IsRecDanmu,index)"
-              />
-              <el-button v-if="item.IsDownload" style="margin-left: 12px;" size="small" type="danger" @click="requestApi('Rec_CancelDownload',item.uid,null,index)">停止录制</el-button>
+              <div class="ng-fromtitle">录制弹幕</div>
+              <el-switch size="small" v-model="item.IsRecDanmu" active-color="#3bdd83" inactive-color="#a0b5a9"
+                @change="requestApi('Room_DanmuRec', item.uid, item.IsRecDanmu, index)" />
+              <el-button v-if="item.IsDownload" style="margin-left: 12px;" size="small" type="danger"
+                @click="requestApi('Rec_CancelDownload', item.uid, null, index)">停止录制</el-button>
             </div>
           </div>
         </div>
 
         <div>
-          <div class="ng-roomCover" >
+          <div class="ng-roomCover">
             <div class="ng-isLive ng-floatbar" v-if="item.live_status == 1">正在直播</div>
             <div class="ng-floatbar">
               <el-checkbox class="ng-checkboox" v-model="item.check" @change="handleCheckedRoomChange"></el-checkbox>
             </div>
             <div class="ng-clink" :onclick="`window.open('https://live.bilibili.com/${item.room_id}')`"></div>
-            <img class="ng-image" referrerPolicy="no-referrer" :src="item.cover_from_user"/>
+            <img class="ng-image" referrerPolicy="no-referrer" :src="item.cover_from_user" />
             <div class="ng-roomType ng-floatbar">{{ item.st }}</div>
           </div>
           <div class="ng-roominfo">
             <div class="ng-faceGroup" :onclick="`window.open('https://space.bilibili.com/${item.uid}')`">
               <div class="ng-face">
-                <img class="ng-image" referrerPolicy="no-referrer" :src="item.face"/>
+                <img class="ng-image" referrerPolicy="no-referrer" :src="item.face" />
               </div>
             </div>
             <div class="ng-roomnameCard">
               <div class="ng-roomtitle">{{ item.title }}</div>
               <div class="ng-hostgroup">
                 <div class="ng-hostname">{{ item.uname }}</div>
-                <ng-svg icon-class="setting2" :size="{width: '22px',height: '22px'}" class="ng-bticon" @click="stemo('#m'+index,'100%')"/>
-                <el-switch
-                  v-model="item.IsAutoRec"
-                  active-color="#3bdd83"
-                  inactive-color="#6b997f"
-                  @change="requestApi('Room_AutoRec',item.uid,item.IsAutoRec,index)"
-                ></el-switch>
+                <ng-svg icon-class="setting2" :size="{ width: '22px', height: '22px' }" class="ng-bticon"
+                  @click="stemo('#m' + index, '100%')" />
+                <el-switch v-model="item.IsAutoRec" active-color="#3bdd83" inactive-color="#6b997f"
+                  @change="requestApi('Room_AutoRec', item.uid, item.IsAutoRec, index)"></el-switch>
               </div>
             </div>
           </div>
         </div>
       </li>
     </ul>
-    <el-empty 
-    v-if="lproom.length == 0 && lp == '' ? room.length == 0:lproom.length == 0" 
-    :description="lproom.length == 0 && lp == '' ? '房间列表为空':'没有符合的搜索结果'"></el-empty>
+    <el-empty v-if="lproom.length == 0 && lp == '' ? room.length == 0 : lproom.length == 0"
+      :description="lproom.length == 0 && lp == '' ? '房间列表为空' : '没有符合的搜索结果'"></el-empty>
   </div>
 </template>
 <script>
@@ -114,7 +112,7 @@ export default {
         },
       ],
       lproom: [],
-      timer:null
+      timer: null
     };
   },
   watch: {
@@ -123,7 +121,7 @@ export default {
       if (newval != "") {
         for (let i = 0; i < this.room.length; i++) {
           let item = this.room[i];
-          let kstr = [item.title, item.uid, item.uname,item.room_id];
+          let kstr = [item.title, item.uid, item.uname, item.room_id];
 
           for (let j = 0; j < kstr.length; j++) {
             let expstr = kstr[j];
@@ -140,18 +138,21 @@ export default {
   mounted() {
     this.timer = setInterval(() => {
       for (let i = 0; i < this.room.length; i++) {
-          let item = this.room[i]
-          if(item.live_status != 1) continue
-          let now = Date.now()
-          let time = this.formatSeconds((now/1000 - item.live_time))
-          let room = this.room
-          room[i].st = time
-        }
-    }, 10000)
-},
+        let item = this.room[i]
+        if (item.live_status != 1) continue
+        let now = Date.now()
+        let time = this.formatSeconds((now / 1000 - item.live_time))
+        let room = this.room
+        room[i].st = time
+      }
+    }, 1000)
+  },
+  beforeUnmount() {
+    clearInterval(this.timer);
+  },
   methods: {
-    stemo:function(id,height){
-      TweenLite.to(id,{height:height})
+    stemo: function (id, height) {
+      TweenLite.to(id, { height: height })
     },
     requestApi: async function (cmd, uid, data, index) {
       console.log(this.room[index])
@@ -229,8 +230,8 @@ export default {
     handleCheckAllChange(val) {
       this.isIndeterminate = false;
       let room = this.room
-      if(this.lp != "") room = this.lproom
-      if(room.length != 0){
+      if (this.lp != "") room = this.lproom
+      if (room.length != 0) {
         for (let i = 0; i < room.length; i++) {
           if (val) {
             room[i].check = true;
@@ -240,44 +241,44 @@ export default {
             room[i].check = false;
           }
         }
-      }else{
+      } else {
         this.checkAll = false
       }
     },
     handleCheckedRoomChange() {
       let arr = this.room
-      if(this.lp != '') arr = this.lproom
+      if (this.lp != '') arr = this.lproom
       let statusand = '',
-          statusor = ''
+        statusor = ''
       for (let i = 0; i < arr.length; i++) {
         let item = arr[i];
-        if(i==0){
+        if (i == 0) {
           statusand = item.check
           statusor = item.check
-        }else{
-        // 全选才为 true
-        statusand &&=item.check
-        statusor ||=item.check
+        } else {
+          // 全选才为 true
+          statusand &&= item.check
+          statusor ||= item.check
         }
       }
-      if(arr.length != 0){
+      if (arr.length != 0) {
         // 全选才为 true
         let alltrue = statusand
         // 全不选才为 true
         let allfalse = !statusor
-        if(alltrue){
+        if (alltrue) {
           this.isIndeterminate = false;
           this.checkAll = true
         }
-        if(allfalse){
+        if (allfalse) {
           this.isIndeterminate = false;
           this.checkAll = false
         }
-        if(allfalse == alltrue){
+        if (allfalse == alltrue) {
           this.isIndeterminate = true;
           this.checkAll = false
         }
-      }else{
+      } else {
         this.isIndeterminate = false;
         this.checkAll = false
       }
@@ -313,14 +314,14 @@ export default {
       let res = await postFormAPI("Room_Del", param);
       return res.data;
     },
-    Room_Add: async function(uid){
+    Room_Add: async function (uid) {
       let param = {
         UID: uid,
       };
       let res = await postFormAPI("Room_Add", param);
       return res.data;
     },
-    Rec_CancelDownload: async function(uid){
+    Rec_CancelDownload: async function (uid) {
       let param = {
         UID: uid,
       };
@@ -328,33 +329,32 @@ export default {
       return res.data;
     }
   },
-beforeDestroy() {
-    if(this.timer) { //如果定时器还在运行 或者直接关闭，不用判断
-        clearInterval(this.timer); //关闭
-    }
-}
 };
 </script>
 
 
 <style>
-.ng-bntgroup{
+.ng-bntgroup {
   padding: 0px 10px 0px 10px;
 }
-.icon-img{
+
+.icon-img {
   vertical-align: middle;
   background-repeat: no-repeat;
   background-image: url('../../assets/icons.png');
 }
+
 .ng-roomGroup {
   /* position: absolute; */
   padding-inline-start: 0px;
   margin-block-start: 0px;
   margin-block-end: 0px;
 }
+
 .right10 {
   margin-right: 10px;
 }
+
 .ng-hlbt {
   border: 1px solid #e5dbdb;
   display: inline;
@@ -364,22 +364,28 @@ beforeDestroy() {
   margin-right: 3px;
   cursor: pointer;
 }
+
 .ng-lookup {
   margin: 0.8rem 0rem 0.8rem 0rem;
   display: flex;
   align-items: center;
 }
+
 .ng-roominput {
   max-width: 18rem;
 }
+
 .ng-todo {
   width: 8rem;
 }
-.ng-fromtitle{
+
+.ng-fromtitle {
   font-size: .8rem;
   padding: .5rem 0rem .5rem 0rem;
-  color: #161313;;
+  color: #161313;
+  ;
 }
+
 .RoomCardV2 {
   display: inline-block;
   width: 228px;
@@ -391,10 +397,12 @@ beforeDestroy() {
   position: relative;
   overflow: hidden;
 }
+
 .RoomCardV2:hover {
   box-shadow: 0 13px 20px 0 rgb(59 64 72 / 22%);
   transition: transform 0.3s cubic-bezier(0.63, -0.01, 0.59, 1);
 }
+
 .ng-roomManager {
   height: 0%;
   width: 100%;
@@ -408,18 +416,22 @@ beforeDestroy() {
   backdrop-filter: blur(10px);
   overflow: hidden;
 }
+
 .ng-configbar {
   padding: 10px 10px 0px 10px;
   font-size: 25px;
   display: flex;
   align-items: center;
 }
+
 .ng-bticon {
   cursor: pointer;
 }
+
 .ng-bticon:hover {
   color: #999;
 }
+
 .ng-roomCover {
   width: 208px;
   margin: 0 9px 0 9px;
@@ -429,10 +441,12 @@ beforeDestroy() {
   overflow: hidden;
   z-index: 1;
 }
-.ng-image{
+
+.ng-image {
   width: 100%;
   /* height: 100%; */
 }
+
 .ng-isLive {
   top: -1px;
   left: -1px;
@@ -443,10 +457,12 @@ beforeDestroy() {
   color: #fff;
   line-height: 24px;
 }
+
 .ng-checkboox {
   float: right;
   padding-right: 2px;
 }
+
 .ng-clink {
   position: absolute;
   width: 100%;
@@ -454,6 +470,7 @@ beforeDestroy() {
   z-index: 102;
   cursor: pointer;
 }
+
 .ng-roomType {
   padding-left: 8px;
   box-sizing: border-box;
@@ -465,6 +482,7 @@ beforeDestroy() {
   white-space: nowrap;
   z-index: 3;
 }
+
 .ng-floatbar {
   position: absolute;
   width: 100%;
@@ -473,6 +491,7 @@ beforeDestroy() {
   background-size: auto 100%;
   z-index: 120;
 }
+
 .ng-roominfo {
   display: flex;
   align-items: center;
@@ -480,12 +499,14 @@ beforeDestroy() {
   padding: 0 10px;
   box-sizing: border-box;
 }
+
 .ng-faceGroup {
   cursor: pointer;
   width: 55px;
   height: 55px;
   position: relative;
 }
+
 .ng-face {
   width: 40px;
   height: 40px;
@@ -496,6 +517,7 @@ beforeDestroy() {
   position: absolute;
   overflow: hidden;
 }
+
 .ng-pendant {
   /* background-image: url('../assets/testzb.png'); */
   width: 100%;
@@ -503,6 +525,7 @@ beforeDestroy() {
   background-size: 100% 100%;
   position: absolute;
 }
+
 .ng-userOfficial {
   z-index: 11;
   font-size: 0.36em;
@@ -512,12 +535,15 @@ beforeDestroy() {
   right: 10%;
   bottom: 10%;
 }
+
 .ng-ao-p {
   background-image: url("../../assets/superuser.svg");
 }
+
 .ng-roomnameCard {
   width: calc(100% - 55px);
 }
+
 .ng-roomtitle {
   font-size: 16px;
   color: #333;
@@ -529,11 +555,13 @@ beforeDestroy() {
   -webkit-box-orient: vertical;
   padding-left: 6px;
 }
+
 .ng-hostgroup {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
+
 .ng-hostname {
   font-size: 0.6em;
   color: #3b2929;
@@ -546,6 +574,7 @@ beforeDestroy() {
   padding-right: 3px;
   box-sizing: border-box;
 }
+
 .ng-stoprec {
   width: 54px;
   height: 26px;
