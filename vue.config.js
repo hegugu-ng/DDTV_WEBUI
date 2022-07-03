@@ -5,6 +5,7 @@ function resolve(dir) {
 }
 
 module.exports = {
+  productionSourceMap: false,
   transpileDependencies: true,
   lintOnSave: false,
   chainWebpack: config => {
