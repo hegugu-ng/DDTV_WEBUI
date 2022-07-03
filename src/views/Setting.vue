@@ -24,7 +24,7 @@
             <p class="info-text-box info-text-war">
                 设置本配置项目之后，将会将大文件自动切分成若干段。
                 <br />修改后需要点击后面的的“提交”按钮。
-                <br />如设置为1MB可能出现错误。
+                <br />如设置小于100MB可能出现错误，推荐大于100MB。
             </p>
             <el-switch class="live-switch" size="large" active-text="开启文件分片" inactive-text="关闭文件分片"
                 v-model="liverecelip" active-color="#46d485" inactive-color="#efe3e3"></el-switch>
@@ -59,7 +59,7 @@ export default {
             liverecode: true,
             livedamaku: true,
             liverecelip: true,
-            num: null,
+            num: 100,
             options: [
                 {
                     value: 'MB',
@@ -75,7 +75,7 @@ export default {
         }
     },
     mounted:async function(){
-        this.timer = setInterval(this.System_Config, 5000);
+        // this.timer = setInterval(this.System_Config, 5000);
         this.System_Config()
     },
     beforeUnmount() {
@@ -88,6 +88,7 @@ export default {
             };
             let res = await postFormAPI("Config_Transcod",param);
             this.$message({type: 'success',message: res.data.data});
+            this.System_Config()
             return true
         },
 
@@ -97,6 +98,7 @@ export default {
             };
             let res = await postFormAPI("Config_DanmuRec",param);
             this.$message({type: 'success',message: res.data.data});
+            this.System_Config()
             return true
         },
 
@@ -111,7 +113,8 @@ export default {
                         if (number== 0){
                             this.liverecelip = false;
                         }else{
-                            this.num = number;
+                            if(number >= 1024){this.num = number/1024;this.value="GB"}
+                            else{this.num = number;this.value="MB"}
                             this.liverecelip = true;
                         }  
                         break;
@@ -148,9 +151,16 @@ export default {
             let param = {
                 Size: Data
             };
+            if (Data < 104857600){
+                this.$message({type: 'error',message: "操作失败！不应该小于100MB。"});
+                this.value = "MB"
+                this.num = 100
+                return
+            }
             // 发请求
             let res = await postFormAPI("Config_FileSplit", param);
             this.$message({type: 'success',message: res.data.data});
+            this.System_Config()
         }
     }
 
