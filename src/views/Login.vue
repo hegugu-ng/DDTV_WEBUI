@@ -141,7 +141,7 @@ export default {
       let param = {
         UserName: this.login.loginname,
         Password: this.login.password,
-        // CookieExpires: this.login.save7days,
+        CookieExpires: this.login.save7days,
         // geetest_challenge: result.geetest_challenge,
         // geetest_validate: result.geetest_validate,
         // geetest_seccode: result.geetest_seccode,
