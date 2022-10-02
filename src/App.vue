@@ -20,7 +20,7 @@
     </div>
     <!--状态栏-->
     <StatusBar />
-    <FootBar />
+    <!-- <FootBar /> -->
   </div>
 </template>
 

@@ -170,7 +170,7 @@ export default {
          * 本函数封装了获取文件列表的功能
          */
         file_lists: async function () {
-            let response = await postFormAPI('File_GetAllFileList')
+            let response = await postFormAPI('File_GetFilePathList')
             return response
         },
 

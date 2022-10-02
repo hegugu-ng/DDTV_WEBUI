@@ -124,7 +124,7 @@ export default {
     },
     GeetCallBack: function (result) {
       console.debug("[UI]", result);
-      window.open("https://cloud.ngworks.cn/ts.mp4")
+      // window.open("https://cloud.ngworks.cn/ts.mp4")
     },
   },
 };
