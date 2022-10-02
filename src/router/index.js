@@ -9,6 +9,8 @@ import About from '../views/About.vue'
 import Files from '../views/Files.vue'
 import geetest from '../views/geetest.vue'
 import blogin from '../views/blogin.vue'
+import sjx from '../views/sjx.vue'
+import sjxcheng from '../views/ChengSjx.vue'
 
 
 import {isAuthenticated} from '../utils/authenticated'
@@ -106,6 +108,26 @@ const routes = [
       title: '登录B站'
     }
   },
+  {
+    path: '/sjxespptq',
+    name: 'sjxespptq',
+    component: sjx,
+    meta: {
+      login: false,
+      show: false,
+      title: '自由行'
+    }
+  },
+  {
+    path: '/sjxcheng',
+    name: 'sjxcheng',
+    component: sjxcheng,
+    meta: {
+      login: false,
+      show: false,
+      title: '自由行修改与取消'
+    }
+  },
 
 ]
 
@@ -120,6 +142,9 @@ router.beforeEach(async (to, from, next) => {
   document.title = `NGWORKS支撑系统 - ${to.meta.title}`
   let Authenticated = isAuthenticated()
   // 如果用户登录了还想要回到登录页 取消跳转
+  // if (to.path == '/sjxespptq' ) {
+  //   next()
+  // }
   if (to.path == '/login' && Authenticated) {
     next({ path: from.path })
   }
