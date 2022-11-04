@@ -78,6 +78,7 @@ window.apiObj = {
   cookieDomain: false
 }
 ```
+> 修改上述配置文件后如果不生效，请清除浏览器缓存。
 ## 实践
 ### 前置知识
 #### 跨域
@@ -106,4 +107,26 @@ window.apiObj = {
 > 错误可能不相同 请注意关键字 **CORS**
 
 ### 前后端分离部署页面（NGINX）
+### 前后端分离部署页面（腾讯云COS）
+> **⚠注意**：腾讯云为每个账号提供了一些免费的云资源额度，超出额度可能**产生费用** [了解详情](https://cloud.tencent.com/document/product/436/6240)腾讯云产品计费规则 [定价](https://cloud.tencent.com/document/product/436/16871) ，请您根据个人需求使用，使用前充分了解规则。
 
+登录腾讯云，进入[对象存储控制台](https://console.cloud.tencent.com/cos)。
+
+进入[储存桶列表](https://console.cloud.tencent.com/cos/bucket)
+![储存桶列表](Docpic/cos1.png)
+
+点击**创建存储桶**
+![创建存储桶](Docpic/cos2.png)
+
+选择离自己相近的地域，根据自己的需求设置名称，**注意将访问权限设置为公有读私有写。**
+设置完毕后点击下一步，高级配置保持默认，随后确认。
+
+进入储存桶，开启**静态网站**，并配置。
+![静态网站](Docpic/cos3.png)
+
+进入**文件列表**选择上传前端包。
+![文件列表](Docpic/cos4.png)
+![文件列表](Docpic/cos5.png)
+点击上传
+
+[了解更多](https://cloud.tencent.com/document/product/436/32670)
