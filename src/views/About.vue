@@ -1,7 +1,7 @@
 <template>
   <div class="about">
     <div class="ThankBenner">
-      感谢这些宝藏般的项目！
+      感谢这些宝藏般的项目！还没整理完
     </div>
     <div>
       <ng-svg :size="{ width: '80px', height: '80px' }" icon-class="vue" />
@@ -45,8 +45,8 @@
       </div>
     </div>
     <div>
-      <h2>感谢这些瑰宝般的项目！</h2>
-      <ng-svg v-for="(item, index) in pr" :size="{ width: '50px', height: '50px' }" :key="index" :icon-class="item" />
+      <!-- <h2>感谢这些瑰宝般的项目！</h2>
+      <ng-svg v-for="(item, index) in pr" :size="{ width: '50px', height: '50px' }" :key="index" :icon-class="item" /> -->
     </div>
   </div>
 </template>

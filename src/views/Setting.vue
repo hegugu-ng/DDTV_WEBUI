@@ -71,10 +71,10 @@ export default {
                 },
             ],
             value: "MB",
-            timer:null
+            timer: null
         }
     },
-    mounted:async function(){
+    mounted: async function () {
         // this.timer = setInterval(this.System_Config, 5000);
         this.System_Config()
     },
@@ -82,56 +82,56 @@ export default {
         clearInterval(this.timer);
     },
     methods: {
-        beforeChangeRecode: async function(){
+        beforeChangeRecode: async function () {
             let param = {
                 state: !this.liverecode
             };
-            let res = await postFormAPI("Config_Transcod",param);
-            this.$message({type: 'success',message: res.data.data});
+            let res = await postFormAPI("Config_Transcod", param);
+            this.$message({ type: 'success', message: res.data.data });
             this.System_Config()
             return true
         },
 
-        beforeChangeDanmuk: async function(){
+        beforeChangeDanmuk: async function () {
             let param = {
                 state: !this.livedamaku
             };
-            let res = await postFormAPI("Config_DanmuRec",param);
-            this.$message({type: 'success',message: res.data.data});
+            let res = await postFormAPI("Config_DanmuRec", param);
+            this.$message({ type: 'success', message: res.data.data });
             this.System_Config()
             return true
         },
 
-        System_Config: async function(){
+        System_Config: async function () {
             let res = await postFormAPI("System_Config");
             let data = res.data.data;
             console.log(data)
-            for(var item of data) {
+            for (var item of data) {
                 switch (item.Key) {
-                    case 20:
-                        let number = (Number(item.Value)/1024)/1024;
-                        if (number== 0){
+                    case 21:
+                        let number = (Number(item.Value) / 1024) / 1024;
+                        if (number == 0) {
                             this.liverecelip = false;
-                        }else{
-                            if(number >= 1024){this.num = number/1024;this.value="GB"}
-                            else{this.num = number;this.value="MB"}
+                        } else {
+                            if (number >= 1024) { this.num = number / 1024; this.value = "GB" }
+                            else { this.num = number; this.value = "MB" }
                             this.liverecelip = true;
-                        }  
+                        }
                         break;
-                    case 6:
-                        if (item.Value== 'True'){
+                    case 7:
+                        if (item.Value == 'True') {
                             this.liverecode = true;
-                        }else{
+                        } else {
                             this.liverecode = false;
-                        }  
+                        }
 
                         break;
-                    case 15:
-                        if (item.Value== 'True'){
+                    case 16:
+                        if (item.Value == 'True') {
                             this.livedamaku = true;
-                        }else{
+                        } else {
                             this.livedamaku = false;
-                        }  
+                        }
                         break;
                 }
             }
@@ -151,15 +151,15 @@ export default {
             let param = {
                 Size: Data
             };
-            if (Data < 104857600 && Data > 0){
-                this.$message({type: 'error',message: "操作失败！不应该小于100MB。"});
+            if (Data < 104857600 && Data > 0) {
+                this.$message({ type: 'error', message: "操作失败！不应该小于100MB。" });
                 this.value = "MB"
                 this.num = 100
                 return
             }
             // 发请求
             let res = await postFormAPI("Config_FileSplit", param);
-            this.$message({type: 'success',message: res.data.data});
+            this.$message({ type: 'success', message: res.data.data });
             this.System_Config()
         }
     }
