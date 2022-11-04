@@ -123,10 +123,18 @@ window.apiObj = {
 
 进入储存桶，开启**静态网站**，并配置。
 ![静态网站](Docpic/cos3.png)
-
+记录**访问节点**的链接，备用。
 进入**文件列表**选择上传前端包。
 ![文件列表](Docpic/cos4.png)
 ![文件列表](Docpic/cos5.png)
-点击上传
+点击上传，测试上面记录的**访问节点**的链接是否可以访问。
+[了解更多关于对象存储的知识](https://cloud.tencent.com/document/product/436/32670)
+**自定义域名**
+![文件列表](Docpic/cos6.png)
+输入自己的域名，复制CNAME记录值。
+**解析**
+去到自己域名服务商的解析后台，设置自己主机记录，将记录类型选为CNAME，粘贴上面复制的CNAME记录值。
+![文件列表](Docpic/cos7.png)
+点击确定完成解析。
 
-[了解更多](https://cloud.tencent.com/document/product/436/32670)
+> 解析生效需要5-30分钟
