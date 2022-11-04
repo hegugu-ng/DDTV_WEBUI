@@ -36,9 +36,11 @@ npm run build
 
 ### 修改配置文件
 在config文件夹中，有两个配置文件，如下图所示：
+
 ![两个配置文件](https://test-1256209952.cos-website.ap-nanjing.myqcloud.com//peizhiwenjan.png)
 
 **其中**,通过修改`barinfo.js`的内容，可以实现个性化的页面底部信息展示：
+
 ![备案信息](https://test-1256209952.cos-website.ap-nanjing.myqcloud.com//beian.png)
 
 `barinfo.js`的内容如下。
@@ -102,6 +104,7 @@ window.apiObj = {
 ![错误示意](https://test-1256209952.cos-website.ap-nanjing.myqcloud.com//kuayucw.png)
 
 此时进入`开发者工具`会发现有以下错误：
+
 ![错误示例](https://test-1256209952.cos-website.ap-nanjing.myqcloud.com//kuayucw2.png)
 
 > 错误可能不相同 请注意关键字 **CORS**
@@ -116,24 +119,32 @@ window.apiObj = {
 ![储存桶列表](https://test-1256209952.cos-website.ap-nanjing.myqcloud.com//cos1.png)
 
 点击**创建存储桶**
+
 ![创建存储桶](https://test-1256209952.cos-website.ap-nanjing.myqcloud.com//cos2.png)
 
 选择离自己相近的地域，根据自己的需求设置名称，**注意将访问权限设置为公有读私有写。**
 设置完毕后点击下一步，高级配置保持默认，随后确认。
 
-进入储存桶，开启**静态网站**，并配置。
+进入储存桶，开启**静态网站**
+
 ![静态网站](https://test-1256209952.cos-website.ap-nanjing.myqcloud.com//cos3.png)
 记录**访问节点**的链接，备用。
 进入**文件列表**选择上传前端包。
+
 ![文件列表](https://test-1256209952.cos-website.ap-nanjing.myqcloud.com//cos4.png)
+
 ![文件列表](https://test-1256209952.cos-website.ap-nanjing.myqcloud.com//cos5.png)
+
 点击上传，测试上面记录的**访问节点**的链接是否可以访问。
+
 [了解更多关于对象存储的知识](https://cloud.tencent.com/document/product/436/32670)
 **自定义域名**
+
 ![文件列表](https://test-1256209952.cos-website.ap-nanjing.myqcloud.com//1667581932992.png)
 输入自己的域名，源站类型选择**静态网页源站**，复制CNAME记录值。
 **解析**
 去到自己域名服务商的解析后台，设置自己主机记录，将记录类型选为CNAME，粘贴上面复制的CNAME记录值。
+
 ![文件列表](https://test-1256209952.cos-website.ap-nanjing.myqcloud.com//cos7.png)
 点击确定完成解析。待解析生效后，您可以通过您配置的自定义域名访问网站
 
