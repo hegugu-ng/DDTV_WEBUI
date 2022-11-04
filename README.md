@@ -89,12 +89,12 @@ window.apiObj = {
 >想要了解更多关于跨域的内容，可以阅读这里
 
 |当前页面url|被请求页面url|是否跨域|原因|
-|:--:|:--:|:--:|:--:|:--:|
-|http://www.ngworks.cn/|	http://www.ngworks.cn/index.html|	否|	同源（协议、域名、端口号相同）|
-|http://www.ngworks.cn/|	https://www.ngworks.cn/index.html|	跨域|	协议不同（http/https）|
-|http://www.ngworks.cn/|	http://www.baidu.com/|	跨域	|主域名不同（ngworks/baidu）|
-|http://www.ngworks.cn/	|http://blog.ngworks.cn/|	跨域	|子域名不同（www/blog）|
-|http://www.ngworks.cn:8080/|	http://www.ngworks.cn:7001/|	跨域|	端口号不同（8080/7001）|
+|:--:|:--:|:--:|:--:|
+|http://www.ngworks.cn/|http://www.ngworks.cn/index.html|否|同源（协议、域名、端口号相同）|
+|http://www.ngworks.cn/|https://www.ngworks.cn/index.html|跨域|协议不同（http/https）|
+|http://www.ngworks.cn/|http://www.baidu.com/|跨域|主域名不同（ngworks/baidu）|
+|http://www.ngworks.cn/|http://blog.ngworks.cn/|跨域|子域名不同（www/blog）|
+|http://www.ngworks.cn:8080/|http://www.ngworks.cn:7001/|跨域|端口号不同（8080/7001）|
 
 > 当您部署网页时出现 “无法与后端建立连接” 错误时，**排除完毕后端和网络问题后**，就**有可能**出现跨域原因。
 
