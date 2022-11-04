@@ -78,3 +78,32 @@ window.apiObj = {
   cookieDomain: false
 }
 ```
+## 实践
+### 前置知识
+#### 跨域
+当一个请求url的**协议、域名、端口**三者之间**任意一个**与当前页面url不同即为跨域。
+
+**为什么会出现跨域**
+出于浏览器的同源策略限制。同源策略是一种约定，它是浏览器最核心也最基本的安全功能，如果缺少了同源策略，则浏览器的正常功能可能都会受到影响。可以说Web是构建在同源策略基础之上的，浏览器只是针对同源策略的一种实现。同源策略会阻止一个域的。javascript脚本和另外一个域的内容进行交互。所谓同源（即指在同一个域）就是两个页面具有相同的协议，主机和端口号。
+
+>想要了解更多关于跨域的内容，可以阅读这里
+
+|当前页面url|被请求页面url|是否跨域|原因|
+|:--:|:--:|:--:|:--:|:--:|
+|http://www.ngworks.cn/|	http://www.ngworks.cn/index.html|	否|	同源（协议、域名、端口号相同）|
+|http://www.ngworks.cn/|	https://www.ngworks.cn/index.html|	跨域|	协议不同（http/https）|
+|http://www.ngworks.cn/|	http://www.baidu.com/|	跨域	|主域名不同（ngworks/baidu）|
+|http://www.ngworks.cn/	|http://blog.ngworks.cn/|	跨域	|子域名不同（www/blog）|
+|http://www.ngworks.cn:8080/|	http://www.ngworks.cn:7001/|	跨域|	端口号不同（8080/7001）|
+
+> 当您部署网页时出现 “无法与后端建立连接” 错误时，**排除完毕后端和网络问题后**，就**有可能**出现跨域原因。
+
+![错误示意](Docpic/kuayucw.png)
+
+此时进入`开发者工具`会发现有以下错误：
+![错误示例](Docpic/kuayucw2.png)
+
+> 错误可能不相同 请注意关键字 **CORS**
+
+### 前后端分离部署页面（NGINX）
+
