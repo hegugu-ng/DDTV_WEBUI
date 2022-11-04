@@ -58,39 +58,7 @@ export default {
     };
   },
   mounted: async function () {
-    // let loginfun = this.userlogin;
-    // console.log("gt", gt);
-    // let res = await getListAPIv2(`/register?t=${new Date().getTime()}`);
-    // let gt_ = res.data.gt;
-    // let challenge = res.data.challenge;
-    // let offline = res.data.success;
-    // let new_captcha = res.data.new_captcha;
-    // var btn = document.getElementById("btn");
-    // let gt_config = {
-    //   product: "bind",
-    //   gt: gt_,
-    //   challenge: challenge,
-    //   offline: !offline,
-    //   new_captcha: new_captcha,
-    // };
-    // let handle = function (captchaObj) {
-    //   captchaObj
-    //     .onReady(function () {
-    //       console.log("极验已经准备好了");
-    //     })
-    //     .onSuccess(function () {
-    //       var result = captchaObj.getValidate();
-    //       loginfun(result)
-    //     });
-    //   // .onError(function () {
-    //   //   console.log("验证失败")
-    //   // });
-    //   btn.onclick = function () {
-    //     captchaObj.verify();
-    //   };
-    // };
 
-    // initGeetest(gt_config, handle);
   },
   methods: {
     /**
@@ -133,18 +101,10 @@ export default {
     userlogin: async function () {
       // 构建请求参数
       this.load = true;
-      // if (!result) {
-      //   this.openWindows(res.data.massage, "登录出现问题");
-      //   this.load = false;
-      //   return
-      // }
       let param = {
         UserName: this.login.loginname,
         Password: this.login.password,
         CookieExpires: this.login.save7days,
-        // geetest_challenge: result.geetest_challenge,
-        // geetest_validate: result.geetest_validate,
-        // geetest_seccode: result.geetest_seccode,
       };
       // 发请求
       try {

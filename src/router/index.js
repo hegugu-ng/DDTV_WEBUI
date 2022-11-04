@@ -7,10 +7,8 @@ import Login from '../views/Login.vue'
 import Flv from '../views/flv.vue'
 import About from '../views/About.vue'
 import Files from '../views/Files.vue'
-import geetest from '../views/geetest.vue'
 import blogin from '../views/blogin.vue'
-import sjx from '../views/sjx.vue'
-import sjxcheng from '../views/ChengSjx.vue'
+
 
 
 import {isAuthenticated} from '../utils/authenticated'
@@ -79,16 +77,6 @@ const routes = [
     }
   },
   {
-    path: '/gt',
-    name: 'gt',
-    component: geetest,
-    meta: {
-      login: false,
-      show: false,
-      title: '极验验证'
-    }
-  },
-  {
     path: '/flv',
     name: 'flv',
     component: Flv,
@@ -107,28 +95,7 @@ const routes = [
       show: true,
       title: '登录B站'
     }
-  },
-  {
-    path: '/sjxespptq',
-    name: 'sjxespptq',
-    component: sjx,
-    meta: {
-      login: false,
-      show: false,
-      title: '自由行'
-    }
-  },
-  {
-    path: '/sjxcheng',
-    name: 'sjxcheng',
-    component: sjxcheng,
-    meta: {
-      login: false,
-      show: false,
-      title: '自由行修改与取消'
-    }
-  },
-
+  }
 ]
 
 const router = createRouter({
