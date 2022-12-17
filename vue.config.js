@@ -5,6 +5,9 @@ function resolve(dir) {
 }
 
 module.exports = {
+  publicPath: './',
+  outputDir: 'dist',
+  assetsDir: 'static',
   productionSourceMap: false,
   transpileDependencies: true,
   lintOnSave: false,
@@ -12,7 +15,7 @@ module.exports = {
     config
     .plugin('html')
     .tap(args => {
-      args[0].title= 'NGWORKS支撑系统 - 登录'
+      args[0].title= 'DDTV WEB UI - 登录'
       return args
     })
     config.module.rules.delete("svg"); //重点:删除默认配置中处理svg,
