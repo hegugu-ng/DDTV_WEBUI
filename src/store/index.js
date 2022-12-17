@@ -1,5 +1,6 @@
 // import Vue from 'vue'
 import { createStore } from 'vuex'
+import { postFormAPI, getListAPIv2 } from "../api";
 
 // Vue.use(Vuex)
 
@@ -20,7 +21,9 @@ const store = createStore({
       // 正在直播的房间
       Is_live: [],
       // 房间列表
-      room_list: []
+      room_list: [],
+      System_Resources: null,
+      Rec_RecordingInfo_Lite: null
     }
   },
   getters: {
@@ -29,6 +32,7 @@ const store = createStore({
     // 最新的一条日志
     newLog: state => state.log.length != 0 ? state.log[state.log.length - 1] : null,
     navBar: state => state.screenWidth < 1300 ? true : false,
+    sys_core_data: state => state.sys_core_data,
   },
   mutations: {
     addLog(state, playload) {
@@ -48,7 +52,15 @@ const store = createStore({
       setTimeout(() => {
         context.commit('setStatus', playload);
       }, 2000)
-    }
+    },
+    System_Resources: async function (context, playload) {
+      let res = await postFormAPI("System_Resources");
+      context.commit('System_Resources', playload);
+    },
+    Rec_RecordingInfo_Lite: async function (context, playload) {
+      let res = await postFormAPI("Rec_RecordingInfo_Lite");
+      context.commit('Rec_RecordingInfo_Lite', playload);
+    },
   },
   modules: {
   }

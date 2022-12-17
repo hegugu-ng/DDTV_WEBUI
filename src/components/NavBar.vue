@@ -40,8 +40,8 @@ export default {
         {title:"概览",router:'/',icon:'home'},
         {title:"房间配置",router:'/room',icon:'roomsettimg'},
         {title:"系统设置",router:'/setting',icon:'setting'},
-        {title:"文件管理",router:'/files',icon:'folder'},
-        {title:"任务管理",router:'/event',icon:'rank_fill'},
+        {title:"文件管理",router:'/files',icon:'folder'}
+        // {title:"任务管理",router:'/event',icon:'rank_fill'},
       ]
     }
   },

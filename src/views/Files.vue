@@ -1,423 +1,394 @@
 <template>
-    <div class="file" v-loading="load">
-        <div class="tool-bar">
-            <div class="but-bar">
-                <el-button-group style="width: 100%;">
-                    <el-button size="small" disabled icon="el-icon-download">下载</el-button>
-                    <el-button size="small" disabled type="danger" icon="el-icon-delete">删除</el-button>
-                </el-button-group>
-            </div>
-            <div class="path">
-                <div class="pathinfo">
-                    <el-button type="text" style="padding: 0 10px 0 0;" @click="filesShow = files, useroomid = false"
-                        :disabled="filesShow.name == '/'">返回首页</el-button>
-                    <el-button type="text" style="padding: 0 10px 0 0;"
-                        @click="filesShow.name == `${$route.query.rooid}的搜索结果` ? $router.push('/room') : filesShow = roomfile"
-                        v-show="useroomid">{{ filesShow.name == `${this.$route.query.rooid}的搜索结果` ? '返回房间列表' : '返回搜索' }}
-                    </el-button>
-                    <div class="originname" style="font-size: 14px;">{{ useroomid ? "搜索" : "tmp" }} {{ filesShow.name != "/"
-                            ? `> ${filesShow.name}` : ""
-                    }}</div>
-                </div>
-                <div style="color:#969a94;font-size: 14px;">已全部加载，共{{ Object.keys(filesShow.Obj).length }}个文件/目录</div>
-            </div>
-            <div class="path" style="justify-content: flex-start;">
-                <el-checkbox style="padding: 0 10px 0 0;" disabled></el-checkbox>
-                <div style="color:#969a94;font-size: 14px;">已选择{{ selent.length }}个文件</div>
+    <div class="file">
+        <div class="body-contain--nav">
+            <div class="nav-title" v-if="table.FilesRoot.length == 0">全部文件</div>
+            <div v-else>
+                <span class="nav-item-title" @click="GoToNext">返回上一级</span>
+                <span class="nav-item-sep">|</span>
+                <span class="nav-item">
+                    <span class="nav-item-title" @click="GoToHome">全部文件</span>
+                    <span class="nav-item-sep">&gt;</span>
+                </span>
+                <span class="nav-item" v-for="(item, index) in table.FilesRoot" :key="index">
+                    <span v-if="index + 1 == table.FilesRoot.length" class="is-disable-nav nav-item-title">{{ item
+                    }}</span>
+                    <span v-else class="nav-item-title" @click="GoToRoot(item)">{{ item }}</span>
+                    <span v-if="index + 1 != table.FilesRoot.length" class="nav-item-sep">&gt;</span>
+                </span>
             </div>
         </div>
-        <el-empty v-if="JSON.stringify(filesShow.Obj) == '{}'" description="啥都木有"></el-empty>
-        <div v-else class="file_list">
-            <div v-for="(item, key) in filesShow.Obj" :key="key" class="file_list_item">
-                <div style="display:flex;flex-direction: row;align-items: center;">
-                    <el-checkbox :disabled="item.type == 0"></el-checkbox>
-                    <img v-if="item.type == 0" src="../../public/static/dict.png" class="fileIcon" />
-                    <img v-else-if="item.type == 1" src="../../public/static/mp4.png" class="fileIcon" />
-                    <img v-else-if="item.type == 2" src="../../public/static/flv.png" class="fileIcon" />
-                    <img v-else-if="item.type == 3" src="../../public/static/xml.png" class="fileIcon" />
-                    <img v-else-if="item.type == 4" src="../../public/static/txt.png" class="fileIcon" />
+        <div class="table-header">
+            <table class="table-header-table table-all">
+                <colgroup>
+                    <col width="8%">
+                    <col width="45%">
+                    <col width="23%">
+                    <col width="22%">
+                </colgroup>
+                <thead>
+                    <tr class="table-header-row">
+                        <th class="table-header-select table-selent">
+                            <el-checkbox v-model="table.table_head.selent"
+                                :indeterminate="table.table_head.isIndeterminate"
+                                @change="handleCheckAllChange"></el-checkbox>
+                        </th>
+                        <th class="table-header-th table-td is-name">
+                            文件名称
+                        </th>
+                        <th class="table-header-th table-td cursor-p">
+                            修改日期
+                        </th>
+                        <th class="table-header-th table-td cursor-p">
+                            大小
+                        </th>
+                    </tr>
+                </thead>
+            </table>
 
-                    <el-button v-if="item.type == 0" type="text" style="padding-left: 20px;" @click="filesShow = item">
-                        {{ key }}</el-button>
-                    <div v-else style="padding-left: 20px;font-size: 14px;">{{ key }}</div>
-                </div>
-                <div>
-                    <div class="originname" style="padding-left: 20px;float: left;">{{ item.type != 0 ?
-                            change(item.Obj.Size) : "--"
-                    }}</div>
-                    <div class="originname" style="padding-left: 20px;float: right;">{{ item.type != 0 ?
-                            transformTimestamp(item.Obj.ModifiedTime) : ''
-                    }}</div>
-                </div>
-                <div style="justify-self: center;">
-                    <el-button-group style="width: 100%;" v-show="item.type != 0">
-                        <el-button size="small" icon="el-icon-video-play" :disabled="item.type != 1"
-                            @click="getDescribe(item.Obj.Directory, key)">播放</el-button>
-                        <el-button size="small" icon="el-icon-download" type="success"
-                            @click="play_str(key, item.Obj.Directory)">下载</el-button>
-                        <el-button size="small" type="danger" icon="el-icon-delete"
-                            @click="process_file_delete(item.Obj.Directory, key)">删除</el-button>
-                    </el-button-group>
-                </div>
-            </div>
+        </div>
+        <div class="table-body">
+            <table class="table-body-table table-all">
+                <colgroup>
+                    <col width="8%">
+                    <col width="45%">
+                    <col width="23%">
+                    <col width="22%">
+                </colgroup>
+                <tbody>
+                    <tr class="table-body-row " v-for="item in table.table_body" :key="item.index" :data-id="item.index"
+                        :index="item.index">
+                        <td class="row-checkbox table-selent">
+                            <el-checkbox v-model="item.selent"
+                                @change="handleCheckedFilesChange(item.index, item.selent)"></el-checkbox>
+                        </td>
+                        <td class="table-td row-icon-name"  @click="GoFiles(item)">
+                            <div class="name-list">
+                                <img v-if="item.type == 'folder'" :src="require('../assets/img/folder.png')"
+                                    :alt="item.type" class="icon-list" />
+                                <img v-else-if="item.type == '.mp4'" :src="require('../assets/img/mp4.png')"
+                                    :alt="item.type" class="icon-list" />
+                                <img v-else-if="item.type == '.flv'" :src="require('../assets/img/video.png')"
+                                    :alt="item.type" class="icon-list" />
+                                <img v-else :src="require('../assets/img/txt.png')" :alt="item.type"
+                                    class="icon-list" />
+                                <a :title="item.name" class="list-name-text">{{ item.name }}</a>
+                            </div>
+                        </td>
+                        <td class="normal-column table-td row-datetime">
+                            {{ item.date }}
+                        </td>
+                        <td class="normal-column table-td row-size">{{ item.size }}</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 </template>
 
 <script>
-import { postFormAPI, pubBody } from "../api";
+import { postFormAPI, getListAPI } from "../api";
 // import { play_str } from "../utils/play_url"
 export default {
     data() {
         return {
-            load: true,
-            files: {},
-            filesShow: { "name": "加载中", "Obj": {} },
-            useroomid: false,
-            roomfile: {},
-            selent: []
+            table: {
+                FilesRoot: [],
+                table_head: { selent: false, isIndeterminate: false },
+                checked: [],
+                table_body: []
+
+
+            },
         };
     },
 
 
     created: async function () {
-
-        let data = await this.file_lists(),
-            filesdict = this.render_manage(data),
-            roomid = this.$route.query.rooid
-        if (roomid) {
-            this.file_range(roomid).then(result => {
-                let showdata = this.render_manage(result)
-                showdata.name = `${roomid}的搜索结果`
-                this.useroomid = true
-                this.files = filesdict
-                this.filesShow = showdata
-                this.roomfile = showdata
-            })
-        } else {
-            this.files = filesdict
-            this.filesShow = filesdict
-        }
-        this.load = false
     },
 
     mounted: async function () {
-        // this.load = false
-        // // 发一次请求 确定用户凭据的有效性
-        // this.getList();
-        // // 进行轮询，定时间隔10秒一次
-        // this.timer = window.setInterval(() => {
-        //   setTimeout(() => {
-        //     if (sessionStorage.getItem("token")) {
-        //       // 轮询 的逻辑
-        //       this.getList();
-        //     }
-        //   }, 0);
-        // }, 30000);
+        var data = await this.GetFiles()
+        let i = 0
+        for (var item of data) {
+            if (item.FileType == "") item.FileType = "folder"
+            if (item.DateTime == "0001-01-01T00:00:00") item.DateTime = "-"
+            if (item.Size == 0) item.Size = "-"
+            let dataitem = { index: i, selent: false, type: item.FileType, name: item.Name, date: item.DateTime, size: item.Size }
+            this.table.table_body.push(dataitem)
+            i = i + 1
+        }
+
+
     },
     methods: {
-        play_str(name, path) {
-            // let url = play_str(name, path)
-            // window.open(url)
-        },
-        // 字节计算
-        change: function (limit) {
-            var size = "";
-            if (limit < 0.1 * 1024) {
-                //小于0.1KB，则转化成B
-                size = limit.toFixed(2) + "B";
-            } else if (limit < 0.1 * 1024 * 1024) {
-                //小于0.1MB，则转化成KB
-                size = (limit / 1024).toFixed(2) + "KB";
-            } else if (limit < 0.1 * 1024 * 1024 * 1024) {
-                //小于0.1GB，则转化成MB
-                size = (limit / (1024 * 1024)).toFixed(2) + "MB";
-            } else {
-                //其他转化成GB
-                size = (limit / (1024 * 1024 * 1024)).toFixed(2) + "GB";
+        GoToNext: async function(){
+            if(this.table.FilesRoot.length == 1){
+                await this.GoToHome()
             }
-
-            var sizeStr = size + ""; //转成字符串
-            var index = sizeStr.indexOf("."); //获取小数点处的索引
-            var dou = sizeStr.substr(index + 1, 2); //获取小数点后两位的值
-            if (dou == "00") {
-                //判断后两位是否为00，如果是则删除00
-                return sizeStr.substring(0, index) + sizeStr.substr(index + 3, 2);
-            }
-            return size;
-        },
-        // 时间戳字符串
-        transformTimestamp(timestamp) {
-            let a = new Date(timestamp).getTime();
-            const date = new Date(a);
-            const Y = date.getFullYear() + "-";
-            const M =
-                (date.getMonth() + 1 < 10
-                    ? "0" + (date.getMonth() + 1)
-                    : date.getMonth() + 1) + "-";
-            const D =
-                (date.getDate() < 10 ? "0" + date.getDate() : date.getDate()) + "  ";
-            const h =
-                (date.getHours() < 10 ? "0" + date.getHours() : date.getHours()) + ":";
-            const m =
-                date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
-            // const s = date.getSeconds(); // 秒
-            const dateString = Y + M + D + h + m;
-            return dateString;
-        },
-
-        /**
-         * 本函数封装了获取文件列表的功能
-         */
-        file_lists: async function () {
-            let response = await postFormAPI('File_GetFilePathList')
-            return response
-        },
-
-        // 渲染管理
-
-        render_manage: function (data) {
-            let res = data.data.data,
-                reslen = res.length,
-                filesdict = { "type": 0, "name": '/', "Obj": {} },
-                pathdit = {},
-                fileitem = {}
-
-            // for (var i = 0; i < reslen; i++) {
-            //     let dictName = res[i].Directory
-            //     if (pathdit[dictName]) pathdit[dictName].push(res[i])
-            //     else pathdit[dictName] = [res[i]]
-            // }
-            for (var key in res) {
-                let fileName = res[key],
-                    type = fileName.slice(-3).toLowerCase(),
-                    filetype = 1
-                switch (type) {
-                    case "mp4":
-                        filetype = 1
-                        break;
-                    case "flv":
-                        filetype = 2
-                        break;
-                    case "xml":
-                        filetype = 3
-                        break;
-                    case "txt":
-                        filetype = 4
-                        break;
+            var i = 1
+            for (var root of this.table.FilesRoot) {
+                if(i == this.table.FilesRoot.length - 1){ 
+                    console.log(root)
+                    await this.GoToRoot(root)
                 }
-                fileitem[fileName] = { "type": filetype, "name": key, "Obj": "fileInfo" }
+                i = i+1
             }
-            filesdict.Obj["./Rec"] = { "type": 0, "name": key, "Obj": fileitem }
-            return filesdict
+
+
         },
-
-
-        // 去视频播放页
-
-        getDescribe(path1, name) {
-            let newpage = this.$router.resolve({
-                path: "/play",
-                query: {
-                    path: path1,
-                    name: name,
-                },
-            });
-            window.open(newpage.href, "_blank");
+        GoToHome: async function () {
+            this.table.FilesRoot = []
+            this.table.table_body = []
+            this.table.checked = []
+            this.table.table_head.selent = false
+            this.table.table_head.isIndeterminate = false
+            var data = await this.GetFiles()
+            let i = 0
+            for (var item of data) {
+                if (item.FileType == "") item.FileType = "folder"
+                if (item.DateTime == "0001-01-01T00:00:00") item.DateTime = "-"
+                if (item.Size == 0) item.Size = "-"
+                let dataitem = { index: i, selent: false, type: item.FileType, name: item.Name, date: item.DateTime, size: item.Size }
+                this.table.table_body.push(dataitem)
+                i = i + 1
+            }
         },
-        msggo: function (res) {
-            let typ = "success", msg = "操作成功"
-            if (res.code != 1001) { typ = "error", msg = res.message }
-            this.$message({ message: msg, type: typ });
-        },
+        GoToRoot: async function (gotoroot) {
+            var data = await this.GetFiles()
+            var newroot = []
+            for (var root of this.table.FilesRoot) {
+                for (var item of data) {
+                    if (item.Name == root) {
+                        data = item.children
+                        break
+                    }
+                }
+                newroot.push(root)
+                if (root == gotoroot) break
+            }
+            let i = 0
+            this.table.FilesRoot = newroot
+            this.table.table_body = []
+            this.table.checked = []
+            this.table.table_head.selent = false
+            this.table.table_head.isIndeterminate = false
 
-        /**
-         * 删除文件
-         *
-         * @param {Directory} 文件路径
-         * @param {Name} 文件名
-         * @return 接口返回的数据
-         */
-        file_delete: async function (Directory, Name) {
-            let param = pubBody("file_delete");
-            param.directory = Directory;
-            param.name = Name;
-            let response = await postFormAPI("file_delete", param, true);
-            return response.data;
-        },
-        process_file_delete: async function (Directory, Name) {
-            await this.$confirm("此操作不可恢复, 是否继续?", "删除文件", {
-                confirmButtonText: "确定",
-                cancelButtonText: "取消",
-                type: "warning",
-            })
-                .then(() => {
-                    this.file_delete(Directory, Name).then(result => {
-                        this.msggo(result)
-                        // 更新视图
-                        if (this.useroomid) {
-                            console.log("搜索内删除")
-                            this.useroom_file(this.$route.query.rooid).then(result => {
-                                let showdata = this.render_manage(result),
-                                    userlook = this.filesShow.name
+            console.log(data)
+            for (var item of data) {
+                if (item.FileType == "") item.FileType = "folder"
+                if (item.DateTime == "0001-01-01T00:00:00") item.DateTime = "-"
+                if (item.Size == 0) item.Size = "-"
+                let dataitem = { index: i, selent: false, type: item.FileType, name: item.Name, date: item.DateTime, size: item.Size }
+                this.table.table_body.push(dataitem)
+                i = i + 1
+            }
 
-                                this.file_lists().then(result => {
-                                    this.files = this.render_manage(result)
-                                })
-                                showdata.name = `${this.$route.query.rooid}的搜索结果`
-                                if (showdata.Obj[userlook]) this.filesShow = showdata.Obj[userlook]
-                                else this.filesShow = { "type": 0, "name": userlook, "Obj": {} }
-                                this.roomfile = showdata
-                            })
+        },
+        GoFiles: async function (item) {
+            console.log(item)
+            if (item.type == "folder") {
+                this.table.FilesRoot.push(item.name)
+                var data = await this.GetFiles()
+                for (var root of this.table.FilesRoot) {
+                    for (var item of data) {
+                        if (item.Name == root) {
+                            data = item.children
+                            break
                         }
-                        else {
-                            console.log("文件列表内删除")
-                            this.file_lists().then(result => {
-                                let userlook = this.filesShow.name,
-                                    countlist = this.render_manage(result)
-                                this.files = countlist
-                                if (userlook != '/') {
-                                    if (countlist.Obj[userlook]) this.filesShow = countlist.Obj[userlook]
-                                    else this.filesShow = { "type": 0, "name": userlook, "Obj": {} }
-                                }
-                                else this.filesShow = countlist
-                            })
-                        }
-                    })
-                })
-                .catch(() => {
-                    this.$message({
-                        type: "info",
-                        message: "已取消删除",
-                    });
-                });
-        },
+                    }
+                }
+                let i = 0
+                this.table.table_body = []
+                this.table.checked = []
+                this.table.table_head.selent = false
+                this.table.table_head.isIndeterminate = false
 
-        // 根据房间获取文件列表 弹窗
-        useroom_file: async function (roomid) {
-            this.roomid = roomid;
-            let res = await this.file_range(roomid);
-            // this.file_tab = res.Package;
-            // var len = this.file_tab.length;
-            // for (var i = 0; i < len; i++) {
-            //   let type = this.file_tab[i].Name.slice(-3);
-            //   if (type == "flv") type = true;
-            //   else type = false;
-            //   this.file_tab[i].Type = type;
-            // }
-            return res
-        },
+                console.log(data)
+                for (var item of data) {
+                    if (item.FileType == "") item.FileType = "folder"
+                    if (item.DateTime == "0001-01-01T00:00:00") item.DateTime = "-"
+                    if (item.Size == 0) item.Size = "-"
+                    let dataitem = { index: i, selent: false, type: item.FileType, name: item.Name, date: item.DateTime, size: item.Size }
+                    this.table.table_body.push(dataitem)
+                    i = i + 1
+                }
 
-        getList: async function () {
-            // 获取全部房间
-            this.room_list();
-        },
 
-        // 根据房间号 获取文件
-        /**
-         * 删除文件
-         *
-         * @param {roomid} 房间号
-         * @return 接口返回的数据
-         */
-        file_range: async function (roomid) {
-            let param = pubBody("file_range");
-            param.roomId = roomid;
-            let response = await postFormAPI("file_range", param, true);
-            return response;
-        },
+            }else{
+                let path = "./Rec/"
+                for (var root of this.table.FilesRoot) {
+                    path = path+root + "/"
+                }
 
-        // 获取当前所有房间
-        room_list: async function () {
-            let param = pubBody("room_list");
-            let response = await postFormAPI("room_list", param, true);
-            this.room = response.data.Package;
-            return response.data;
+                let FileName =  path + item.name
+
+                let host = window.apiObj.apiUrl
+                if (window.apiObj.apiUrl == false) host = location.protocol + '//' + location.host
+
+                window.open(host + "/api/File_GetFile?FileName="+FileName +"&CMD=File_GetFile")
+
+                // let data = await getListAPI("File_GetFile",param)
+                
+            }
         },
+        GetFiles: async function () {
+            let data = await postFormAPI("File_GetFilePathList")
+            return data.data.data
+
+        },
+        handleCheckAllChange: function (val) {
+            if (val) {
+                for (var item of this.table.table_body) {
+                    item.selent = true
+                    this.table.checked.push(item)
+                }
+            }
+            else {
+                for (var item of this.table.table_body) {
+                    item.selent = false
+                }
+                this.table.checked = []
+            }
+            this.table.table_head.isIndeterminate = false
+        },
+        handleCheckedFilesChange: function (index, selent) {
+            if (selent) {
+                for (var item of this.table.table_body) {
+                    if (item.index == index) {
+                        this.table.checked.push(item)
+                        break
+                    }
+                }
+            }
+            else {
+                for (var item of this.table.checked) {
+                    if (item.index == index) {
+                        this.table.checked.splice(this.table.checked.indexOf(item), 1)
+                        break
+                    }
+                }
+
+            }
+            if (this.table.checked.length == this.table.table_body.length && this.table.table_body.length > 0) { this.table.table_head.selent = true, this.table.table_head.isIndeterminate = false }
+            if (this.table.checked.length < this.table.table_body.length && this.table.table_body.length > 0) this.table.table_head.isIndeterminate = true
+            if (this.table.checked.length == 0) { this.table.table_head.selent = false, this.table.table_head.isIndeterminate = false }
+
+            console.log(this.table.checked)
+
+        }
     },
-    // 销毁定时器
-    // destroyed() {
-    //   window.clearInterval(this.timer);
-    // },
+
 };
 </script>
 
 <style scoped>
-.file {
-    /*概览的主要元素的容器 全局布局的对象 */
-    display: flex;
-    flex-direction: column;
+td,
+th {
+    padding: 0;
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+.body-contain--nav {
+    width: 100%;
+    padding: 0 0 0 24px;
+    box-sizing: border-box;
+    height: 40px;
+    line-height: 40px;
+    overflow: hidden;
+}
+
+.table-all {
+    width: 100%;
+    table-layout: fixed;
+}
+
+.table-td {
+    border-bottom: 1px solid #f7f8fa;
     position: relative;
 }
 
-.fileIcon {
-    height: 38px;
-    padding-left: 30px;
+.table-header-row {
+    line-height: 1;
+    height: 50px;
+    line-height: 50px;
+    color: #818999;
+    text-align: left;
+    font-size: 12px;
 }
 
-.tool-bar {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    border-bottom: 1px solid #e6e4e4;
-    height: 94px;
-    background-color: #ffffff;
-    padding: 10px 10px 10px 10px;
-    position: -webkit-sticky;
-    /* Safari */
-    position: sticky;
-    top: 0;
-    z-index: 99;
+.table-body-row {
+    height: 50px;
+    line-height: 50px;
+    color: #03081a;
+    font-size: 12px;
 }
 
-.but-bar {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    align-items: center;
-    justify-content: space-between;
+.table-body-row:hover {
+    background-color: #f7f9fc;
+    border-color: #f7f9fc;
 }
 
-.path {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+.table-selent {
+    padding-left: 24px;
 }
 
-.pathinfo {
+.icon-list {
+    width: 32px;
+    height: 32px;
+}
+
+.name-list {
     display: flex;
+    align-content: center;
     align-items: center;
 }
 
-.file_list_item {
-    /* background-color: rgb(255 255 255); */
-    height: 55px;
-    border-bottom: 1px solid rgb(143 239 255);
-    padding-left: 10px;
-    padding-right: 10px;
-    display: grid;
-    grid-template-columns: 4fr 1fr 2fr;
-    align-items: center;
-    background-color: #f0e7e700;
-}
-
-.file_list_item:hover {
-    background-color: #f0e7e785;
-}
-
-.username {
-    font-size: 28px;
-    font-weight: 300;
-    display: flex;
-    align-items: center;
-    white-space: nowrap;
-    flex: 1;
+.list-name-text {
+    padding-left: 12px;
+    line-height: 40px;
+    max-width: calc(100% - 60px);
     overflow: hidden;
+    white-space: nowrap;
     text-overflow: ellipsis;
 }
 
-.originname {
-    font-size: 10px;
-    color: #af8585;
+.nav-item-title {
+    color: #06a7ff;
+    max-width: 120px;
+    cursor: pointer;
+    display: inline-block;
+    vertical-align: middle;
+    font-size: 12px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.nav-title {
+    font-size: 12px;
+    color: #03081a;
+    font-weight: 700;
+}
+
+.nav-item-sep {
+    margin: 0 4px;
+    color: #c4d8f4;
+    display: inline-block;
+    vertical-align: middle;
+    font-size: 14px;
+}
+
+.is-disable-nav {
+    color: #818999;
+    cursor: auto;
+}
+
+.nav-item {
+    font-size: 14px;
+
 }
 </style>

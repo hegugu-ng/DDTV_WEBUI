@@ -3,6 +3,7 @@
     <div class="title">
       <div class="desc">{{title}}</div>
       <div class="date">{{update}}</div>
+      
     </div>
     <slot></slot>
   </div>
