@@ -106,7 +106,7 @@ const router = createRouter({
 
 router.beforeEach(async (to, from, next) => {
   // 动态添加 title 后面拼接一个名称
-  document.title = `NGWORKS支撑系统 - ${to.meta.title}`
+  document.title = `DDTV WEB UI - ${to.meta.title}`
   let Authenticated = isAuthenticated()
   // 如果用户登录了还想要回到登录页 取消跳转
   // if (to.path == '/sjxespptq' ) {
