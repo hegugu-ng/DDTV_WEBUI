@@ -1,6 +1,6 @@
 import http from './utils/http'
 
-let resquest = "/api"
+let resquest = "api"
 
 /**
 * 本函数实现了一个封装好的POST请求
