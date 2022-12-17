@@ -536,10 +536,6 @@ export default {
   bottom: 10%;
 }
 
-.ng-ao-p {
-  background-image: url("../../assets/superuser.svg");
-}
-
 .ng-roomnameCard {
   width: calc(100% - 55px);
 }
