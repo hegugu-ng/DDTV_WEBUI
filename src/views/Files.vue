@@ -223,7 +223,7 @@ export default {
                 let FileName =  path + item.name
 
                 let host = window.apiObj.apiUrl
-                if (window.apiObj.apiUrl == false) host = location.protocol + '//' + location.host
+                if (window.apiObj.apiUrl == false) host = "."
 
                 window.open(host + "/api/File_GetFile?FileName="+FileName +"&CMD=File_GetFile")
 

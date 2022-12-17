@@ -5,7 +5,8 @@ import {clearCookie} from '../utils/cookie'
 axios.defaults.withCredentials=true;
 
 let host = window.apiObj.apiUrl
-if (window.apiObj.apiUrl == false) host = location.protocol + '//' + location.host
+if (window.apiObj.apiUrl == false) host = "./"
+// location.protocol + '//' + location.host + location.pathname
 
 
 const service = axios.create({
