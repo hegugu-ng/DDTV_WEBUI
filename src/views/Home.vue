@@ -253,4 +253,5 @@ export default {
   margin-bottom: 8px;
   font-size: 10px;
 }
+
 </style>
