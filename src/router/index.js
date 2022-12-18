@@ -1,17 +1,17 @@
-import {createRouter,createWebHashHistory, onBeforeRouteUpdate} from 'vue-router'
+import {createRouter,createWebHashHistory} from 'vue-router'
 
-import Home from '../views/Home.vue'
-import Room from '../views/Room.vue'
-import Setting from '../views/Setting.vue'
-import Login from '../views/Login.vue'
-import Flv from '../views/flv.vue'
-import About from '../views/About.vue'
-import Files from '../views/Files.vue'
-import blogin from '../views/blogin.vue'
+const Home = () => import('../views/Home.vue')
+const Room = () => import('../views/Room.vue')
+const Setting = () => import('../views/Setting.vue')
+const Login = () => import('../views/Login.vue')
+const Flv = () => import('../views/flv.vue')
+const About = () => import('../views/About.vue')
+const Files = () => import('../views/Files.vue')
+const blogin = () => import('../views/blogin.vue')
 
 
 
-import {isAuthenticated} from '../utils/authenticated'
+import {isAuthenticated} from '@/utils/authenticated'
 
 // Vue.use(VueRouter)
 
@@ -107,7 +107,7 @@ router.beforeEach(async (to, from, next) => {
   document.title = `DDTV WEB UI - ${to.meta.title}`
   let Authenticated = isAuthenticated()
   // 如果用户登录了还想要回到登录页 取消跳转
-  if (to.path == '/login' && Authenticated) {
+  if (to.path === '/login' && Authenticated) {
     next({ path: from.path })
   }
   next()
