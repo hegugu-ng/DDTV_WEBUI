@@ -3,7 +3,7 @@
     <div class="ng-lookup">
       <el-checkbox size="small" class="ng-checkbox right10" :indeterminate="isIndeterminate" v-model="checkAll"
                    @change="handleCheckAllChange" border>全选</el-checkbox>
-      <el-input class="ng-roominput right10" size="small" v-model="lp" placeholder="搜索UID/房间号/昵称/标题" clearable>
+      <el-input class="ng-roominput right10" size="small" v-model="lp" @keyup="handleOnkeyup($event)" placeholder="搜索UID/房间号/昵称/标题" clearable>
         <template #prefix>
           <el-icon class="el-input__icon">
             <search />
@@ -19,7 +19,7 @@
     </div>
     <ul class="ng-roomGroup">
       <slot v-if="lp === ''"></slot>
-      <li class="RoomCardV2" v-for="(item, index) in lproom.length === 0 && lp === '' ? room : lproom" :key="index"
+      <li class="RoomCardV2" v-for="(item, index) in lproom.length === 0 ? room : lproom" :key="index"
           v-loading="item.load">
 
         <div class="ng-roomManager" :id="'m' + index">
@@ -77,7 +77,7 @@
       </li>
     </ul>
     <el-empty v-if="lproom.length === 0 && lp === '' ? room.length === 0 : lproom.length === 0"
-      :description="lproom.length === 0 && lp === '' ? '房间列表为空' : '没有符合的搜索结果'"></el-empty>
+      description="没有符合的搜索结果"></el-empty>
   </div>
 </template>
 <script>
@@ -146,8 +146,6 @@ export default {
           }
         }, 1000);
       }
-    },
-
     },
     handleInputChange () {
       this.lproom = [];
@@ -340,7 +338,7 @@ export default {
       let res = await postFormAPI("Rec_CancelDownload", param);
       return res.data;
     }
-
+  },
 };
 </script>
 
