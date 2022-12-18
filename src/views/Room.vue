@@ -54,7 +54,7 @@
       <li class="ng-addroom" @click="drawer = true">
         <div class="ng-add">
           <div class="additem">
-            <i class="el-icon-plus addicon"></i>
+            <div class="icon-add icon-b"></div>
             <div class="addtitle">点击添加房间</div>
           </div>
         </div>
@@ -226,6 +226,15 @@ export default {
   background-size: auto 100%;
   transform: rotate(29deg);
   /* opacity: 0.5; */
+}
+.icon-b {
+  background-image: url('../assets/icons.png');
+}
+.icon-add{
+  width: 40px;
+  height: 40px;
+  background-position: -716px -332px;
+  padding-bottom: 10px;
 }
 .live {
   background-color: #f6313e;
