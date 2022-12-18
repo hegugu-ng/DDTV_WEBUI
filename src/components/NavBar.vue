@@ -11,7 +11,7 @@
             </el-tooltip>
           </div>
         </div>
-        <div :class="'/about' == $route.path ?'bar-item navon':'bar-item'" @click="$router.push({path:'/about'})">
+        <div :class="'/about' === $route.path ?'bar-item navon':'bar-item'" @click="$router.push({path:'/about'})">
           <button class="ddtv-ui-bt nav-bt" :style="itemcss">
             <ng-svg class="nav-icon" icon-class="more" />
             <div class="title" v-if="titleshow">更多</div>
@@ -45,11 +45,11 @@ export default {
       ]
     }
   },
-  beforeMount() {  
+  beforeMount() {
     // 在挂载页面前 规定起始宽度，避免闪烁
     if (document.documentElement.clientWidth < 1400) this.NavOff()
     else this.NavOn()
-  }, 
+  },
   watch:{
     'navBar': function(val) {
       if (val) this.NavOff()

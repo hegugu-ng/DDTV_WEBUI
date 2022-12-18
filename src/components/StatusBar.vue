@@ -18,7 +18,7 @@
         <div class="logs" id="logsbox" @mousewheel="Scroll = false">
           <transition-group name="R_slide-fade">
             <div class="logger-message" v-for="(log,count) in log" :key="count">
-              <ng-lever :level="log.level" :levelshow="log.level != null ? true:false" />
+              <ng-lever :level="log.level" :levelshow="log.level != null" />
               <div class="message" :class="log.level != null ? 'm12':null">{{ log.msg }}</div>
               <div class="date">{{ log.time }}</div>
             </div>
@@ -34,7 +34,7 @@
         <i class="el-icon-s-order icon-bar"></i>
         <div class="massgelist">
           <div class="logger-message a-brush-move-in-top" style="padding: 2px 2px;" v-for="(item,count) in logpool" :key="count" :v-if="false">
-            <ng-lever :level="item.level" :levelshow="item.level != null ? true:false"></ng-lever>
+            <ng-lever :level="item.level" :levelshow="item.level != null"></ng-lever>
             <div class="message"  :class="item.level != null ? 'm12':null">{{ item.msg }}</div>
             <div class="date" v-if="item.time">{{ item.time }}</div>
           </div>
@@ -87,7 +87,7 @@ export default {
     // 监听用户触发日志模块的情况并处理
     show: function(val){
       // 当用户关闭日志模块时，复位
-      if (val){ 
+      if (val){
         this.Scroll = true;
         this.ToBottom('#logsbox')
       }
@@ -103,10 +103,10 @@ export default {
     logprint(level,msg,time){
       // 将日志打印到控制台
       let data = "[UI]：" + msg + "  - ["+time+"]";
-      if (level == "info" || level == null) console.info(data);
-      if (level == "error") console.error(data);
-      if (level == "warn") console.warn(data);
-      if (level == "debug") console.debug(data);
+      if (level === "info" || level == null) console.info(data);
+      if (level === "error") console.error(data);
+      if (level === "warn") console.warn(data);
+      if (level === "debug") console.debug(data);
     },
     ToBottom(elementId){
       // 将日志滚动到最下方

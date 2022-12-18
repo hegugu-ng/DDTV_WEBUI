@@ -31,5 +31,13 @@ module.exports = {
         symbolId: 'icon-[name]'
       })
   },
-
+  devServer: {
+    proxy: {
+      //配置跨域
+      "/api": {
+        target: "http://localhost:11419/",
+        changOrigin: true, //允许跨域
+      },
+    },
+  },
 }
