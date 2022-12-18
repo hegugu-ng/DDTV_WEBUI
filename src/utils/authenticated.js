@@ -46,7 +46,8 @@ export function getCookie(cname) {
  export function isAuthenticated() {
     // 获取cookies
     var cookieToken = getCookie("DDTVUser");
-    // 如果为空，认定鉴权失败
+    // 如果为空，认定鉴权失败、
+    if (cookieToken == "") return false
     if (cookieToken == null) return false
     else return true
 }

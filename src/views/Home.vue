@@ -24,7 +24,6 @@ import InfoCard from "../components/ng/InfoCard";
 import DataGroup from "../components/ng/DataGroup";
 import RoomCardV2 from "../components/ng/RoomCardV2";
 import { room_data } from "../utils/data_cli";
-import * as echarts from "echarts";
 import { mapState } from "vuex";
 import { postFormAPI, getListAPIv2 } from "../api";
 export default {
@@ -97,7 +96,6 @@ export default {
       this.MemUsage();
       this.Lan();
     }
-    // this.timer_core = (() => {    this.UpdateDataView }, 1000);
     this.timer_core = setInterval(this.UpdateDataView, 30000);
     this.timer_liveroom = setInterval(this.UpdateRoomView, 20000);
     this.updateTimeManger = setInterval(this.Updatetime, 2000);
@@ -140,91 +138,6 @@ export default {
     requestApi(type, roomid, data) {
       console.log(type, roomid, data);
       // 分配一下
-    },
-    PR(x,series,id) {
-      var chartDom = document.getElementById(id);
-      var myChart = echarts.init(chartDom);
-      let option = {
-        tooltip: {confine :false,trigger: 'axis',axisPointer: {type: 'line'}},
-        xAxis: {type: "category",boundaryGap: false,data:x},
-        yAxis: {type: "value",splitNumber: 2,axisPointer: {snap: true},},
-        grid: {left:"0px",right: "10px", top:"10px",bottom: "0px",containLabel:true },
-        series: series
-      };
-
-      option && myChart.setOption(option);
-    },
-    CpuUsage: async function () {
-      let res = await getListAPIv2("/tencent?MetricName=CpuUsage");
-      let Timestamps = res.data.data.DataPoints[0].Timestamps;
-      let Values = res.data.data.DataPoints[0].Values;
-      let series = [
-          {
-            name: "CPU占用率",
-            type: "line",
-            showSymbol: false,
-            smooth: true,
-            data: Values,
-          },
-        ]
-      this.PR(this.valtokey(Timestamps),series,'cpu-labe');
-    },
-    MemUsage: async function () {
-      let res = await getListAPIv2("/tencent?MetricName=MemUsed");
-      let Timestamps = res.data.data.DataPoints[0].Timestamps;
-      let Values = res.data.data.DataPoints[0].Values;
-      let series = [
-          {
-            name: "内存使用量",
-            type: "line",
-            showSymbol: false,
-            smooth: true,
-            data: Values,
-          },
-        ]
-      this.PR(this.valtokey(Timestamps),series,'ram-labe');
-    },
-    Lan: async function() {
-      // 定一个基本日期
-      let LighthouseIntraffic = await getListAPIv2("/tencent?MetricName=LighthouseIntraffic");
-      let Timestamps_LighthouseIntraffic = LighthouseIntraffic.data.data.DataPoints[0].Timestamps;
-      let Values_LighthouseIntraffic = LighthouseIntraffic.data.data.DataPoints[0].Values;
-
-      let LighthouseOuttraffic = await getListAPIv2("/tencent?MetricName=LighthouseOuttraffic");
-      // let Timestamps_LighthouseOuttraffic = LighthouseOuttraffic.data.data.DataPoints[0].Timestamps;
-      let Values_LighthouseOuttraffic = LighthouseOuttraffic.data.data.DataPoints[0].Values;
-
-      let series = [
-          {
-            name: "流入流量",
-            type: "line",
-            showSymbol: false,
-            smooth: true,
-            yAxisIndex: 0,
-            data: Values_LighthouseIntraffic
-          },
-          {
-            name: "流出流量",
-            type: "line",
-            showSymbol: false,
-            smooth: true,
-            yAxisIndex: 0,
-            data: Values_LighthouseOuttraffic
-          },
-        ]
-      this.PR(this.valtokey(Timestamps_LighthouseIntraffic),series,'lan-labe');
-    },
-    Format: function(Q){return Q < 10 ? '0' + Q : Q},
-    valtokey(arr1) {
-      let res = [];
-      for (var k = 0; k < arr1.length; k++) {
-        let time = arr1[k];
-        let T = new Date(time*1000);
-        let Result = this.Format(T.getHours()) + ':' + this.Format(T.getMinutes());
-        
-        res.push(Result);
-      }
-      return res;
     },
 
     UpdateDataView: async function () {
