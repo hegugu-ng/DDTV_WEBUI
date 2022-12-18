@@ -14,7 +14,7 @@
       </template>
 
       <template class="drawer"  #default>
-        <div class="ng-bntgroup" v-if="seview.length != 0">
+        <div class="ng-btngroup" v-if="seview.length !== 0">
           <ul class="ng-userGroup">
             <li class="ng-user-item" v-for="(item, index) in seview" :key="index" @click="open(item.uname,item.uid,'添加房间',Room_Add)">
               <div class="ng-user-itemvi">
@@ -31,12 +31,12 @@
                   <div v-html="item.uname" class="ng-username"></div>
                   <div
                     class="ng-liveStuat"
-                    :class="item.live_status == 0 ? 'nolive' : 'live'"
+                    :class="item.live_status === 0 ? 'nolive' : 'live'"
                   >
-                    {{ item.live_status == 0 ? "未开播" : "直播中" }}
+                    {{ item.live_status === 0 ? "未开播" : "直播中" }}
                   </div>
                   <div class="ng-ps ng-username">
-                    {{ item.cate_name == "" ? "未选择分区" : item.cate_name }}
+                    {{ item.cate_name === "" ? "未选择分区" : item.cate_name }}
                   </div>
                 </div>
               </div>
@@ -53,9 +53,9 @@
     <ng-roomcard :room="room" @request="test" @requestgroup="test2">
       <li class="ng-addroom" @click="drawer = true">
         <div class="ng-add">
-          <div class="additem">
+          <div class="ng-additem">
             <div class="icon-add icon-b"></div>
-            <div class="addtitle">点击添加房间</div>
+            <div class="ng-addtitle">点击添加房间</div>
           </div>
         </div>
       </li>
@@ -91,7 +91,7 @@ export default {
 
   watch:{
     addkeywords:async function(newval){
-      if(newval!= ''){
+      if(newval!== ''){
         let res = await this.User_Search(newval)
         this.seview = res.data.data.result
       }
@@ -115,7 +115,7 @@ export default {
           this.$message({
             type: 'info',
             message: `已取消${active}`
-          });          
+          });
         });
       },
     handleClose(done) {
@@ -126,15 +126,15 @@ export default {
       this.room[index].load = true;
       let res = { code: -1 };
       try {
-        if (cmd == "Room_AutoRec") res = await this.Room_AutoRec(uid, data);
-        if (cmd == "Room_DanmuRec") res = await this.Room_DanmuRec(uid, data);
-        if (cmd == "Room_Del") res = await this.Room_Del(uid);
+        if (cmd === "Room_AutoRec") res = await this.Room_AutoRec(uid, data);
+        if (cmd === "Room_DanmuRec") res = await this.Room_DanmuRec(uid, data);
+        if (cmd === "Room_Del") res = await this.Room_Del(uid);
         // 抛出错误
-        if (res.code != 0) throw new Error("服务器返回错误");
-        if (cmd == "Room_Del") this.room.splice(index, 1);
+        if (res.code !== 0) return new Promise.Error("服务器返回错误");
+        if (cmd === "Room_Del") this.room.splice(index, 1);
       } catch (err) {
-        if (cmd == "Room_AutoRec") this.room[index].IsAutoRec = !data;
-        if (cmd == "Room_DanmuRec") this.room[index].IsRecDanmu = !data;
+        if (cmd === "Room_AutoRec") this.room[index].IsAutoRec = !data;
+        if (cmd === "Room_DanmuRec") this.room[index].IsRecDanmu = !data;
       } finally {
         this.room[index].load = false;
       }
@@ -152,7 +152,7 @@ export default {
     Room_AllInfo: async function () {
       let res = await postFormAPI("Room_AllInfo");
       let data = res.data;
-      if (data.code == 0) {
+      if (data.code === 0) {
         await room_data(this, data.data);
       }
     },
@@ -222,7 +222,7 @@ export default {
 .inserver {
   width: 110px;
   height: 110px;
-  background: url("../assets/success.png") 0px 0px no-repeat;
+  background: url("../assets/success.png") 0 0 no-repeat;
   background-size: auto 100%;
   transform: rotate(29deg);
   /* opacity: 0.5; */
@@ -316,7 +316,7 @@ export default {
   flex-direction: column;
   justify-content: center;
 }
-.additem {
+.ng-additem {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -325,7 +325,7 @@ export default {
   color: #888;
   font-size: 4rem;
 }
-.addtitle {
+.ng-addtitle {
   color: #888;
   font-size: 1rem;
 }
@@ -333,9 +333,9 @@ export default {
   list-style-type: none;
   margin-block-start: 0;
   margin-block-end: 0;
-  margin-inline-start: 0px;
-  margin-inline-end: 0px;
-  padding-inline-start: 0px;
+  margin-inline-start: 0;
+  margin-inline-end: 0;
+  padding-inline-start: 0;
 }
 .ng-user-item {
   display: inline-block;

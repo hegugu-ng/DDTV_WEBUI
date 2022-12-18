@@ -1,8 +1,8 @@
 <template>
   <div>
     <div class="ng-lookup">
-      <el-checkbox size="small" class="ng-checkboox right10" :indeterminate="isIndeterminate" v-model="checkAll"
-        @change="handleCheckAllChange" border>全选</el-checkbox>
+      <el-checkbox size="small" class="ng-checkbox right10" :indeterminate="isIndeterminate" v-model="checkAll"
+                   @change="handleCheckAllChange" border>全选</el-checkbox>
       <el-input class="ng-roominput right10" size="small" v-model="lp" placeholder="搜索UID/房间号/昵称/标题" clearable>
         <template #prefix>
           <el-icon class="el-input__icon">
@@ -14,13 +14,13 @@
         <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
         </el-option>
       </el-select>
-      <el-button :disabled="select == ''" size="small" @click="$emit('requestgroup', select, checkedRoom)">确定
+      <el-button :disabled="select === ''" size="small" @click="$emit('requestgroup', select, checkedRoom)">确定
       </el-button>
     </div>
     <ul class="ng-roomGroup">
-      <slot v-if="lp == ''"></slot>
-      <li class="RoomCardV2" v-for="(item, index) in lproom.length == 0 && lp == '' ? room : lproom" :key="index"
-        v-loading="item.load">
+      <slot v-if="lp === ''"></slot>
+      <li class="RoomCardV2" v-for="(item, index) in lproom.length === 0 && lp === '' ? room : lproom" :key="index"
+          v-loading="item.load">
 
         <div class="ng-roomManager" :id="'m' + index">
           <div class="ng-configbar">
@@ -29,7 +29,7 @@
             </el-icon>
             <div class="ng-hostname">{{ item.uname }}</div>
           </div>
-          <div class="ng-bntgroup">
+          <div class="ng-btngroup">
             <div>
               <div class="ng-fromtitle">基础管理</div>
               <el-button size="small">管理文件</el-button>
@@ -48,9 +48,9 @@
 
         <div>
           <div class="ng-roomCover">
-            <div class="ng-isLive ng-floatbar" v-if="item.live_status == 1">正在直播</div>
+            <div class="ng-isLive ng-floatbar" v-if="item.live_status === 1">正在直播</div>
             <div class="ng-floatbar">
-              <el-checkbox class="ng-checkboox" v-model="item.check" @change="handleCheckedRoomChange"></el-checkbox>
+              <el-checkbox class="ng-checkbox" v-model="item.check" @change="handleCheckedRoomChange"></el-checkbox>
             </div>
             <div class="ng-clink" :onclick="`window.open('https://live.bilibili.com/${item.room_id}')`"></div>
             <img class="ng-image" referrerPolicy="no-referrer" :src="item.cover_from_user" />
@@ -76,13 +76,13 @@
         </div>
       </li>
     </ul>
-    <el-empty v-if="lproom.length == 0 && lp == '' ? room.length == 0 : lproom.length == 0"
-      :description="lproom.length == 0 && lp == '' ? '房间列表为空' : '没有符合的搜索结果'"></el-empty>
+    <el-empty v-if="lproom.length === 0 && lp === '' ? room.length === 0 : lproom.length === 0"
+      :description="lproom.length === 0 && lp === '' ? '房间列表为空' : '没有符合的搜索结果'"></el-empty>
   </div>
 </template>
 <script>
-import { postFormAPI } from "../../api";
-import { room_data } from "../../utils/data_cli";
+import { postFormAPI } from "@/api";
+import { room_data } from "@/utils/data_cli";
 import TweenLite from 'gsap';
 export default {
   name: "RoomGroupV2",
@@ -112,13 +112,14 @@ export default {
         },
       ],
       lproom: [],
-      timer: null
+      timer: null,
+      setRoom: this.room
     };
   },
   watch: {
     lp: function (newval) {
       this.lproom = [];
-      if (newval != "") {
+      if (newval !== "") {
         for (let i = 0; i < this.room.length; i++) {
           let item = this.room[i];
           let kstr = [item.title, item.uid, item.uname, item.room_id];
@@ -139,7 +140,7 @@ export default {
     this.timer = setInterval(() => {
       for (let i = 0; i < this.room.length; i++) {
         let item = this.room[i]
-        if (item.live_status != 1) continue
+        if (item.live_status !== 1) continue
         let now = Date.now()
         let time = this.formatSeconds((now / 1000 - item.live_time))
         let room = this.room
@@ -156,62 +157,58 @@ export default {
     },
     requestApi: async function (cmd, uid, data, index) {
       console.log(this.room[index])
-      this.room[index].load = true;
+      this.setRoom[index].load = true;
       let res = { code: -1 };
       try {
-        if (cmd == "Room_AutoRec") res = await this.Room_AutoRec(uid, data);
-        if (cmd == "Room_DanmuRec") res = await this.Room_DanmuRec(uid, data);
-        if (cmd == "Room_Del") res = await this.Room_Del(uid);
-        if (cmd == "Rec_CancelDownload") res = await this.Rec_CancelDownload(uid)
+        if (cmd === "Room_AutoRec") res = await this.Room_AutoRec(uid, data);
+        if (cmd === "Room_DanmuRec") res = await this.Room_DanmuRec(uid, data);
+        if (cmd === "Room_Del") res = await this.Room_Del(uid);
+        if (cmd === "Rec_CancelDownload") res = await this.Rec_CancelDownload(uid)
         // 抛出错误
-        if (res.code != 0) throw new Error("服务器返回错误");
-        if (cmd == "Room_Del") this.room.splice(index, 1);
-        if (cmd == "Rec_CancelDownload") this.room.splice(index, 1);
+        if (res.code !== 0) return new Promise.Error("服务器返回错误");
+        if (cmd === "Room_Del") this.setRoom.splice(index, 1);
+        if (cmd === "Rec_CancelDownload") this.setRoom.splice(index, 1);
       } catch (err) {
-        if (cmd == "Room_AutoRec") this.room[index].IsAutoRec = !data;
-        if (cmd == "Room_DanmuRec") this.room[index].IsRecDanmu = !data;
+        if (cmd === "Room_AutoRec") this.setRoom[index].IsAutoRec = !data;
+        if (cmd === "Room_DanmuRec") this.setRoom[index].IsRecDanmu = !data;
       } finally {
-        this.room[index].load = false;
+        this.setRoom[index].load = false;
       }
     },
     formatSeconds(value) {
-      var theTime = parseInt(value); // 秒
-      var middle = 0; // 分
-      var hour = 0; // 小时
+      let theTime = parseInt(value); // 秒
+      let middle = 0; // 分
+      let hour = 0; // 小时
 
       if (theTime > 60) {
-        undefined;
-        middle = parseInt(theTime / 60);
-        theTime = parseInt(theTime % 60);
+        middle = Math.round(theTime / 60);
+        theTime = Math.round(theTime % 60);
         if (middle > 60) {
-          undefined;
-          hour = parseInt(middle / 60);
-          middle = parseInt(middle % 60);
+          hour = Math.round(middle / 60);
+          middle = Math.round(middle % 60);
         }
       }
-      var result = ""
+      let result = "";
       // + parseInt(theTime) + "秒";
       if (middle > 0) {
-        undefined;
-        result = "" + parseInt(middle) + "分" + result;
+        result = "" + Math.round(middle) + "分" + result;
       }
       if (hour > 0) {
-        undefined;
-        result = "" + parseInt(hour) + "小时" + result;
+        result = "" + Math.round(hour) + "小时" + result;
       }
       return result;
     },
     fuzzyMatch(str1, key) {
-      let index = -1,
-        flag = false;
+      let index = -1, flag = false;
       str1 = String(str1).toLowerCase();
       key = String(key).toLowerCase();
-      for (var i = 0, arr = String(key).split(""); i < arr.length; i++) {
+      let i = 0, arr = key.split("");
+      for (; i < arr.length; i++) {
         //有一个关键字都没匹配到，则没有匹配到数据
-        if (String(str1).indexOf(arr[i]) < 0) {
+        if (str1.indexOf(arr[i]) < 0) {
           break;
         } else {
-          let match = String(str1).matchAll(arr[i]);
+          let match = str1.matchAll(arr[i]);
           let next = match.next();
           while (!next.done) {
             if (next.value.index > index) {
@@ -230,8 +227,8 @@ export default {
     handleCheckAllChange(val) {
       this.isIndeterminate = false;
       let room = this.room
-      if (this.lp != "") room = this.lproom
-      if (room.length != 0) {
+      if (this.lp !== "") room = this.lproom
+      if (room.length !== 0) {
         for (let i = 0; i < room.length; i++) {
           if (val) {
             room[i].check = true;
@@ -247,12 +244,12 @@ export default {
     },
     handleCheckedRoomChange() {
       let arr = this.room
-      if (this.lp != '') arr = this.lproom
+      if (this.lp !== '') arr = this.lproom
       let statusand = '',
         statusor = ''
       for (let i = 0; i < arr.length; i++) {
         let item = arr[i];
-        if (i == 0) {
+        if (i === 0) {
           statusand = item.check
           statusor = item.check
         } else {
@@ -261,7 +258,7 @@ export default {
           statusor ||= item.check
         }
       }
-      if (arr.length != 0) {
+      if (arr.length !== 0) {
         // 全选才为 true
         let alltrue = statusand
         // 全不选才为 true
@@ -274,7 +271,7 @@ export default {
           this.isIndeterminate = false;
           this.checkAll = false
         }
-        if (allfalse == alltrue) {
+        if (allfalse === alltrue) {
           this.isIndeterminate = true;
           this.checkAll = false
         }
@@ -287,7 +284,7 @@ export default {
     Room_AllInfo: async function () {
       let res = await postFormAPI("Room_AllInfo");
       let data = res.data;
-      if (data.code == 0) {
+      if (data.code === 0) {
         await room_data(this, data.data);
       }
     },
@@ -334,8 +331,8 @@ export default {
 
 
 <style>
-.ng-bntgroup {
-  padding: 0px 10px 0px 10px;
+.ng-btngroup {
+  padding: 0 10px 0 10px;
 }
 
 .icon-img {
@@ -346,9 +343,9 @@ export default {
 
 .ng-roomGroup {
   /* position: absolute; */
-  padding-inline-start: 0px;
-  margin-block-start: 0px;
-  margin-block-end: 0px;
+  padding-inline-start: 0;
+  margin-block-start: 0;
+  margin-block-end: 0;
 }
 
 .right10 {
@@ -366,7 +363,7 @@ export default {
 }
 
 .ng-lookup {
-  margin: 0.8rem 0rem 0.8rem 0rem;
+  margin: 0.8rem 0 0.8rem 0;
   display: flex;
   align-items: center;
 }
@@ -381,7 +378,7 @@ export default {
 
 .ng-fromtitle {
   font-size: .8rem;
-  padding: .5rem 0rem .5rem 0rem;
+  padding: .5rem 0 .5rem 0;
   color: #161313;
   ;
 }
@@ -458,9 +455,10 @@ export default {
   line-height: 24px;
 }
 
-.ng-checkboox {
+.ng-checkbox {
   float: right;
   padding-right: 2px;
+  pointer-events: auto;
 }
 
 .ng-clink {
@@ -490,6 +488,7 @@ export default {
   background-repeat: no-repeat;
   background-size: auto 100%;
   z-index: 120;
+  pointer-events: none;
 }
 
 .ng-roominfo {
