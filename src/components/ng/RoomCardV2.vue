@@ -113,28 +113,9 @@ export default {
       ],
       lproom: [],
       timer: null,
-      setRoom: this.room
+      setRoom: this.room,
+      lastTimeStamp: 0
     };
-  },
-  watch: {
-    lp: function (newval) {
-      this.lproom = [];
-      if (newval !== "") {
-        for (let i = 0; i < this.room.length; i++) {
-          let item = this.room[i];
-          let kstr = [item.title, item.uid, item.uname, item.room_id];
-
-          for (let j = 0; j < kstr.length; j++) {
-            let expstr = kstr[j];
-            if (this.fuzzyMatch(expstr, newval)) {
-              this.lproom.push(item);
-              break;
-            }
-          }
-        }
-      }
-      this.handleCheckedRoomChange()
-    },
   },
   mounted() {
     this.timer = setInterval(() => {
@@ -152,6 +133,40 @@ export default {
     clearInterval(this.timer);
   },
   methods: {
+    handleOnkeyup(event){
+      console.log(event)
+      if(event.keyCode === 13){
+        this.handleInputChange()
+      }else {
+        this.lastTimeStamp = event.timeStamp;
+        setTimeout(() => {
+          //1s后比较二者是否还相同（因为只要还有事件触发，lastTimeStamp就会被改写，不再是当前事件函数的时间戳）
+          if(this.lastTimeStamp === event.timeStamp){
+            this.handleInputChange()
+          }
+        }, 1000);
+      }
+    },
+
+    },
+    handleInputChange () {
+      this.lproom = [];
+      if (this.lp !== "") {
+        for (let i = 0; i < this.room.length; i++) {
+          let item = this.room[i];
+          let kstr = [item.title, item.uid, item.uname, item.room_id];
+
+          for (let j = 0; j < kstr.length; j++) {
+            let expstr = kstr[j];
+            if (this.fuzzyMatch(expstr, this.lp)) {
+              this.lproom.push(item);
+              break;
+            }
+          }
+        }
+      }
+      this.handleCheckedRoomChange()
+    },
     stemo: function (id, height) {
       TweenLite.to(id, { height: height })
     },
@@ -325,7 +340,7 @@ export default {
       let res = await postFormAPI("Rec_CancelDownload", param);
       return res.data;
     }
-  },
+
 };
 </script>
 
