@@ -50,6 +50,10 @@ service.interceptors.response.use(response => {
         clearCookie()
         Router.push("/login")
     }
+    if(response.status != 200) {
+        clearCookie()
+        Router.push("/login")
+    }
     return response
 }, error => {
     // 异常处理

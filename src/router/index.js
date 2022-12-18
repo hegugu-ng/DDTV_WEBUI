@@ -1,4 +1,4 @@
-import {createRouter,createWebHashHistory} from 'vue-router'
+import {createRouter,createWebHashHistory, onBeforeRouteUpdate} from 'vue-router'
 
 import Home from '../views/Home.vue'
 import Room from '../views/Room.vue'
@@ -102,22 +102,14 @@ const router = createRouter({
   history: createWebHashHistory(),
   routes,
 })
-
-
 router.beforeEach(async (to, from, next) => {
   // 动态添加 title 后面拼接一个名称
   document.title = `DDTV WEB UI - ${to.meta.title}`
   let Authenticated = isAuthenticated()
   // 如果用户登录了还想要回到登录页 取消跳转
-  // if (to.path == '/sjxespptq' ) {
-  //   next()
-  // }
   if (to.path == '/login' && Authenticated) {
     next({ path: from.path })
   }
-  // // 判断鉴权  逻辑:如果在除了 Login 的其他页面 且没有登录状态的 定向到登录页
-  // if (to.name !== 'Login' && to.name !== 'geetest' && !Authenticated) next({path: '/login' })
-  // else 
   next()
 })
 
