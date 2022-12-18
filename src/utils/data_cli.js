@@ -44,19 +44,19 @@ export async function room_data(self, arr) {
         dataslent = []
 
     // 开始生成本地渲染列表的索引
-    if (datalen != 0) { 
-        for (var i = 0; i < datalen; i++) { 
-            dataslent.push(self.room[i].room_id) 
-        } 
+    if (datalen !== 0) {
+        for (var i = 0; i < datalen; i++) {
+            dataslent.push(self.room[i].room_id)
+        }
     }
     // 遍历API数据 初始化 roomid 和 index 对应的索引
     let arrlen = arr.length,
         arrslent = []
     // 开始生成API列表的索引
-    if (arrlen != 0) { 
-        for (var j = 0; j < arrlen; j++) { 
-            arrslent.push(arr[j].room_id) 
-        } 
+    if (arrlen != 0) {
+        for (var j = 0; j < arrlen; j++) {
+            arrslent.push(arr[j].room_id)
+        }
     }
     // 拷贝数组 得到两个数组 独有roomid的新数组
     let _dataSet = new Set(dataslent),
@@ -87,7 +87,7 @@ export async function room_data(self, arr) {
             if (ordata.cover_from_user != ondata.cover_from_user) {
                 if(ordata.cover_from_user!='')self.room[p].cover_from_user = ordata.cover_from_user
             }
-            if (`${ordata.face}@60w_60h_1c_1s.webp` != ondata.face){ 
+            if (`${ordata.face}@60w_60h_1c_1s.webp` != ondata.face){
                 if(ordata.face!='')self.room[p].face = `${ordata.face}@60w_60h_1c_1s.webp`
             }
             if (ordata.keyframe != ondata.keyframe) self.room[p].keyframe = ordata.keyframe

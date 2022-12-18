@@ -23,14 +23,14 @@
     "ts-loader": "^9.2.7",
     "vue": "^3.2.31",
     "vue-router": "^4.0.13",
-    "vuex": "^4.0.2"
+    "vuex": "^4.0.0"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.17.0",
     "@vue/cli-plugin-babel": "~5.0.1",
     "@vue/cli-plugin-eslint": "~5.0.1",
     "@vue/cli-plugin-router": "~5.0.1",
-    "@vue/cli-plugin-vuex": "~5.0.1",
+    "@vue/cli-plugin-vuex": "^5.0.8",
     "@vue/cli-service": "^5.0.1",
     "ansi-regex": "^6.0.1",
     "axios": "^0.26.0",

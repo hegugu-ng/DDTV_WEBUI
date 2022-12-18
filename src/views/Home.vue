@@ -85,38 +85,39 @@ export default {
         { title: "流量", key: "ll" },
         { title: "开播人数", key: "live" },
       ],
-      timer_core: null,
-      timer_liveroom: null,
+      timer: null,
       updateTimeManger: null,
     };
   },
-  mounted: function () {
+  mounted: async function () {
     if(this.monitor){
       this.CpuUsage();
       this.MemUsage();
       this.Lan();
     }
-    this.timer_core = setInterval(this.UpdateDataView, 30000);
-    this.timer_liveroom = setInterval(this.UpdateRoomView, 20000);
+    this.$store.state.System_Resources ? (await this.UpdateDataView()) && (await this.UpdateRoomView()): this.initView();
     this.updateTimeManger = setInterval(this.Updatetime, 2000);
-    this.UpdateDataView();
-    this.UpdateRoomView();
+    this.timer = setInterval(this.initView, 20000);
   },
   beforeUnmount() {
-    clearInterval(this.timer_core);
-    clearInterval(this.timer_liveroom);
+    clearInterval(this.timer);
     console.log("beforeUnmount");
   },
   methods: {
     isNull(value) {
-      if (!value && typeof value != "undefined" && value != 0) {
-          return true;
-      } else {
-          return false;
-      }
+      return !value && typeof value != "undefined" && value !== 0;
+    },
+    initView(){
+      Promise.all([this.System_Resources(), this.Rec_RecordingInfo_Lite(), this.Room_AllInfo()]).then((res) => {
+        this.$store.commit("System_Resources", res[0]);
+        this.$store.commit("Rec_RecordingInfo_Lite", res[1]);
+        this.$store.commit("Room_AllInfo", res[2]);
+        this.UpdateDataView();
+        this.UpdateRoomView();
+      });
     },
     Updatetime(){
-      var time = new Date();
+      const time = new Date();
       let NowTime = time.getTime();
       let coreUp,liveUp;
       if (this.isNull(this.coreUpdateTime)) coreUp = "更新中";
@@ -125,10 +126,10 @@ export default {
       if (this.isNull(this.liveUpdateTime)) liveUp = "更新中";
       else liveUp = Math.round((NowTime - this.liveUpdateTime)/1000);
 
-      if (coreUp < 8 || coreUp == "更新中") coreUp = "刚刚";
+      if (coreUp < 8 || coreUp === "更新中") coreUp = "刚刚";
       else coreUp = coreUp + "秒前更新"
 
-      if (liveUp < 8 || coreUp == "更新中") liveUp = "刚刚";
+      if (liveUp < 8 || coreUp === "更新中") liveUp = "刚刚";
       else liveUp = liveUp + "秒前更新"
 
 
@@ -137,21 +138,22 @@ export default {
     },
     requestApi(type, roomid, data) {
       console.log(type, roomid, data);
-      // 分配一下
+      // TODO 分配一下
     },
 
     UpdateDataView: async function () {
       this.coreUpdateTime_time = "更新中";
-      let data = await this.System_Resources();
-      let room = await this.Rec_RecordingInfo_Lite();
-      let allroom = await this.Room_AllInfo();
+      let data = this.$store.state.System_Resources;
+      let room = this.$store.state.Rec_RecordingInfo_Lite;
+      let allroom = this.$store.state.Room_AllInfo;
+      console.log(data,room,allroom)
       let dl_all = 0;
       for (let i = 0; i < room.length; i++) {
         let item = room[i];
         dl_all += item.TotalDownloadCount;
       }
       let HDD = {};
-      if (data.Platform != "Linux") HDD = data.HDDInfo[0];
+      if (data.Platform !== "Linux") HDD = data.HDDInfo[0];
       else {
         let dish = data.HDDInfo;
         var dishlen = dish.length;
@@ -186,25 +188,16 @@ export default {
     },
     UpdateRoomView: async function () {
       this.liveUpdateTime_time = "更新中";
-      let liveroom = await this.Rec_RecordingInfo_Lite();
-      let allroom = await this.Room_AllInfo();
-      let datalen = liveroom.length,
-        dataslent = [],
-        liveroomdata = [];
+      let allRoom = this.$store.state.Room_AllInfo;
+      let liveRoomData = [];
       // 开始生成本地渲染列表的索引
-      for (var i = 0; i < datalen; i++) {
-        dataslent.push(liveroom[i].Uid);
-      }
-      for (var j = 0; j < dataslent.length; j++) {
-        for (var k = 0; k < allroom.length; k++) {
-          if (dataslent[j] == allroom[k].uid) {
-            liveroomdata.push(allroom[k]);
-            break;
-          }
+      allRoom.forEach((item) =>{
+        if(item.live_status === 1){
+          liveRoomData.push(item);
         }
-      }
-      await room_data(this, liveroomdata);
-      var time = new Date();
+      })
+      await room_data(this, liveRoomData);
+      const time = new Date();
       this.liveUpdateTime = time.getTime();
     },
     Room_AllInfo: async function () {
