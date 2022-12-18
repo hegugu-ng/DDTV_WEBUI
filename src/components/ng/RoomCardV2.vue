@@ -172,7 +172,7 @@
 </template>
 <script>
 import { postFormAPI } from "@/api";
-import { room_data } from "@/utils/data_cli";
+// import { room_data } from "@/utils/data_cli";
 import TweenLite from "gsap";
 export default {
 	name: "RoomGroupV2",
@@ -249,22 +249,19 @@ export default {
 			console.log(this.room[index]);
 			this.setRoom[index].load = true;
 			let res = { code: -1 };
-			try {
-				if (cmd === "Room_AutoRec") res = await this.Room_AutoRec(uid, data);
-				if (cmd === "Room_DanmuRec") res = await this.Room_DanmuRec(uid, data);
-				if (cmd === "Room_Del") res = await this.Room_Del(uid);
-				if (cmd === "Rec_CancelDownload")
-					res = await this.Rec_CancelDownload(uid);
-				// 抛出错误
-				if (res.code !== 0) return new Promise.Error("服务器返回错误");
-				if (cmd === "Room_Del") this.setRoom.splice(index, 1);
-				if (cmd === "Rec_CancelDownload") this.setRoom.splice(index, 1);
-			} catch (err) {
+
+			res = await this.Room_Api_Function(cmd, uid, data);
+
+			if (res.code !== 0) {
 				if (cmd === "Room_AutoRec") this.setRoom[index].IsAutoRec = !data;
 				if (cmd === "Room_DanmuRec") this.setRoom[index].IsRecDanmu = !data;
-			} finally {
-				this.setRoom[index].load = false;
+			} else {
+				if (["Room_Del", "Rec_CancelDownload"].includes(cmd)) {
+					this.setRoom.splice(index, 1);
+				}
 			}
+
+			this.setRoom[index].load = false;
 		},
 		formatSeconds(value) {
 			let theTime = parseInt(value); // 秒
@@ -373,51 +370,34 @@ export default {
 				this.checkAll = false;
 			}
 		},
+		// Room_AllInfo: async function () {
+		// 	let res = await postFormAPI("Room_AllInfo");
+		// 	let data = res.data;
+		// 	if (data.code === 0) {
+		// 		await room_data(this, data.data);
+		// 	}
+		// },
+		Room_Api_Function: async function (type, uid, data) {
+			let param = {
+				UID: uid,
+			};
 
-		Room_AllInfo: async function () {
-			let res = await postFormAPI("Room_AllInfo");
-			let data = res.data;
-			if (data.code === 0) {
-				await room_data(this, data.data);
+			if (["Room_AutoRec", "Room_DanmuRec"].includes(type)) {
+				type === "Room_AutoRec"
+					? (param["IsAutoRec"] = data)
+					: (param["IsRecDanmu"] = data);
 			}
-		},
-		Room_AutoRec: async function (uid, data) {
-			let param = {
-				UID: uid,
-				IsAutoRec: data,
-			};
-			let res = await postFormAPI("Room_AutoRec", param);
+
+			let res = await postFormAPI(type, param);
 			return res.data;
 		},
-		Room_DanmuRec: async function (uid, data) {
-			let param = {
-				UID: uid,
-				IsRecDanmu: data,
-			};
-			let res = await postFormAPI("Room_DanmuRec", param);
-			return res.data;
-		},
-		Room_Del: async function (uid) {
-			let param = {
-				UID: uid,
-			};
-			let res = await postFormAPI("Room_Del", param);
-			return res.data;
-		},
-		Room_Add: async function (uid) {
-			let param = {
-				UID: uid,
-			};
-			let res = await postFormAPI("Room_Add", param);
-			return res.data;
-		},
-		Rec_CancelDownload: async function (uid) {
-			let param = {
-				UID: uid,
-			};
-			let res = await postFormAPI("Rec_CancelDownload", param);
-			return res.data;
-		},
+		// Room_Add: async function (uid) {
+		// 	let param = {
+		// 		UID: uid,
+		// 	};
+		// 	let res = await postFormAPI("Room_Add", param);
+		// 	return res.data;
+		// },
 	},
 };
 </script>
