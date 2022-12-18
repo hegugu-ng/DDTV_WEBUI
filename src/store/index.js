@@ -1,6 +1,6 @@
 // import Vue from 'vue'
 import { createStore } from 'vuex'
-import { postFormAPI, getListAPIv2 } from "../api";
+// import { postFormAPI, getListAPIv2 } from "../api";
 
 // Vue.use(Vuex)
 
@@ -14,7 +14,7 @@ const store = createStore({
         "type": 'updater',
         "show": false
       },
-      beforestatus: null,
+      beforeStatus: null,
       // 日志
       log: [],
       screenWidth: document.documentElement.clientWidth,
@@ -30,36 +30,36 @@ const store = createStore({
     log: state => state.log,
     connectStatus: state => state.connectStatus,
     // 最新的一条日志
-    newLog: state => state.log.length != 0 ? state.log[state.log.length - 1] : null,
-    navBar: state => state.screenWidth < 1300 ? true : false,
+    newLog: state => state.log.length !== 0 ? state.log[state.log.length - 1] : null,
+    navBar: state => state.screenWidth < 1300,
     sys_core_data: state => state.sys_core_data,
   },
   mutations: {
-    addLog(state, playload) {
-      var date = new Date();
-      var nowStr = date.toLocaleString('zh', { hour12: true });
-      var playload = { "level": playload.lv, "msg": playload.msg, "time": nowStr };
-      state.log.push(playload);
+    addLog(state, payload) {
+      const date = new Date();
+      const nowStr = date.toLocaleString('zh', {hour12: true});
+      payload = { "level": payload.lv, "msg": payload.msg, "time": nowStr };
+      state.log.push(payload);
     },
     clearLog: state => state.log = [],
-    setStatus: (state, playload) => state.connectStatus = playload,
-    screenWidth: (state, playload) => state.screenWidth = playload,
-    beforestatus: (state, playload) => state.beforestatus = playload
+    setStatus: (state, payload) => state.connectStatus = payload,
+    screenWidth: (state, payload) => state.screenWidth = payload,
+    beforeStatus: (state, payload) => state.beforeStatus = payload
   },
   actions: {
-    setStatusAsync(context, playload) {
+    setStatusAsync(context, payload) {
       // 异步的修改状态栏，延迟2秒
       setTimeout(() => {
-        context.commit('setStatus', playload);
+        context.commit('setStatus', payload);
       }, 2000)
     },
-    System_Resources: async function (context, playload) {
-      let res = await postFormAPI("System_Resources");
-      context.commit('System_Resources', playload);
+    System_Resources: async function (context, payload) {
+      // let res = await postFormAPI("System_Resources");
+      context.commit('System_Resources', payload);
     },
-    Rec_RecordingInfo_Lite: async function (context, playload) {
-      let res = await postFormAPI("Rec_RecordingInfo_Lite");
-      context.commit('Rec_RecordingInfo_Lite', playload);
+    Rec_RecordingInfo_Lite: async function (context, payload) {
+      // let res = await postFormAPI("Rec_RecordingInfo_Lite");
+      context.commit('Rec_RecordingInfo_Lite', payload);
     },
   },
   modules: {
