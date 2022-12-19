@@ -108,10 +108,9 @@ export default {
       return !value && typeof value != "undefined" && value !== 0;
     },
     initView(){
-      Promise.all([this.System_Resources(), this.Rec_RecordingInfo_Lite(), this.Room_AllInfo()]).then((res) => {
+      Promise.all([this.System_Resources(), this.Room_AllInfo()]).then((res) => {
         this.$store.commit("System_Resources", res[0]);
-        this.$store.commit("Rec_RecordingInfo_Lite", res[1]);
-        this.$store.commit("Room_AllInfo", res[2]);
+        this.$store.commit("Room_AllInfo", res[1]);
         this.UpdateDataView();
         this.UpdateRoomView();
       });
@@ -196,7 +195,7 @@ export default {
           liveRoomData.push(item);
         }
       })
-      await room_data(this, liveRoomData);
+      this.room = await room_data(this.room, liveRoomData);
       const time = new Date();
       this.liveUpdateTime = time.getTime();
     },

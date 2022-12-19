@@ -19,7 +19,8 @@
     </div>
     <ul class="ng-roomGroup">
       <slot v-if="lp === ''"></slot>
-      <li class="RoomCardV2" v-for="(item, index) in lproom.length === 0 ? room : lproom" :key="index"
+      <el-checkbox-group v-model="checkedRoom">
+        <li class="RoomCardV2" v-for="(item, index) in lproom.length === 0 ? room : lproom" :key="index"
           v-loading="item.load">
 
         <div class="ng-roomManager" :id="'m' + index">
@@ -50,7 +51,7 @@
           <div class="ng-roomCover">
             <div class="ng-isLive ng-floatbar" v-if="item.live_status === 1">正在直播</div>
             <div class="ng-floatbar">
-              <el-checkbox class="ng-checkbox" v-model="item.check" @change="handleCheckedRoomChange"></el-checkbox>
+              <el-checkbox class="ng-checkbox" :label="item" :key="item" @change="handleCheckedRoomChange">{{}}</el-checkbox>
             </div>
             <div class="ng-clink" :onclick="`window.open('https://live.bilibili.com/${item.room_id}')`"></div>
             <img class="ng-image" referrerPolicy="no-referrer" :src="item.cover_from_user" />
@@ -75,6 +76,7 @@
           </div>
         </div>
       </li>
+      </el-checkbox-group>
     </ul>
     <el-empty v-if="lproom.length === 0 && lp === '' ? room.length === 0 : lproom.length === 0"
       description="没有符合的搜索结果"></el-empty>
@@ -238,69 +240,15 @@ export default {
       return flag;
     },
     handleCheckAllChange(val) {
-      this.isIndeterminate = false;
-      let room = this.room
-      if (this.lp !== "") room = this.lproom
-      if (room.length !== 0) {
-        for (let i = 0; i < room.length; i++) {
-          if (val) {
-            room[i].check = true;
-            this.checkAll = true;
-          } else {
-            this.checkAll = false;
-            room[i].check = false;
-          }
-        }
-      } else {
-        this.checkAll = false
-      }
+      this.checkedRoom = val ? this.setRoom : []
+      this.isIndeterminate = false
     },
     handleCheckedRoomChange() {
-      let arr = this.room
-      if (this.lp !== '') arr = this.lproom
-      let statusand = '',
-        statusor = ''
-      for (let i = 0; i < arr.length; i++) {
-        let item = arr[i];
-        if (i === 0) {
-          statusand = item.check
-          statusor = item.check
-        } else {
-          // 全选才为 true
-          statusand &&= item.check
-          statusor ||= item.check
-        }
-      }
-      if (arr.length !== 0) {
-        // 全选才为 true
-        let alltrue = statusand
-        // 全不选才为 true
-        let allfalse = !statusor
-        if (alltrue) {
-          this.isIndeterminate = false;
-          this.checkAll = true
-        }
-        if (allfalse) {
-          this.isIndeterminate = false;
-          this.checkAll = false
-        }
-        if (allfalse === alltrue) {
-          this.isIndeterminate = true;
-          this.checkAll = false
-        }
-      } else {
-        this.isIndeterminate = false;
-        this.checkAll = false
-      }
+      const checkedCount = this.checkedRoom.length
+      this.checkAll = checkedCount === this.setRoom.length
+      this.isIndeterminate = checkedCount > 0 && checkedCount < this.setRoom.length
     },
 
-    Room_AllInfo: async function () {
-      let res = await postFormAPI("Room_AllInfo");
-      let data = res.data;
-      if (data.code === 0) {
-        await room_data(this, data.data);
-      }
-    },
     Room_AutoRec: async function (uid, data) {
       let param = {
         UID: uid,
@@ -422,8 +370,8 @@ export default {
   bottom: 0;
   left: 0;
   right: 0;
-  /* background: rgb(255, 255, 255); */
-  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255,90%);
+  backdrop-filter: blur(5px);
   overflow: hidden;
 }
 
