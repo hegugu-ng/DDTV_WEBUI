@@ -9,15 +9,14 @@
 <script>
 export default {
   name: "DataGroup",
-  props: ['CardItem']
+  props: ["CardItem"],
 };
 </script>
-
 
 <style>
 .ng-info-card {
   background-color: #fff;
-  border: 1px solid #ebeef5;  
+  border: 1px solid #ebeef5;
   border-radius: 10px;
   /* padding: 20px; */
   box-shadow: 0 2px 22px 0 rgb(0 0 0 / 10%);
@@ -53,7 +52,7 @@ export default {
 }
 .ng-data-group > .data-item:hover {
   /* margin-top: 20px; */
-  box-shadow: 1px 0px 20px 0 rgb(59 64 72 / 16%);
+  box-shadow: 1px 0 20px 0 rgb(59 64 72 / 16%);
 }
 .ng-data-group > .data-item > .title {
   font-size: 15px;
