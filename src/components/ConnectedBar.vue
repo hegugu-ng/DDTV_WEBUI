@@ -10,6 +10,7 @@
 </template>
 
 <script>
+
 import { mapState } from 'vuex';
 import { NetworkConnection, NetworkDisconnection } from "../utils/error"
 import TweenLite from 'gsap';
@@ -20,10 +21,11 @@ import store from "@/store";
 // 解除 是告警信息打到解除的条件 action 后 解除
 
 // 优先级 优先级大的信息会被优先展示 如果高优先级的信息没有被解除 那么将不会推送低优先级的信息，直到高优先级的信息被解除
+
 export default {
   name: "ConnectedBar",
   computed: {
-    ...mapState(['connectStatus']),
+    ...mapState(["connectStatus"]),
   },
   data() {
     return {
@@ -35,6 +37,7 @@ export default {
   watch: {
     // 监听vuex 数据变更 生成推送优先级
     connectStatus: {
+
       handler(Value) {
         console.log(Value)
         this.Generate(Value)
@@ -142,11 +145,11 @@ export default {
 }
 
 .error {
-  background: #F56C6C;
+  background: #f56c6c;
 }
 
 .warn {
-  background: #E6A23C;
+  background: #e6a23c;
 }
 
 .debug {
