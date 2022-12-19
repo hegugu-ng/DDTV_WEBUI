@@ -24,63 +24,55 @@
 				</div>
 			</template>
 
-			<template #default>
-				<div class="drawer">
-					<div class="ng-btngroup" v-if="seview.length !== 0">
-						<ul class="ng-userGroup">
-							<li
-								class="ng-user-item"
-								v-for="(item, index) in seview"
-								:key="index"
-								@click="open(item.uname, item.uid, '添加房间', Room_Add)"
-							>
-								<div class="ng-user-itemvi">
-									<div class="ng-faceGroup-Big ng-faceflex">
-										<div class="ng-face-Big">
-											<img
-												class="ng-image"
-												referrerPolicy="no-referrer"
-												:src="`https:${item.uface}@60w_60h_1c_1s.webp`"
-											/>
-										</div>
-									</div>
-									<div class="ng-userinfo">
-										<div v-html="item.uname" class="ng-username"></div>
-										<div
-											class="ng-liveStuat"
-											:class="item.live_status === 0 ? 'nolive' : 'live'"
-										>
-											{{ item.live_status === 0 ? "未开播" : "直播中" }}
-										</div>
-										<div class="ng-ps ng-username">
-											{{
-												item.cate_name === "" ? "未选择分区" : item.cate_name
-											}}
-										</div>
-									</div>
-								</div>
-								<div class="iconbar" v-if="item.inlist">
-									<div class="inserver"></div>
-								</div>
-							</li>
-						</ul>
-					</div>
-					<el-empty v-else description="没有符合的搜索结果"></el-empty>
-				</div>
-			</template>
-		</el-drawer>
+      <template class="drawer"  #default>
+        <div class="ng-btngroup" v-if="seview.length !== 0">
+          <ul class="ng-userGroup">
+            <li class="ng-user-item" v-for="(item, index) in seview" :key="index" @click="open(item.uname,item.uid,'添加房间',Room_Add)">
+              <div class="ng-user-itemvi">
+                <div class="ng-faceGroup-Big ng-faceflex">
+                  <div class="ng-face-Big">
+                    <img
+                      class="ng-image"
+                      referrerPolicy="no-referrer"
+                      :src="`https:${item.uface}@60w_60h_1c_1s.webp`"
+                    />
+                  </div>
+                </div>
+                <div class="ng-userinfo">
+                  <div v-html="item.uname" class="ng-username"></div>
+                  <div
+                    class="ng-liveStuat"
+                    :class="item.live_status === 0 ? 'nolive' : 'live'"
+                  >
+                    {{ item.live_status === 0 ? "未开播" : "直播中" }}
+                  </div>
+                  <div class="ng-ps ng-username">
+                    {{ item.cate_name === "" ? "未选择分区" : item.cate_name }}
+                  </div>
+                </div>
+              </div>
+              <div class="iconbar" v-if="item.inlist">
+                <div class="inserver"></div>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <el-empty v-else description="没有符合的搜索结果"></el-empty>
+      </template>
+      </el-drawer>
 
-		<ng-roomcard :room="room" @request="test" @requestgroup="test2">
-			<li class="ng-addroom" @click="drawer = true">
-				<div class="ng-add">
-					<div class="ng-additem">
-						<div class="icon-add icon-b"></div>
-						<div class="ng-addtitle">点击添加房间</div>
-					</div>
-				</div>
-			</li>
-		</ng-roomcard>
-	</div>
+    <ng-roomcard :room="room" @request="test" @requestgroup="test2">
+      <li class="ng-addroom" @click="drawer = true">
+        <div class="ng-add">
+          <div class="ng-additem">
+            <div class="icon-add icon-b"></div>
+            <div class="ng-addtitle">点击添加房间</div>
+          </div>
+        </div>
+      </li>
+    </ng-roomcard>
+  </div>
+
 </template>
 <script>
 import { postFormAPI } from "../api";
@@ -109,105 +101,105 @@ export default {
 		clearInterval(this.timer);
 	},
 
-	watch: {
-		addkeywords: async function (newval) {
-			if (newval !== "") {
-				let res = await this.User_Search(newval);
-				this.seview = res.data.data.result;
-			} else this.seview = [];
-		},
-	},
-	methods: {
-		open(user, uid, active, fun) {
-			this.$confirm(`确认将${user}(${uid})添加到录制列表？`, active, {
-				dangerouslyUseHTMLString: true,
-				confirmButtonText: "确定",
-				cancelButtonText: "取消",
-				type: "warning",
-			})
-				.then(() => {
-					fun(uid);
-					this.$message({
-						type: "success",
-						message: `${active}成功!`,
-					});
-				})
-				.catch(() => {
-					this.$message({
-						type: "info",
-						message: `已取消${active}`,
-					});
-				});
-		},
-		handleClose(done) {
-			done();
-			this.adduid = "";
-		},
-		test: async function (cmd, uid, data, index) {
-			this.room[index].load = true;
-			let res = { code: -1 };
-			try {
-				if (cmd === "Room_AutoRec") res = await this.Room_AutoRec(uid, data);
-				if (cmd === "Room_DanmuRec") res = await this.Room_DanmuRec(uid, data);
-				if (cmd === "Room_Del") res = await this.Room_Del(uid);
-				// 抛出错误
-				if (res.code !== 0) return new Promise.Error("服务器返回错误");
-				if (cmd === "Room_Del") this.room.splice(index, 1);
-			} catch (err) {
-				if (cmd === "Room_AutoRec") this.room[index].IsAutoRec = !data;
-				if (cmd === "Room_DanmuRec") this.room[index].IsRecDanmu = !data;
-			} finally {
-				this.room[index].load = false;
-			}
-		},
-		test2(cmd, uidGropu) {
-			console.log(cmd, uidGropu);
-		},
-		User_Search: async function (KeyWord) {
-			let param = {
-				keyword: KeyWord,
-			};
-			let res = await postFormAPI("User_Search", param);
-			return res.data;
-		},
-		Room_AllInfo: async function () {
-			let res = await postFormAPI("Room_AllInfo");
-			let data = res.data;
-			if (data.code === 0) {
-				await room_data(this, data.data);
-			}
-		},
-		Room_AutoRec: async function (uid, data) {
-			let param = {
-				UID: uid,
-				IsAutoRec: data,
-			};
-			let res = await postFormAPI("Room_AutoRec", param);
-			return res.data;
-		},
-		Room_DanmuRec: async function (uid, data) {
-			let param = {
-				UID: uid,
-				IsRecDanmu: data,
-			};
-			let res = await postFormAPI("Room_DanmuRec", param);
-			return res.data;
-		},
-		Room_Del: async function (uid) {
-			let param = {
-				UID: uid,
-			};
-			let res = await postFormAPI("Room_Del", param);
-			return res.data;
-		},
-		Room_Add: async function (uid) {
-			let param = {
-				UID: uid,
-			};
-			let res = await postFormAPI("Room_Add", param);
-			return res.data;
-		},
-	},
+  watch:{
+    addkeywords:async function(newval){
+      if(newval!== ''){
+        let res = await this.User_Search(newval)
+        this.seview = res.data.data.result
+      }
+      else this.seview = []
+    }
+  },
+  methods: {
+    open(user,uid,active,fun) {
+        this.$confirm(`确认将${user}(${uid})添加到录制列表？`, active, {
+          dangerouslyUseHTMLString: true,
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          fun(uid)
+          this.$message({
+            type: 'success',
+            message: `${active}成功!`
+          });
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: `已取消${active}`
+          });
+        });
+      },
+    handleClose(done) {
+      done();
+      this.adduid = '';
+    },
+    test: async function (cmd, uid, data, index) {
+      this.room[index].load = true;
+      let res = { code: -1 };
+      try {
+        if (cmd === "Room_AutoRec") res = await this.Room_AutoRec(uid, data);
+        if (cmd === "Room_DanmuRec") res = await this.Room_DanmuRec(uid, data);
+        if (cmd === "Room_Del") res = await this.Room_Del(uid);
+        // 抛出错误
+        if (res.code !== 0) return new Promise.Error("服务器返回错误");
+        if (cmd === "Room_Del") this.room.splice(index, 1);
+      } catch (err) {
+        if (cmd === "Room_AutoRec") this.room[index].IsAutoRec = !data;
+        if (cmd === "Room_DanmuRec") this.room[index].IsRecDanmu = !data;
+      } finally {
+        this.room[index].load = false;
+      }
+    },
+    test2(cmd, uidGropu) {
+      console.log(cmd, uidGropu);
+    },
+    User_Search: async function(KeyWord){
+      let param = {
+        keyword:KeyWord
+      }
+      let res = await postFormAPI("User_Search",param);
+      return res.data
+    },
+    Room_AllInfo: async function () {
+      let res = await postFormAPI("Room_AllInfo");
+      let data = res.data;
+      if (data.code === 0) {
+        this.room = await room_data(this.room, data.data);
+      }
+    },
+    Room_AutoRec: async function (uid, data) {
+      let param = {
+        UID: uid,
+        IsAutoRec: data,
+      };
+      let res = await postFormAPI("Room_AutoRec", param);
+      return res.data;
+    },
+    Room_DanmuRec: async function (uid, data) {
+      let param = {
+        UID: uid,
+        IsRecDanmu: data,
+      };
+      let res = await postFormAPI("Room_DanmuRec", param);
+      return res.data;
+    },
+    Room_Del: async function (uid) {
+      let param = {
+        UID: uid,
+      };
+      let res = await postFormAPI("Room_Del", param);
+      return res.data;
+    },
+    Room_Add: async function(uid){
+      let param = {
+        UID: uid,
+      };
+      let res = await postFormAPI("Room_Add", param);
+      return res.data;
+    }
+  },
+
 };
 </script>
 <style>
@@ -241,12 +233,12 @@ export default {
 	border: 1px solid #c7c8ca;
 }
 .inserver {
-	width: 110px;
-	height: 110px;
-	background: url("../assets/success.png") 0 0 no-repeat;
-	background-size: auto 100%;
-	transform: rotate(29deg);
-	/* opacity: 0.5; */
+  width: 110px;
+  height: 110px;
+  background: url("../assets/success.png") 0 0 no-repeat;
+  background-size: auto 100%;
+  transform: rotate(29deg);
+  /* opacity: 0.5; */
 }
 .icon-b {
 	background-image: url("../assets/icons.png");
@@ -338,25 +330,28 @@ export default {
 	justify-content: center;
 }
 .ng-additem {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
 }
 .addicon {
 	color: #888;
 	font-size: 4rem;
 }
 .ng-addtitle {
-	color: #888;
-	font-size: 1rem;
+  color: #888;
+  font-size: 1rem;
 }
 .ng-userGroup {
-	list-style-type: none;
-	margin-block-start: 0;
-	margin-block-end: 0;
-	margin-inline-start: 0;
-	margin-inline-end: 0;
-	padding-inline-start: 0;
+  list-style-type: none;
+  margin-block-start: 0;
+  margin-block-end: 0;
+  margin-inline-start: 0;
+  margin-inline-end: 0;
+  padding-inline-start: 0;
+
 }
 .ng-user-item {
 	display: inline-block;

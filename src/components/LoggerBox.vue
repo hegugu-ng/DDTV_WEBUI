@@ -22,7 +22,7 @@
             </div>
             <div class="logs">
                 <div class="logger-message" v-for="(log,count) in logger_view.logs" :key="count">
-                    <loglever :level="log.level" :levelshow="log.level != null ? true:false" />
+                    <loglever :level="log.level" :levelshow="log.level != null" />
                     <div class="message" :class="log.level != null ? 'm12':null">{{ log.msg }}</div>
                     <div class="date">{{ log.time }}</div>
                 </div>

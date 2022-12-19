@@ -1,7 +1,7 @@
 import { createApp } from 'vue'
 import App from './App.vue'
 import 'default-passive-events'
-const app = createApp(App)
+const app = createApp(App).use(store)
 
 import SvgIcon from '@/components/svgIcon'
 app.component('ng-svg', SvgIcon)
@@ -10,11 +10,11 @@ import './icons'
 
 
 import router from './router'
-import store from './store'
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 
 import * as ElIconModules from '@element-plus/icons'
+import store from './store'
 
 // 统一注册Icon图标
 for (const iconName in ElIconModules) {
@@ -26,6 +26,5 @@ for (const iconName in ElIconModules) {
 app.use(ElementPlus)
 
 
-app.use(store)
 app.use(router)
 app.mount('#app')
