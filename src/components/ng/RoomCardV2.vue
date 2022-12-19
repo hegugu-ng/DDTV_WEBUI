@@ -287,9 +287,9 @@ export default {
       return res.data;
     }
   },
+
 };
 </script>
-
 
 <style>
 .ng-btngroup {
@@ -297,9 +297,9 @@ export default {
 }
 
 .icon-img {
-  vertical-align: middle;
-  background-repeat: no-repeat;
-  background-image: url('../../assets/icons.png');
+	vertical-align: middle;
+	background-repeat: no-repeat;
+	background-image: url("../../assets/icons.png");
 }
 
 .ng-roomGroup {
@@ -307,58 +307,59 @@ export default {
   padding-inline-start: 0;
   margin-block-start: 0;
   margin-block-end: 0;
+
 }
 
 .right10 {
-  margin-right: 10px;
+	margin-right: 10px;
 }
 
 .ng-hlbt {
-  border: 1px solid #e5dbdb;
-  display: inline;
-  padding: 5px;
-  font-size: 10px;
-  font-weight: bold;
-  margin-right: 3px;
-  cursor: pointer;
+	border: 1px solid #e5dbdb;
+	display: inline;
+	padding: 5px;
+	font-size: 10px;
+	font-weight: bold;
+	margin-right: 3px;
+	cursor: pointer;
 }
 
 .ng-lookup {
+
   margin: 0.8rem 0 0.8rem 0;
   display: flex;
   align-items: center;
 }
 
 .ng-roominput {
-  max-width: 18rem;
+	max-width: 18rem;
 }
 
 .ng-todo {
-  width: 8rem;
+	width: 8rem;
 }
 
 .ng-fromtitle {
   font-size: .8rem;
   padding: .5rem 0 .5rem 0;
   color: #161313;
-  ;
 }
 
 .RoomCardV2 {
-  display: inline-block;
-  width: 228px;
-  border: 1px solid #e9eaec;
-  padding: 10px 2px;
-  margin: 0 0.8rem 0.8rem 0;
-  border-radius: 8px;
-  background: #fff;
-  position: relative;
-  overflow: hidden;
+	display: inline-block;
+	width: 228px;
+	border: 1px solid #e9eaec;
+	padding: 10px 2px;
+	margin: 0 0.8rem 0.8rem 0;
+	border-radius: 8px;
+	background: #fff;
+	position: relative;
+	overflow: hidden;
 }
 
 .RoomCardV2:hover {
-  box-shadow: 0 13px 20px 0 rgb(59 64 72 / 22%);
-  transition: transform 0.3s cubic-bezier(0.63, -0.01, 0.59, 1);
+	box-shadow: 0 13px 20px 0 rgb(59 64 72 / 22%);
+	transition: transform 0.3s cubic-bezier(0.63, -0.01, 0.59, 1);
 }
 
 .ng-roomManager {
@@ -376,44 +377,44 @@ export default {
 }
 
 .ng-configbar {
-  padding: 10px 10px 0px 10px;
-  font-size: 25px;
-  display: flex;
-  align-items: center;
+	padding: 10px 10px 0px 10px;
+	font-size: 25px;
+	display: flex;
+	align-items: center;
 }
 
 .ng-bticon {
-  cursor: pointer;
+	cursor: pointer;
 }
 
 .ng-bticon:hover {
-  color: #999;
+	color: #999;
 }
 
 .ng-roomCover {
-  width: 208px;
-  margin: 0 9px 0 9px;
-  height: 117px;
-  border-radius: 5px;
-  position: relative;
-  overflow: hidden;
-  z-index: 1;
+	width: 208px;
+	margin: 0 9px 0 9px;
+	height: 117px;
+	border-radius: 5px;
+	position: relative;
+	overflow: hidden;
+	z-index: 1;
 }
 
 .ng-image {
-  width: 100%;
-  /* height: 100%; */
+	width: 100%;
+	/* height: 100%; */
 }
 
 .ng-isLive {
-  top: -1px;
-  left: -1px;
-  background-image: url("../../assets/testlive.png");
-  background-position: 0 100%;
-  text-indent: 30px;
-  font-size: 12px;
-  color: #fff;
-  line-height: 24px;
+	top: -1px;
+	left: -1px;
+	background-image: url("../../assets/testlive.png");
+	background-position: 0 100%;
+	text-indent: 30px;
+	font-size: 12px;
+	color: #fff;
+	line-height: 24px;
 }
 
 .ng-checkbox {
@@ -423,23 +424,23 @@ export default {
 }
 
 .ng-clink {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  z-index: 102;
-  cursor: pointer;
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	z-index: 102;
+	cursor: pointer;
 }
 
 .ng-roomType {
-  padding-left: 8px;
-  box-sizing: border-box;
-  bottom: 6px;
-  font-size: 14px;
-  color: #fff;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  z-index: 3;
+	padding-left: 8px;
+	box-sizing: border-box;
+	bottom: 6px;
+	font-size: 14px;
+	color: #fff;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	z-index: 3;
 }
 
 .ng-floatbar {
@@ -453,82 +454,82 @@ export default {
 }
 
 .ng-roominfo {
-  display: flex;
-  align-items: center;
-  margin-top: 5px;
-  padding: 0 10px;
-  box-sizing: border-box;
+	display: flex;
+	align-items: center;
+	margin-top: 5px;
+	padding: 0 10px;
+	box-sizing: border-box;
 }
 
 .ng-faceGroup {
-  cursor: pointer;
-  width: 55px;
-  height: 55px;
-  position: relative;
+	cursor: pointer;
+	width: 55px;
+	height: 55px;
+	position: relative;
 }
 
 .ng-face {
-  width: 40px;
-  height: 40px;
-  /* background-image: url('../assets/testuserface.jpg'); */
-  border-radius: 50%;
-  margin-top: 8px;
-  margin-left: 8px;
-  position: absolute;
-  overflow: hidden;
+	width: 40px;
+	height: 40px;
+	/* background-image: url('../assets/testuserface.jpg'); */
+	border-radius: 50%;
+	margin-top: 8px;
+	margin-left: 8px;
+	position: absolute;
+	overflow: hidden;
 }
 
 .ng-pendant {
-  /* background-image: url('../assets/testzb.png'); */
-  width: 100%;
-  height: 100%;
-  background-size: 100% 100%;
-  position: absolute;
+	/* background-image: url('../assets/testzb.png'); */
+	width: 100%;
+	height: 100%;
+	background-size: 100% 100%;
+	position: absolute;
 }
 
 .ng-userOfficial {
-  z-index: 11;
-  font-size: 0.36em;
-  width: 17px;
-  height: 17px;
-  position: absolute;
-  right: 10%;
-  bottom: 10%;
+	z-index: 11;
+	font-size: 0.36em;
+	width: 17px;
+	height: 17px;
+	position: absolute;
+	right: 10%;
+	bottom: 10%;
 }
 
 .ng-roomnameCard {
-  width: calc(100% - 55px);
+	width: calc(100% - 55px);
 }
 
 .ng-roomtitle {
-  font-size: 16px;
-  color: #333;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  /* margin-bottom: 8px; */
-  display: -webkit-box;
-  -webkit-line-clamp: 1;
-  -webkit-box-orient: vertical;
-  padding-left: 6px;
+	font-size: 16px;
+	color: #333;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	/* margin-bottom: 8px; */
+	display: -webkit-box;
+	-webkit-line-clamp: 1;
+	-webkit-box-orient: vertical;
+	padding-left: 6px;
 }
 
 .ng-hostgroup {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
 }
 
 .ng-hostname {
-  font-size: 0.6em;
-  color: #3b2929;
-  margin-top: 1px;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
-  padding-left: 6px;
-  flex: 1;
-  padding-right: 3px;
-  box-sizing: border-box;
+	font-size: 0.6em;
+	color: #3b2929;
+	margin-top: 1px;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	white-space: nowrap;
+	padding-left: 6px;
+	flex: 1;
+	padding-right: 3px;
+	box-sizing: border-box;
 }
 
 .ng-stoprec {
@@ -541,5 +542,6 @@ export default {
   line-height: 26px;
   border-radius: 4px;
   cursor: pointer;
+
 }
 </style>
