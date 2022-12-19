@@ -1,6 +1,4 @@
 import { createStore } from 'vuex'
-import { postFormAPI} from "../api";
-
 
 export default createStore({
   state() {
@@ -27,8 +25,7 @@ export default createStore({
   },
   getters: {
     log: state => state.log,
-    // 返回状态栏推送的消息
-    GetConnectStatus: state => state.connectStatus,
+    connectStatus: state => state.connectStatus,
     // 最新的一条日志
     newLog: state => state.log.length !== 0 ? state.log[state.log.length - 1] : null,
     navBar: state => state.screenWidth < 1300,
@@ -44,12 +41,10 @@ export default createStore({
     clearLog: state => state.log = [],
     setStatus: (state, payload) => state.connectStatus = payload,
     screenWidth: (state, payload) => state.screenWidth = payload,
-
     beforeStatus: (state, payload) => state.beforeStatus = payload,
     System_Resources: (state, payload) => state.System_Resources = payload,
     Rec_RecordingInfo_Lite: (state, payload) => state.Rec_RecordingInfo_Lite = payload,
     Room_AllInfo: (state, payload) => state.Room_AllInfo = payload
-
   },
   actions: {
     setStatusAsync(context, payload) {
@@ -64,11 +59,9 @@ export default createStore({
     },
     Rec_RecordingInfo_Lite: async function (context, payload) {
       let res = await postFormAPI("Rec_RecordingInfo_Lite");
-
       context.commit('Rec_RecordingInfo_Lite', payload);
     },
   },
   modules: {
   }
 })
-
