@@ -104,10 +104,11 @@ export default {
       // 传递来的房间数据
       room: this.roomFilterMap.size > 0 ? this.$store.state.Room_AllInfo.filter((item) => {
         for (let [key, value] of this.roomFilterMap) {
-          if (item[key] === value) {
-            return item;
+          if (item[key] !== value) {
+            return false;
           }
         }
+        return true;
       }) : this.$store.state.Room_AllInfo,
       forkRoom: undefined,
       // 工具栏 全选标志
