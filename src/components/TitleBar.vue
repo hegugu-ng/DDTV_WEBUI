@@ -5,10 +5,10 @@
       {{ $route.meta.title }}
     </div>
     <button type="button" class="ddtv-ui-bt barnav" v-show="screenWidth < 1024">
-      <div class="bt-content">
+      <template class="bt-content">
         <i class="el-icon-s-unfold"></i>
         <span class="default-slot"></span>
-      </div>
+      </template>
     </button>
   </div>
 </template>

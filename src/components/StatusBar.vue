@@ -9,7 +9,7 @@
             type="button"
             class="ddtv-ui-bt toolbar-button flat icon-button"
             @click="
-              ToBottom('#logsbox');
+              new ToBottom('#logsbox');
               Scroll = true;
             "
           >
@@ -123,7 +123,7 @@ export default {
     ToBottom(elementId) {
       // 将日志滚动到最下方
       this.$nextTick(() => {
-        var container = this.$el.querySelector(elementId);
+        const container = this.$el.querySelector(elementId);
         container.scrollTop = container.scrollHeight;
       });
     },
@@ -239,7 +239,6 @@ export default {
   overflow-y: auto;
 }
 .logger-message .message {
-  white-space: pre-wrap;
   flex: 100% 1 1;
   width: 0;
   overflow: hidden;
@@ -262,7 +261,7 @@ export default {
 }
 .fade-enter,
 .fade-leave-to {
-  height: 0px;
+  height: 0;
   opacity: 0;
 }
 .logger-view .logger-message:hover {
@@ -301,11 +300,11 @@ export default {
   transition: all 0.2s ease;
 }
 .slide-fade-enter {
-  height: 0px;
+  height: 0;
   opacity: 0;
 }
 .slide-fade-leave-to {
-  height: 0px;
+  height: 0;
   opacity: 0;
 }
 .logs::-webkit-scrollbar {
