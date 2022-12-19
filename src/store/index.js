@@ -1,10 +1,7 @@
-// import Vue from 'vue'
 import { createStore } from 'vuex'
-// import { postFormAPI, getListAPIv2 } from "../api";
 
-// Vue.use(Vuex)
 
-const store = createStore({
+export default createStore({
   state() {
     return {
       //页面组件状态 - 警告栏
@@ -22,8 +19,9 @@ const store = createStore({
       Is_live: [],
       // 房间列表
       room_list: [],
-      System_Resources: null,
-      Rec_RecordingInfo_Lite: null
+      System_Resources: undefined,
+      Rec_RecordingInfo_Lite: undefined,
+      Room_AllInfo: undefined
     }
   },
   getters: {
@@ -44,7 +42,12 @@ const store = createStore({
     clearLog: state => state.log = [],
     setStatus: (state, payload) => state.connectStatus = payload,
     screenWidth: (state, payload) => state.screenWidth = payload,
-    beforeStatus: (state, payload) => state.beforeStatus = payload
+
+    beforeStatus: (state, payload) => state.beforeStatus = payload,
+    System_Resources: (state, payload) => state.System_Resources = payload,
+    Rec_RecordingInfo_Lite: (state, payload) => state.Rec_RecordingInfo_Lite = payload,
+    Room_AllInfo: (state, payload) => state.Room_AllInfo = payload
+
   },
   actions: {
     setStatusAsync(context, payload) {
@@ -54,11 +57,12 @@ const store = createStore({
       }, 2000)
     },
     System_Resources: async function (context, payload) {
-      // let res = await postFormAPI("System_Resources");
+      let res = await postFormAPI("System_Resources");
       context.commit('System_Resources', payload);
     },
     Rec_RecordingInfo_Lite: async function (context, payload) {
-      // let res = await postFormAPI("Rec_RecordingInfo_Lite");
+      let res = await postFormAPI("Rec_RecordingInfo_Lite");
+
       context.commit('Rec_RecordingInfo_Lite', payload);
     },
   },
@@ -66,4 +70,3 @@ const store = createStore({
   }
 })
 
-export default store

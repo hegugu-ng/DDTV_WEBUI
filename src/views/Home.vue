@@ -34,121 +34,112 @@ import {
 	// getListAPIv2
 } from "../api";
 export default {
-	computed: {
-		...mapState(["screenWidth"]),
-	},
-	components: {
-		"ng-infocard": InfoCard,
-		"ng-datagroup": DataGroup,
-		"ng-roomcard": RoomCardV2,
-	},
-	data() {
-		return {
-			monitor: window.apiObj.monitor,
-			mount: window.apiObj.mount,
-			coreUpdateTime: null,
-			coreUpdateTime_time: "",
-			liveUpdateTime: null,
-			liveUpdateTime_time: "",
-			lp: "",
-			options: [
-				{
-					value: "1",
-					label: "停止录制",
-				},
-				{
-					value: "2",
-					label: "删除房间并停止录制",
-				},
-				{
-					value: "3",
-					label: "删除房间",
-				},
-			],
-			labe: [
-				{
-					title: "CPU利用率（%）",
-					desc: "当前：97.266% 总量：2核",
-					id: "cpu-labe",
-				},
-				{
-					title: "内存使用量（MB）",
-					desc: "当前：917.5MB 总量：4GB",
-					id: "ram-labe",
-				},
-				{
-					title: "公网带宽使用（Mbps）",
-					desc: "当前：0.069（入）0.02（出）",
-					id: "lan-labe",
-				},
-			],
-			OneDayFrom: null,
-			room: [],
-			Pic: {
-				title: "CPU使用率",
-				key: "cpu",
-				on: { "background-color": "#23ade5", color: "#fff" },
-				off: { "background-color": "#fff", color: "#000" },
-			},
-			CoreData: [
-				{ title: "房间数", data: "--" },
-				{ title: "正在录制", data: "--" },
-				{ title: "CPU占用", data: "--" },
-				{ title: "内存占用", data: "--" },
-				{ title: "硬盘占用", data: "--" },
-				{ title: "下载总量", data: "--" },
-			],
-			OneDayData: [
-				{ title: "CPU使用率", key: "cpu" },
-				{ title: "内存使用率", key: "ram" },
-				{ title: "流量", key: "ll" },
-				{ title: "开播人数", key: "live" },
-			],
-			timer_core: null,
-			timer_liveroom: null,
-			updateTimeManger: null,
-		};
-	},
-	mounted: function () {
-		if (this.monitor) {
-			this.CpuUsage();
-			this.MemUsage();
-			this.Lan();
-		}
-		this.timer_core = setInterval(this.UpdateDataView, 30000);
-		this.timer_liveroom = setInterval(this.UpdateRoomView, 20000);
-		this.updateTimeManger = setInterval(this.Updatetime, 2000);
-		this.UpdateDataView();
-		this.UpdateRoomView();
-	},
-	beforeUnmount() {
-		clearInterval(this.timer_core);
-		clearInterval(this.timer_liveroom);
-		console.log("beforeUnmount");
-	},
-	methods: {
-		isNull(value) {
-			if (!value && typeof value != "undefined" && value != 0) {
-				return true;
-			} else {
-				return false;
-			}
-		},
-		Updatetime() {
-			var time = new Date();
-			let NowTime = time.getTime();
-			let coreUp, liveUp;
-			if (this.isNull(this.coreUpdateTime)) coreUp = "更新中";
-			else coreUp = Math.round((NowTime - this.coreUpdateTime) / 1000);
+  computed: {
+    ...mapState(["screenWidth"]),
+  },
+  components: {
+    "ng-infocard": InfoCard,
+    "ng-datagroup": DataGroup,
+    "ng-roomcard": RoomCardV2,
+  },
+  data() {
+    return {
+      monitor:window.apiObj.monitor,
+      mount: window.apiObj.mount,
+      coreUpdateTime: null,
+      coreUpdateTime_time :"",
+      liveUpdateTime: null,
+      liveUpdateTime_time :"",
+      lp: "",
+      options: [
+        {
+          value: "1",
+          label: "停止录制",
+        },
+        {
+          value: "2",
+          label: "删除房间并停止录制",
+        },
+        {
+          value: "3",
+          label: "删除房间",
+        },
+      ],
+      labe:[
+        {title:"CPU利用率（%）",desc:"当前：97.266% 总量：2核",id:"cpu-labe"},
+        {title:"内存使用量（MB）",desc:"当前：917.5MB 总量：4GB",id:"ram-labe"},
+        {title:"公网带宽使用（Mbps）",desc:"当前：0.069（入）0.02（出）",id:"lan-labe"},
+        ],
+      OneDayFrom: null,
+      room: [],
+      Pic: {
+        title: "CPU使用率",
+        key: "cpu",
+        on: { "background-color": "#23ade5", color: "#fff" },
+        off: { "background-color": "#fff", color: "#000" },
+      },
+      CoreData: [
+        { title: "房间数", data: "--" },
+        { title: "正在录制", data: "--" },
+        { title: "CPU占用", data: "--" },
+        { title: "内存占用", data: "--" },
+        { title: "硬盘占用", data: "--" },
+        { title: "下载总量", data: "--" },
+      ],
+      OneDayData: [
+        { title: "CPU使用率", key: "cpu" },
+        { title: "内存使用率", key: "ram" },
+        { title: "流量", key: "ll" },
+        { title: "开播人数", key: "live" },
+      ],
+      timer: null,
+      updateTimeManger: null,
+    };
+  },
+  mounted: async function () {
+    if(this.monitor){
+      this.CpuUsage();
+      this.MemUsage();
+      this.Lan();
+    }
+    this.$store.state.System_Resources ? (await this.UpdateDataView()) && (await this.UpdateRoomView()): this.initView();
+    this.updateTimeManger = setInterval(this.Updatetime, 2000);
+    this.timer = setInterval(this.initView, 20000);
+  },
+  beforeUnmount() {
+    clearInterval(this.timer);
+    console.log("beforeUnmount");
+  },
+  methods: {
+    isNull(value) {
+      return !value && typeof value != "undefined" && value !== 0;
+    },
+    initView(){
+      Promise.all([this.System_Resources(), this.Room_AllInfo()]).then((res) => {
+        this.$store.commit("System_Resources", res[0]);
+        this.$store.commit("Room_AllInfo", res[1]);
+        this.UpdateDataView();
+        this.UpdateRoomView();
+      });
+    },
+    Updatetime(){
+      const time = new Date();
+      let NowTime = time.getTime();
+      let coreUp,liveUp;
+      if (this.isNull(this.coreUpdateTime)) coreUp = "更新中";
+      else coreUp = Math.round((NowTime - this.coreUpdateTime)/1000);
+
 
 			if (this.isNull(this.liveUpdateTime)) liveUp = "更新中";
 			else liveUp = Math.round((NowTime - this.liveUpdateTime) / 1000);
 
-			if (coreUp < 8 || coreUp == "更新中") coreUp = "刚刚";
-			else coreUp = coreUp + "秒前更新";
 
-			if (liveUp < 8 || coreUp == "更新中") liveUp = "刚刚";
-			else liveUp = liveUp + "秒前更新";
+      if (coreUp < 8 || coreUp === "更新中") coreUp = "刚刚";
+      else coreUp = coreUp + "秒前更新"
+
+      if (liveUp < 8 || coreUp === "更新中") liveUp = "刚刚";
+      else liveUp = liveUp + "秒前更新"
+
 
 			this.coreUpdateTime_time = coreUp;
 			this.liveUpdateTime_time = liveUp;
@@ -158,86 +149,88 @@ export default {
 			// 分配一下
 		},
 
-		UpdateDataView: async function () {
-			this.coreUpdateTime_time = "更新中";
-			let data = await this.System_Resources();
-			let room = await this.Rec_RecordingInfo_Lite();
-			let allroom = await this.Room_AllInfo();
-			let dl_all = 0;
-			for (let i = 0; i < room.length; i++) {
-				let item = room[i];
-				dl_all += item.TotalDownloadCount;
-			}
-			let HDD = {};
-			if (data.Platform != "Linux") HDD = data.HDDInfo[0];
-			else {
-				let dish = data.HDDInfo;
-				var dishlen = dish.length;
-				for (var j = 0; j < dishlen; j++) {
-					if (dish[j].MountPath == this.mount) {
-						HDD = dish[j];
-					}
-				}
-			}
-			this.CoreData = [
-				{ title: "房间数", data: allroom.length },
-				{ title: "正在录制", data: room.length },
-				{ title: "CPU占用", data: `${data.CPU_usage}%` },
-				{
-					title: "内存占用",
-					data: `${(
-						((data.Memory.Total - data.Memory.Available) / data.Memory.Total) *
-						100
-					).toFixed(1)}%`,
-				},
-				{ title: "硬盘占用", data: HDD.Used },
-				{
-					title: "下载总量",
-					data:
-						dl_all > 1000000000
-							? (dl_all / 1000000000).toFixed(2) + "GB"
-							: (dl_all / 1000000).toFixed(2) + "MB",
-				},
-			];
-			var time = new Date();
-			this.coreUpdateTime = time.getTime(); //获取当前时间,毫秒数
-		},
-		UpdateRoomView: async function () {
-			this.liveUpdateTime_time = "更新中";
-			let liveroom = await this.Rec_RecordingInfo_Lite();
-			let allroom = await this.Room_AllInfo();
-			let datalen = liveroom.length,
-				dataslent = [],
-				liveroomdata = [];
-			// 开始生成本地渲染列表的索引
-			for (var i = 0; i < datalen; i++) {
-				dataslent.push(liveroom[i].Uid);
-			}
-			for (var j = 0; j < dataslent.length; j++) {
-				for (var k = 0; k < allroom.length; k++) {
-					if (dataslent[j] == allroom[k].uid) {
-						liveroomdata.push(allroom[k]);
-						break;
-					}
-				}
-			}
-			await room_data(this, liveroomdata);
-			var time = new Date();
-			this.liveUpdateTime = time.getTime();
-		},
-		Room_AllInfo: async function () {
-			let res = await postFormAPI("Room_AllInfo");
-			return res.data.data;
-		},
-		System_Resources: async function () {
-			let res = await postFormAPI("System_Resources");
-			return res.data.data;
-		},
-		Rec_RecordingInfo_Lite: async function () {
-			let res = await postFormAPI("Rec_RecordingInfo_Lite");
-			return res.data.data;
-		},
-	},
+
+      this.coreUpdateTime_time  = coreUp;
+      this.liveUpdateTime_time = liveUp;
+    },
+    requestApi(type, roomid, data) {
+      console.log(type, roomid, data);
+      // TODO 分配一下
+    },
+
+    UpdateDataView: async function () {
+      this.coreUpdateTime_time = "更新中";
+      let data = this.$store.state.System_Resources;
+      let room = this.$store.state.Rec_RecordingInfo_Lite;
+      let allroom = this.$store.state.Room_AllInfo;
+      console.log(data,room,allroom)
+      let dl_all = 0;
+      for (let i = 0; i < room.length; i++) {
+        let item = room[i];
+        dl_all += item.TotalDownloadCount;
+      }
+      let HDD = {};
+      if (data.Platform !== "Linux") HDD = data.HDDInfo[0];
+      else {
+        let dish = data.HDDInfo;
+        var dishlen = dish.length;
+        for (var j = 0; j < dishlen; j++) {
+          if (dish[j].MountPath == this.mount) {
+            HDD = dish[j];
+          }
+        }
+      }
+      this.CoreData = [
+        { title: "房间数", data: allroom.length },
+        { title: "正在录制", data: room.length },
+        { title: "CPU占用", data: `${data.CPU_usage}%` },
+        {
+          title: "内存占用",
+          data: `${(
+            ((data.Memory.Total - data.Memory.Available) / data.Memory.Total) *
+            100
+          ).toFixed(1)}%`,
+        },
+        { title: "硬盘占用", data: HDD.Used },
+        {
+          title: "下载总量",
+          data:
+            dl_all > 1000000000
+              ? (dl_all / 1000000000).toFixed(2) + "GB"
+              : (dl_all / 1000000).toFixed(2) + "MB",
+        },
+      ];
+      var time = new Date();
+      this.coreUpdateTime = time.getTime(); //获取当前时间,毫秒数
+    },
+    UpdateRoomView: async function () {
+      this.liveUpdateTime_time = "更新中";
+      let allRoom = this.$store.state.Room_AllInfo;
+      let liveRoomData = [];
+      // 开始生成本地渲染列表的索引
+      allRoom.forEach((item) =>{
+        if(item.live_status === 1){
+          liveRoomData.push(item);
+        }
+      })
+      this.room = await room_data(this.room, liveRoomData);
+      const time = new Date();
+      this.liveUpdateTime = time.getTime();
+    },
+    Room_AllInfo: async function () {
+      let res = await postFormAPI("Room_AllInfo");
+      return res.data.data;
+    },
+    System_Resources: async function () {
+      let res = await postFormAPI("System_Resources");
+      return res.data.data;
+    },
+    Rec_RecordingInfo_Lite: async function () {
+      let res = await postFormAPI("Rec_RecordingInfo_Lite");
+      return res.data.data;
+    },
+  },
+
 };
 </script>
 
@@ -270,4 +263,4 @@ export default {
 	margin-bottom: 8px;
 	font-size: 10px;
 }
-</style>
+
