@@ -14,3 +14,11 @@ export let NetworkConnection = {
   type: "Network Restored",
   icon: "link",
 };
+export let TestInfo = {
+  message: "消息",
+  level: "info",
+  priority: 9,
+  action: "Until Network Restored",
+  type: "1Network Disconnection",
+  icon: "wifi",
+};
