@@ -37,7 +37,7 @@ export default {
     // 监听vuex 数据变更 生成推送优先级
     connectStatus: {
       handler(Value) {
-        console.log(Value)
+        console.log(Value);
         this.Generate(Value);
       },
       deep: true,
