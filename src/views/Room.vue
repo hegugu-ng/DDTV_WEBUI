@@ -78,6 +78,7 @@
 import { postFormAPI } from "../api";
 import { room_data } from "../utils/data_cli";
 import RoomCardV2 from "../components/ng/RoomCardV2";
+import { mapState } from "vuex";
 export default {
 	name: "Room",
 	components: {
@@ -94,11 +95,8 @@ export default {
 	},
 	mounted: async function () {
 		console.debug("[UI] 挂载房间配置页面");
-		await this.Room_AllInfo();
-		this.timer = setInterval(this.Room_AllInfo, 5000);
-	},
-	beforeUnmount() {
-		clearInterval(this.timer);
+    console.log(this.$store.state.Room_AllInfo)
+    this.$store.state.Room_AllInfo ? (await this.UpdateRoomView()) : this.initView();
 	},
 
   watch:{
@@ -111,6 +109,12 @@ export default {
     }
   },
   methods: {
+    initView: function(){
+      Promise.all([this.Room_AllInfo()]).then((res) => {
+        this.$store.commit("Room_AllInfo", res[0]);
+        this.UpdateRoomView()
+      });
+    },
     open(user,uid,active,fun) {
         this.$confirm(`确认将${user}(${uid})添加到录制列表？`, active, {
           dangerouslyUseHTMLString: true,
@@ -163,10 +167,11 @@ export default {
     },
     Room_AllInfo: async function () {
       let res = await postFormAPI("Room_AllInfo");
-      let data = res.data;
-      if (data.code === 0) {
-        this.room = await room_data(this.room, data.data);
-      }
+      return res.data.data;
+    },
+    UpdateRoomView: async function () {
+      let allRoom = this.$store.state.Room_AllInfo;
+      this.room = await room_data(this.room, allRoom);
     },
     Room_AutoRec: async function (uid, data) {
       let param = {

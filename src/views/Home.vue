@@ -60,12 +60,6 @@ export default {
       ],
       OneDayFrom: null,
       room: [],
-      Pic: {
-        title: "CPU使用率",
-        key: "cpu",
-        on: { "background-color": "#23ade5", color: "#fff" },
-        off: { "background-color": "#fff", color: "#000" },
-      },
       CoreData: [
         { title: "房间数", data: "--" },
         { title: "正在录制", data: "--" },
