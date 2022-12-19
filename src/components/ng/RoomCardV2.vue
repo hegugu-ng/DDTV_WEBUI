@@ -2,8 +2,9 @@
   <div>
     <div class="ng-lookup">
       <el-checkbox size="small" class="ng-checkbox right10" :indeterminate="isIndeterminate" v-model="checkAll"
-                   @change="handleCheckAllChange" border>全选</el-checkbox>
-      <el-input class="ng-roominput right10" size="small" v-model="lp" @keyup="handleOnkeyup($event)" placeholder="搜索UID/房间号/昵称/标题" clearable>
+        @change="handleCheckAllChange" border>全选</el-checkbox>
+      <el-input class="ng-roominput right10" size="small" v-model="lp" @keyup="handleOnkeyup($event)"
+        placeholder="搜索UID/房间号/昵称/标题" clearable>
         <template #prefix>
           <el-icon class="el-input__icon">
             <search />
@@ -17,67 +18,68 @@
       <el-button :disabled="select === ''" size="small" @click="$emit('requestgroup', select, checkedRoom)">确定
       </el-button>
     </div>
-    <ul class="ng-roomGroup">
-      <slot v-if="lp === ''"></slot>
-      <el-checkbox-group v-model="checkedRoom">
+    <el-checkbox-group v-model="checkedRoom">
+      <ul class="ng-roomGroup">
+        <!--这里放一个插槽，用来放置列表第一个定制的元素，比如添加房间-->
+        <slot v-if="lp === ''"></slot>
         <li class="RoomCardV2" v-for="(item, index) in lproom.length === 0 ? room : lproom" :key="index"
           v-loading="item.load">
-
-        <div class="ng-roomManager" :id="'m' + index">
-          <div class="ng-configbar">
-            <el-icon class="el-icon-back ng-bticon" @click="stemo('#m' + index, '0%')">
-              <arrow-left />
-            </el-icon>
-            <div class="ng-hostname">{{ item.uname }}</div>
-          </div>
-          <div class="ng-btngroup">
-            <div>
-              <div class="ng-fromtitle">基础管理</div>
-              <el-button size="small">管理文件</el-button>
-              <el-button size="small" type="danger" @click="requestApi('Room_Del', item.uid, null, index)">删除房间
-              </el-button>
+          <div class="ng-roomManager" :id="'m' + index">
+            <div class="ng-configbar">
+              <el-icon class="el-icon-back ng-bticon" @click="stemo('#m' + index, '0%')">
+                <arrow-left />
+              </el-icon>
+              <div class="ng-hostname">{{ item.uname }}</div>
             </div>
-            <div>
-              <div class="ng-fromtitle">录制弹幕</div>
-              <el-switch size="small" v-model="item.IsRecDanmu" active-color="#3bdd83" inactive-color="#a0b5a9"
-                @change="requestApi('Room_DanmuRec', item.uid, item.IsRecDanmu, index)" />
-              <el-button v-if="item.IsDownload" style="margin-left: 12px;" size="small" type="danger"
-                @click="requestApi('Rec_CancelDownload', item.uid, null, index)">停止录制</el-button>
-            </div>
-          </div>
-        </div>
-
-        <div>
-          <div class="ng-roomCover">
-            <div class="ng-isLive ng-floatbar" v-if="item.live_status === 1">正在直播</div>
-            <div class="ng-floatbar">
-              <el-checkbox class="ng-checkbox" :label="item" :key="item" @change="handleCheckedRoomChange">{{}}</el-checkbox>
-            </div>
-            <div class="ng-clink" :onclick="`window.open('https://live.bilibili.com/${item.room_id}')`"></div>
-            <img class="ng-image" referrerPolicy="no-referrer" :src="item.cover_from_user" />
-            <div class="ng-roomType ng-floatbar">{{ item.st }}</div>
-          </div>
-          <div class="ng-roominfo">
-            <div class="ng-faceGroup" :onclick="`window.open('https://space.bilibili.com/${item.uid}')`">
-              <div class="ng-face">
-                <img class="ng-image" referrerPolicy="no-referrer" :src="item.face" />
+            <div class="ng-btngroup">
+              <div>
+                <div class="ng-fromtitle">基础管理</div>
+                <el-button size="small">管理文件</el-button>
+                <el-button size="small" type="danger" @click="requestApi('Room_Del', item.uid, null, index)">删除房间
+                </el-button>
               </div>
-            </div>
-            <div class="ng-roomnameCard">
-              <div class="ng-roomtitle">{{ item.title }}</div>
-              <div class="ng-hostgroup">
-                <div class="ng-hostname">{{ item.uname }}</div>
-                <ng-svg icon-class="setting2" :size="{ width: '22px', height: '22px' }" class="ng-bticon"
-                  @click="stemo('#m' + index, '100%')" />
-                <el-switch v-model="item.IsAutoRec" active-color="#3bdd83" inactive-color="#6b997f"
-                  @change="requestApi('Room_AutoRec', item.uid, item.IsAutoRec, index)"></el-switch>
+              <div>
+                <div class="ng-fromtitle">录制弹幕</div>
+                <el-switch size="small" v-model="item.IsRecDanmu" active-color="#3bdd83" inactive-color="#a0b5a9"
+                  @change="requestApi('Room_DanmuRec', item.uid, item.IsRecDanmu, index)" />
+                <el-button v-if="item.IsDownload" style="margin-left: 12px;" size="small" type="danger"
+                  @click="requestApi('Rec_CancelDownload', item.uid, null, index)">停止录制</el-button>
               </div>
             </div>
           </div>
-        </div>
-      </li>
-      </el-checkbox-group>
-    </ul>
+
+          <div>
+            <div class="ng-roomCover">
+              <div class="ng-isLive ng-floatbar" v-if="item.live_status === 1">正在直播</div>
+              <div class="ng-floatbar">
+                <el-checkbox class="ng-checkbox" :label="item" :key="item"
+                  @change="handleCheckedRoomChange">{{}}</el-checkbox>
+              </div>
+              <div class="ng-clink" :onclick="`window.open('https://live.bilibili.com/${item.room_id}')`"></div>
+              <img class="ng-image" referrerPolicy="no-referrer" :src="item.cover_from_user" />
+              <div class="ng-roomType ng-floatbar">{{ item.st }}</div>
+            </div>
+            <div class="ng-roominfo">
+              <div class="ng-faceGroup" :onclick="`window.open('https://space.bilibili.com/${item.uid}')`">
+                <div class="ng-face">
+                  <img class="ng-image" referrerPolicy="no-referrer" :src="item.face" />
+                </div>
+              </div>
+              <div class="ng-roomnameCard">
+                <div class="ng-roomtitle">{{ item.title }}</div>
+                <div class="ng-hostgroup">
+                  <div class="ng-hostname">{{ item.uname }}</div>
+                  <ng-svg icon-class="setting2" :size="{ width: '22px', height: '22px' }" class="ng-bticon"
+                    @click="stemo('#m' + index, '100%')" />
+                  <el-switch v-model="item.IsAutoRec" active-color="#3bdd83" inactive-color="#6b997f"
+                    @change="requestApi('Room_AutoRec', item.uid, item.IsAutoRec, index)"></el-switch>
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </el-checkbox-group>
     <el-empty v-if="lproom.length === 0 && lp === '' ? room.length === 0 : lproom.length === 0"
       description="没有符合的搜索结果"></el-empty>
   </div>
@@ -135,21 +137,21 @@ export default {
     clearInterval(this.timer);
   },
   methods: {
-    handleOnkeyup(event){
+    handleOnkeyup(event) {
       console.log(event)
-      if(event.keyCode === 13){
+      if (event.keyCode === 13) {
         this.handleInputChange()
-      }else {
+      } else {
         this.lastTimeStamp = event.timeStamp;
         setTimeout(() => {
           //1s后比较二者是否还相同（因为只要还有事件触发，lastTimeStamp就会被改写，不再是当前事件函数的时间戳）
-          if(this.lastTimeStamp === event.timeStamp){
+          if (this.lastTimeStamp === event.timeStamp) {
             this.handleInputChange()
           }
         }, 1000);
       }
     },
-    handleInputChange () {
+    handleInputChange() {
       this.lproom = [];
       if (this.lp !== "") {
         for (let i = 0; i < this.room.length; i++) {
@@ -247,6 +249,7 @@ export default {
       const checkedCount = this.checkedRoom.length
       this.checkAll = checkedCount === this.setRoom.length
       this.isIndeterminate = checkedCount > 0 && checkedCount < this.setRoom.length
+      console.log(this.checkedRoom)
     },
 
     Room_AutoRec: async function (uid, data) {
@@ -297,9 +300,9 @@ export default {
 }
 
 .icon-img {
-	vertical-align: middle;
-	background-repeat: no-repeat;
-	background-image: url("../../assets/icons.png");
+  vertical-align: middle;
+  background-repeat: no-repeat;
+  background-image: url("../../assets/icons.png");
 }
 
 .ng-roomGroup {
@@ -311,17 +314,17 @@ export default {
 }
 
 .right10 {
-	margin-right: 10px;
+  margin-right: 10px;
 }
 
 .ng-hlbt {
-	border: 1px solid #e5dbdb;
-	display: inline;
-	padding: 5px;
-	font-size: 10px;
-	font-weight: bold;
-	margin-right: 3px;
-	cursor: pointer;
+  border: 1px solid #e5dbdb;
+  display: inline;
+  padding: 5px;
+  font-size: 10px;
+  font-weight: bold;
+  margin-right: 3px;
+  cursor: pointer;
 }
 
 .ng-lookup {
@@ -332,11 +335,11 @@ export default {
 }
 
 .ng-roominput {
-	max-width: 18rem;
+  max-width: 18rem;
 }
 
 .ng-todo {
-	width: 8rem;
+  width: 8rem;
 }
 
 .ng-fromtitle {
@@ -346,20 +349,20 @@ export default {
 }
 
 .RoomCardV2 {
-	display: inline-block;
-	width: 228px;
-	border: 1px solid #e9eaec;
-	padding: 10px 2px;
-	margin: 0 0.8rem 0.8rem 0;
-	border-radius: 8px;
-	background: #fff;
-	position: relative;
-	overflow: hidden;
+  display: inline-block;
+  width: 228px;
+  border: 1px solid #e9eaec;
+  padding: 10px 2px;
+  margin: 0 0.8rem 0.8rem 0;
+  border-radius: 8px;
+  background: #fff;
+  position: relative;
+  overflow: hidden;
 }
 
 .RoomCardV2:hover {
-	box-shadow: 0 13px 20px 0 rgb(59 64 72 / 22%);
-	transition: transform 0.3s cubic-bezier(0.63, -0.01, 0.59, 1);
+  box-shadow: 0 13px 20px 0 rgb(59 64 72 / 22%);
+  transition: transform 0.3s cubic-bezier(0.63, -0.01, 0.59, 1);
 }
 
 .ng-roomManager {
@@ -371,50 +374,50 @@ export default {
   bottom: 0;
   left: 0;
   right: 0;
-  background: rgba(255, 255, 255,90%);
+  background: rgba(255, 255, 255, 90%);
   backdrop-filter: blur(5px);
   overflow: hidden;
 }
 
 .ng-configbar {
-	padding: 10px 10px 0px 10px;
-	font-size: 25px;
-	display: flex;
-	align-items: center;
+  padding: 10px 10px 0px 10px;
+  font-size: 25px;
+  display: flex;
+  align-items: center;
 }
 
 .ng-bticon {
-	cursor: pointer;
+  cursor: pointer;
 }
 
 .ng-bticon:hover {
-	color: #999;
+  color: #999;
 }
 
 .ng-roomCover {
-	width: 208px;
-	margin: 0 9px 0 9px;
-	height: 117px;
-	border-radius: 5px;
-	position: relative;
-	overflow: hidden;
-	z-index: 1;
+  width: 208px;
+  margin: 0 9px 0 9px;
+  height: 117px;
+  border-radius: 5px;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
 }
 
 .ng-image {
-	width: 100%;
-	/* height: 100%; */
+  width: 100%;
+  /* height: 100%; */
 }
 
 .ng-isLive {
-	top: -1px;
-	left: -1px;
-	background-image: url("../../assets/testlive.png");
-	background-position: 0 100%;
-	text-indent: 30px;
-	font-size: 12px;
-	color: #fff;
-	line-height: 24px;
+  top: -1px;
+  left: -1px;
+  background-image: url("../../assets/testlive.png");
+  background-position: 0 100%;
+  text-indent: 30px;
+  font-size: 12px;
+  color: #fff;
+  line-height: 24px;
 }
 
 .ng-checkbox {
@@ -424,23 +427,23 @@ export default {
 }
 
 .ng-clink {
-	position: absolute;
-	width: 100%;
-	height: 100%;
-	z-index: 102;
-	cursor: pointer;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 102;
+  cursor: pointer;
 }
 
 .ng-roomType {
-	padding-left: 8px;
-	box-sizing: border-box;
-	bottom: 6px;
-	font-size: 14px;
-	color: #fff;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	white-space: nowrap;
-	z-index: 3;
+  padding-left: 8px;
+  box-sizing: border-box;
+  bottom: 6px;
+  font-size: 14px;
+  color: #fff;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  z-index: 3;
 }
 
 .ng-floatbar {
@@ -454,82 +457,82 @@ export default {
 }
 
 .ng-roominfo {
-	display: flex;
-	align-items: center;
-	margin-top: 5px;
-	padding: 0 10px;
-	box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  margin-top: 5px;
+  padding: 0 10px;
+  box-sizing: border-box;
 }
 
 .ng-faceGroup {
-	cursor: pointer;
-	width: 55px;
-	height: 55px;
-	position: relative;
+  cursor: pointer;
+  width: 55px;
+  height: 55px;
+  position: relative;
 }
 
 .ng-face {
-	width: 40px;
-	height: 40px;
-	/* background-image: url('../assets/testuserface.jpg'); */
-	border-radius: 50%;
-	margin-top: 8px;
-	margin-left: 8px;
-	position: absolute;
-	overflow: hidden;
+  width: 40px;
+  height: 40px;
+  /* background-image: url('../assets/testuserface.jpg'); */
+  border-radius: 50%;
+  margin-top: 8px;
+  margin-left: 8px;
+  position: absolute;
+  overflow: hidden;
 }
 
 .ng-pendant {
-	/* background-image: url('../assets/testzb.png'); */
-	width: 100%;
-	height: 100%;
-	background-size: 100% 100%;
-	position: absolute;
+  /* background-image: url('../assets/testzb.png'); */
+  width: 100%;
+  height: 100%;
+  background-size: 100% 100%;
+  position: absolute;
 }
 
 .ng-userOfficial {
-	z-index: 11;
-	font-size: 0.36em;
-	width: 17px;
-	height: 17px;
-	position: absolute;
-	right: 10%;
-	bottom: 10%;
+  z-index: 11;
+  font-size: 0.36em;
+  width: 17px;
+  height: 17px;
+  position: absolute;
+  right: 10%;
+  bottom: 10%;
 }
 
 .ng-roomnameCard {
-	width: calc(100% - 55px);
+  width: calc(100% - 55px);
 }
 
 .ng-roomtitle {
-	font-size: 16px;
-	color: #333;
-	text-overflow: ellipsis;
-	overflow: hidden;
-	/* margin-bottom: 8px; */
-	display: -webkit-box;
-	-webkit-line-clamp: 1;
-	-webkit-box-orient: vertical;
-	padding-left: 6px;
+  font-size: 16px;
+  color: #333;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  /* margin-bottom: 8px; */
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  padding-left: 6px;
 }
 
 .ng-hostgroup {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .ng-hostname {
-	font-size: 0.6em;
-	color: #3b2929;
-	margin-top: 1px;
-	text-overflow: ellipsis;
-	overflow: hidden;
-	white-space: nowrap;
-	padding-left: 6px;
-	flex: 1;
-	padding-right: 3px;
-	box-sizing: border-box;
+  font-size: 0.6rem;
+  color: #3b2929;
+  margin-top: 1px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  padding-left: 6px;
+  flex: 1;
+  padding-right: 3px;
+  box-sizing: border-box;
 }
 
 .ng-stoprec {

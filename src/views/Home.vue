@@ -58,7 +58,14 @@ export default {
           label: "删除房间",
         },
       ],
+      OneDayFrom: null,
       room: [],
+      Pic: {
+        title: "CPU使用率",
+        key: "cpu",
+        on: { "background-color": "#23ade5", color: "#fff" },
+        off: { "background-color": "#fff", color: "#000" },
+      },
       CoreData: [
         { title: "房间数", data: "--" },
         { title: "正在录制", data: "--" },
@@ -72,11 +79,6 @@ export default {
     };
   },
   mounted: async function () {
-    if(this.monitor){
-      this.CpuUsage();
-      this.MemUsage();
-      this.Lan();
-    }
     this.$store.state.System_Resources ? (await this.UpdateDataView()) && (await this.UpdateRoomView()): this.initView();
     this.updateTimeManger = setInterval(this.Updatetime, 2000);
     this.timer = setInterval(this.initView, 20000);
@@ -90,12 +92,13 @@ export default {
       return !value && typeof value != "undefined" && value !== 0;
     },
     initView(){
-      Promise.all([this.System_Resources(), this.Room_AllInfo()]).then((res) => {
+      Promise.all([this.System_Resources(), this.Rec_RecordingInfo_Lite(), this.Room_AllInfo()]).then((res) => {
         this.$store.commit("System_Resources", res[0]);
-        this.$store.commit("Room_AllInfo", res[1]);
+        this.$store.commit("Rec_RecordingInfo_Lite", res[1]);
+        this.$store.commit("Room_AllInfo", res[2]);
         this.UpdateDataView();
         this.UpdateRoomView();
-      });    
+      });
     },
     Updatetime(){
       const time = new Date();
@@ -177,7 +180,7 @@ export default {
           liveRoomData.push(item);
         }
       })
-      this.room = await room_data(this.room, liveRoomData);
+      await room_data(this, liveRoomData);
       const time = new Date();
       this.liveUpdateTime = time.getTime();
     },
