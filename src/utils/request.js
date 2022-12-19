@@ -1,8 +1,9 @@
 import axios from 'axios'
 import Router from '../router'
 import Store from '../store'
-import {clearCookie} from '@/utils/cookie'
-axios.defaults.withCredentials=true;
+import {NetworkDisconnection,NetworkConnection} from './error'
+import { clearCookie } from '@/utils/cookie'
+axios.defaults.withCredentials = true;
 
 let host = window.apiObj.apiUrl
 if (window.apiObj.apiUrl === false) host = "./"
@@ -36,21 +37,18 @@ service.interceptors.response.use(response => {
 
     console.debug("[UI] 收到数据返回", jsondata)
     response.data = jsondata
-    // 吊销错误消息，推送成功信息
-    if (Store.state.connectStatus.show && Store.state.connectStatus.type === "networkError"){
-        Store.commit('setStatus', {"level": 'success',"msg": '连接成功',"type": null,"show": true});
-        if (Store.state.beforeStatus != null) {
-            Store.dispatch('setStatusAsync',Store.state.beforeStatus);
-            Store.commit('beforeStatus',null)
-        }else{
-            Store.dispatch('setStatusAsync',{"level": 'success',"msg": '连接成功',"type": null,"show": false})
-        }
+    // 在存在 NetworkDisconnection 的情况下 吊销 失败信息，推送成功消息
+    console.log(Store.state.connectStatus.indexOf(NetworkDisconnection))
+    if (Store.state.connectStatus.indexOf(NetworkDisconnection) != -1) {
+        Store.commit('RemoveConnectStatus', NetworkDisconnection)
+        if (Store.state.connectStatus.indexOf(NetworkConnection) === -1) Store.commit('AddConnectStatus', NetworkConnection)
     }
-    if(response.data.code === 6000) {
+
+    if (response.data.code === 6000) {
         clearCookie()
         Router.push("/login")
     }
-    if(response.status !== 200) {
+    if (response.status !== 200) {
         clearCookie()
         Router.push("/login")
     }
@@ -63,12 +61,9 @@ service.interceptors.response.use(response => {
     } else {
         // 超时处理
         if (JSON.stringify(error).includes('timeout')) {
-            // 推送错误消息
-            // 如果先前有信息展示，且不为网络错误
-            if(Store.state.connectStatus.show && Store.state.connectStatus.type !== "networkError"){
-                Store.commit('beforeStatus',Store.state.connectStatus);
-            }
-            Store.commit('setStatus', {"level": 'error',"msg": '无法与后端建立连接',"type": 'networkError',"show": true});
+            // 推送错误消息 
+            // 判断 是否存在 Network Disconnection 没有的话推送消息 因为 NetworkDisconnection 的动作是 在网络恢复后吊销
+            if (Store.state.connectStatus.indexOf(NetworkDisconnection) === -1) Store.commit('AddConnectStatus', NetworkDisconnection)
             console.debug('[UI] 网络连接超时')
         }
     }

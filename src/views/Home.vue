@@ -1,6 +1,7 @@
 <template>
   <div class="home">
     <!--核心数据-->
+    <el-button @click="pusherror">报错</el-button>
     <ng-infocard title="核心数据" :update="coreUpdateTime_time">
       <ng-datagroup :CardItem="CoreData"></ng-datagroup>
     </ng-infocard>
@@ -26,9 +27,10 @@ import RoomCardV2 from "../components/ng/RoomCardV2";
 import { room_data } from "../utils/data_cli";
 import { mapState } from "vuex";
 import { postFormAPI, getListAPIv2 } from "../api";
+import {NetworkConnection,NetworkDisconnection} from "../utils/error";
 export default {
   computed: {
-    ...mapState(["screenWidth"]),
+    ...mapState(["screenWidth","connectStatus"]),
   },
   components: {
     "ng-infocard": InfoCard,
@@ -82,6 +84,9 @@ export default {
     console.log("beforeUnmount");
   },
   methods: {
+    pusherror(){
+      this.$store.commit("AddConnectStatus", NetworkDisconnection);
+    },
     isNull(value) {
       return !value && typeof value != "undefined" && value !== 0;
     },

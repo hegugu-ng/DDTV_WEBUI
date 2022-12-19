@@ -4,12 +4,8 @@ export default createStore({
   state() {
     return {
       //页面组件状态 - 警告栏
-      connectStatus: {
-        "level": 'warn',
-        "msg": '有新版本',
-        "type": 'updater',
-        "show": false
-      },
+      connectStatus: [],
+      // { message: "消息", level: "info", priority: 99, action:"Until Network Restored",type:"Network Disconnection"},
       beforeStatus: null,
       // 日志
       log: [],
@@ -33,11 +29,18 @@ export default createStore({
   mutations: {
     addLog(state, payload) {
       const date = new Date();
-      const nowStr = date.toLocaleString('zh', {hour12: true});
+      const nowStr = date.toLocaleString('zh', { hour12: true });
       payload = { "level": payload.lv, "msg": payload.msg, "time": nowStr };
       state.log.push(payload);
     },
     clearLog: state => state.log = [],
+    // 向顶部状态栏推送一条消息
+    AddConnectStatus: (state,payload) => state.connectStatus.push(payload),
+    // 从状态栏中吊销一条消息
+    RemoveConnectStatus:(state,payload) =>{ 
+      let index = state.connectStatus.indexOf(payload)
+      state.connectStatus.splice(index,1); 
+    },
     setStatus: (state, payload) => state.connectStatus = payload,
     screenWidth: (state, payload) => state.screenWidth = payload,
     beforeStatus: (state, payload) => state.beforeStatus = payload,
