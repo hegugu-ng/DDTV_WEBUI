@@ -37,28 +37,44 @@ export default {
     // 监听vuex 数据变更 生成推送优先级
     connectStatus: {
       handler(Value) {
-        console.log(Value);
+        if (Value.length === 0) {
+          this.orgin = undefined;
+          return;
+        }
         this.Generate(Value);
       },
       deep: true,
     },
     orgin: {
       handler(newValue, oldValue) {
+        // 如果 消息队列不是变成空的
         if (newValue !== undefined) {
+          // 状态栏下拉
           TweenLite.to(".con-msg-banner", {
             background: this.color[newValue.level],
             height: "45px",
           });
+          // 如果 消息action为 auto
           if (this.show.action === "auto") {
-            TweenLite.to(".con-msg-banner", {
-              background: this.color[newValue.level],
-              height: "0px",
-              delay: 1,
-              onComplete: this.revokeMessage,
-            });
+            if (store.state.connectStatus.length >= 3) {
+              TweenLite.to(".con-msg-banner", {
+                background: this.color[newValue.level],
+                onComplete: store.commit("RemoveConnectStatus", newValue),
+              });
+            } else {
+              // 自动一秒后吊销
+              TweenLite.to(".con-msg-banner", {
+                background: this.color[newValue.level],
+                height: "0px",
+                delay: 1,
+                // 回调中自动吊销自己
+                onComplete: store.commit("RemoveConnectStatus", newValue),
+              });
+            }
           }
         }
-        if (oldValue !== undefined) {
+        // 如果 不是第一条消息
+        if (oldValue !== undefined && this.orgin !== undefined) {
           if (newValue.type === oldValue.action) {
             store.commit("RemoveConnectStatus", oldValue);
           }
@@ -69,12 +85,11 @@ export default {
   },
   methods: {
     Generate: function (arr) {
-      console.log(arr);
       const newarr = this.deepCopy(arr);
       newarr.sort((a, b) => b.priority - a.priority);
       // 最高优先级的消息
       // 没有消息
-      if (this.orgin === undefined) {
+      if (this.orgin === undefined || this.orgin.action === "auto") {
         this.orgin = newarr[0];
         this.show = newarr[0];
       } else {
@@ -99,11 +114,6 @@ export default {
         }
       }
       return newObj;
-    },
-    // 吊销当前消息
-    revokeMessage: function () {
-      console.log(111);
-      store.commit("RemoveConnectStatus", this.orgin);
     },
   },
 };
