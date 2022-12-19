@@ -1,27 +1,23 @@
 <template>
-	<div class="home">
-		<!--核心数据-->
-		<ng-infocard title="核心数据" :update="coreUpdateTime_time">
-			<ng-datagroup :CardItem="CoreData"></ng-datagroup>
-		</ng-infocard>
-		<div class="ng-table-group" v-if="monitor">
-			<div class="ng-table" v-for="(item, index) in labe" :key="index">
-				<div class="ng-table-title">{{ item.title }}</div>
-				<div class="ng-table-app">
-					<div class="ng-table-app-title">{{ item.desc }}</div>
-					<div :id="item.id" style="width: 245px; height: 110px"></div>
-				</div>
-			</div>
-		</div>
+  <div class="home">
+    <!--核心数据-->
+    <ng-infocard title="核心数据" :update="coreUpdateTime_time">
+      <ng-datagroup :CardItem="CoreData"></ng-datagroup>
+    </ng-infocard>
+    <div class="ng-table-group" v-if="monitor">
+      <div class="ng-table" v-for="(item,index) in labe" :key="index">
+        <div class="ng-table-title">{{item.title}}</div>
+        <div class="ng-table-app">
+          <div class="ng-table-app-title">{{item.desc}}</div>
+          <div :id="item.id" style="width: 245px; height: 110px"></div>
+        </div>
+      </div>
+    </div>
 
-		<ng-infocard
-			title="录制中房间管理"
-			:update="liveUpdateTime_time"
-			style="margin-top: 3vh"
-		>
-			<ng-roomcard :room="room" @requestApi="requestApi"></ng-roomcard>
-		</ng-infocard>
-	</div>
+    <ng-infocard title="录制中房间管理" :update="liveUpdateTime_time" style="margin-top: 3vh">
+      <ng-roomcard :room="room" @requestApi="requestApi"></ng-roomcard>
+    </ng-infocard>
+  </div>
 </template>
 <script>
 import InfoCard from "../components/ng/InfoCard";
@@ -29,10 +25,7 @@ import DataGroup from "../components/ng/DataGroup";
 import RoomCardV2 from "../components/ng/RoomCardV2";
 import { room_data } from "../utils/data_cli";
 import { mapState } from "vuex";
-import {
-	postFormAPI,
-	// getListAPIv2
-} from "../api";
+import { postFormAPI, getListAPIv2 } from "../api";
 export default {
   computed: {
     ...mapState(["screenWidth"]),
@@ -65,19 +58,7 @@ export default {
           label: "删除房间",
         },
       ],
-      labe:[
-        {title:"CPU利用率（%）",desc:"当前：97.266% 总量：2核",id:"cpu-labe"},
-        {title:"内存使用量（MB）",desc:"当前：917.5MB 总量：4GB",id:"ram-labe"},
-        {title:"公网带宽使用（Mbps）",desc:"当前：0.069（入）0.02（出）",id:"lan-labe"},
-        ],
-      OneDayFrom: null,
       room: [],
-      Pic: {
-        title: "CPU使用率",
-        key: "cpu",
-        on: { "background-color": "#23ade5", color: "#fff" },
-        off: { "background-color": "#fff", color: "#000" },
-      },
       CoreData: [
         { title: "房间数", data: "--" },
         { title: "正在录制", data: "--" },
@@ -85,12 +66,6 @@ export default {
         { title: "内存占用", data: "--" },
         { title: "硬盘占用", data: "--" },
         { title: "下载总量", data: "--" },
-      ],
-      OneDayData: [
-        { title: "CPU使用率", key: "cpu" },
-        { title: "内存使用率", key: "ram" },
-        { title: "流量", key: "ll" },
-        { title: "开播人数", key: "live" },
       ],
       timer: null,
       updateTimeManger: null,
@@ -120,7 +95,7 @@ export default {
         this.$store.commit("Room_AllInfo", res[1]);
         this.UpdateDataView();
         this.UpdateRoomView();
-      });
+      });    
     },
     Updatetime(){
       const time = new Date();
@@ -129,25 +104,14 @@ export default {
       if (this.isNull(this.coreUpdateTime)) coreUp = "更新中";
       else coreUp = Math.round((NowTime - this.coreUpdateTime)/1000);
 
-
-			if (this.isNull(this.liveUpdateTime)) liveUp = "更新中";
-			else liveUp = Math.round((NowTime - this.liveUpdateTime) / 1000);
-
+      if (this.isNull(this.liveUpdateTime)) liveUp = "更新中";
+      else liveUp = Math.round((NowTime - this.liveUpdateTime)/1000);
 
       if (coreUp < 8 || coreUp === "更新中") coreUp = "刚刚";
       else coreUp = coreUp + "秒前更新"
 
       if (liveUp < 8 || coreUp === "更新中") liveUp = "刚刚";
       else liveUp = liveUp + "秒前更新"
-
-
-			this.coreUpdateTime_time = coreUp;
-			this.liveUpdateTime_time = liveUp;
-		},
-		requestApi(type, roomid, data) {
-			console.log(type, roomid, data);
-			// 分配一下
-		},
 
 
       this.coreUpdateTime_time  = coreUp;
@@ -209,7 +173,7 @@ export default {
       let liveRoomData = [];
       // 开始生成本地渲染列表的索引
       allRoom.forEach((item) =>{
-        if(item.live_status === 1){
+        if(item.live_status === 1 && item.IsDownload){
           liveRoomData.push(item);
         }
       })
@@ -230,37 +194,38 @@ export default {
       return res.data.data;
     },
   },
-
 };
 </script>
 
+
 <style>
 .home {
-	padding: 10px;
-	/* background-color: #fff; */
+  padding: 10px;
+  /* background-color: #fff; */
 }
-.ng-table-group {
-	display: flex;
-	margin-top: 1vh;
+.ng-table-group{
+  display:flex;
+  margin-top: 1vh;
 }
 .ng-table {
-	height: 170px;
-	width: 245px;
-	padding: 20px;
-	display: flex;
-	flex-direction: column;
-	/* justify-content: space-around; */
-	background-color: #fff;
-	border: 1px solid #e5dbdb;
-	margin-right: 10px;
+  height: 170px;
+  width: 245px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  /* justify-content: space-around; */
+  background-color: #fff;
+  border: 1px solid #e5dbdb;
+  margin-right: 10px;
 }
 .ng-table-title {
-	margin-bottom: 18px;
-	font-weight: 700;
-	font-size: 14px;
+  margin-bottom: 18px;
+  font-weight: 700;
+  font-size: 14px;
 }
 .ng-table-app-title {
-	margin-bottom: 8px;
-	font-size: 10px;
+  margin-bottom: 8px;
+  font-size: 10px;
 }
 
+</style>
