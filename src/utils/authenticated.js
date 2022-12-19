@@ -1,22 +1,22 @@
 // import { postFormAPI } from '../api'
 
 export function getCookie(name) {
-    // 获取所有的 cookie
-    const cookies = document.cookie;
+  // 获取所有的 cookie
+  const cookies = document.cookie;
 
-    // 查找 cookie 名为 "name" 的值
-    name += "=";
-    let start = cookies.indexOf(name);
-    if (start === -1) return null;
+  // 查找 cookie 名为 "name" 的值
+  name += "=";
+  let start = cookies.indexOf(name);
+  if (start === -1) return null;
 
-    // 跳过 cookie 名称，获取 cookie 值
-    start += name.length;
-    let end = cookies.indexOf(";", start);
-    if (end === -1) end = cookies.length;
-    const value = cookies.substring(start, end);
+  // 跳过 cookie 名称，获取 cookie 值
+  start += name.length;
+  let end = cookies.indexOf(";", start);
+  if (end === -1) end = cookies.length;
+  const value = cookies.substring(start, end);
 
-    // 将 cookie 值解码并返回
-    return decodeURIComponent(value);
+  // 将 cookie 值解码并返回
+  return decodeURIComponent(value);
 }
 
 // /**
@@ -46,9 +46,9 @@ export function getCookie(name) {
  * 进行一次鉴权
  * @returns boolean
  */
- export function isAuthenticated() {
-    // 获取cookies
-    const cookieToken = getCookie("DDTVUser");
-    // 如果为空，认定鉴权失败、
-    return cookieToken != null && cookieToken !== ""
+export function isAuthenticated() {
+  // 获取cookies
+  const cookieToken = getCookie("DDTVUser");
+  // 如果为空，认定鉴权失败、
+  return cookieToken != null && cookieToken !== "";
 }

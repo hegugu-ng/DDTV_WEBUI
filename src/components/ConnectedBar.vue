@@ -10,13 +10,12 @@
 </template>
 
 <script>
-
-import { mapState } from 'vuex';
-import { NetworkConnection, NetworkDisconnection } from "../utils/error"
-import TweenLite from 'gsap';
+import { mapState } from "vuex";
+// import { NetworkConnection, NetworkDisconnection } from "../utils/error";
+import TweenLite from "gsap";
 import store from "@/store";
 
-// 告警 信息的推送 解除 
+// 告警 信息的推送 解除
 // 推送 是指接收到需要展示的告警信息后，展示
 // 解除 是告警信息打到解除的条件 action 后 解除
 
@@ -31,76 +30,76 @@ export default {
     return {
       show: { icon: "wifi", message: null },
       color: { error: "#F56C6C", warn: "#E6A23C", info: "#909399", success: "#c1ae67" },
-      orgin: undefined
+      orgin: undefined,
     };
   },
   watch: {
     // 监听vuex 数据变更 生成推送优先级
     connectStatus: {
-
       handler(Value) {
-        console.log(Value)
-        this.Generate(Value)
+        console.log(Value);
+        this.Generate(Value);
       },
-      deep: true
+      deep: true,
     },
     orgin: {
-      handler(newValue,oldValue) {
-        console.log(newValue,oldValue)
+      handler(newValue, oldValue) {
+        console.log(newValue, oldValue);
         if (newValue !== undefined) {
-          TweenLite.to('.con-msg-banner', { background: this.color[newValue.level], height: "45px" })
+          TweenLite.to(".con-msg-banner", { background: this.color[newValue.level], height: "45px" });
           if (this.show.action === "auto") {
-            TweenLite.to('.con-msg-banner', { background: this.color[newValue.level], height: "0px", delay: 1 ,onComplete:this.revokeMessage})
+            TweenLite.to(".con-msg-banner", {
+              background: this.color[newValue.level],
+              height: "0px",
+              delay: 1,
+              onComplete: this.revokeMessage,
+            });
           }
         }
       },
-      deep: true
-    }
+      deep: true,
+    },
   },
   methods: {
     Generate: function (arr) {
-      console.log(arr)
-      var newarr = this.deepCopy(arr)
-      newarr.sort((a, b) => b.priority - a.priority)
+      console.log(arr);
+      var newarr = this.deepCopy(arr);
+      newarr.sort((a, b) => b.priority - a.priority);
       // 最高优先级的消息
       // 没有消息
       if (this.orgin === undefined) {
-        this.orgin = newarr[0]
-        this.show = newarr[0]
-      }else{
-        var keylist = []
-        for(var item of newarr){
-          keylist.push(item.type)
+        this.orgin = newarr[0];
+        this.show = newarr[0];
+      } else {
+        var keylist = [];
+        for (var item of newarr) {
+          keylist.push(item.type);
         }
-        var dx = keylist.indexOf(this.orgin.action)
-        if(dx !== -1){
-          this.orgin = newarr[dx]
-          this.show = newarr[dx]
+        var dx = keylist.indexOf(this.orgin.action);
+        if (dx !== -1) {
+          this.orgin = newarr[dx];
+          this.show = newarr[dx];
         }
       }
-
     },
     deepCopy: function (obj) {
-      let newObj = obj.constructor === Array ? [] : {}
+      let newObj = obj.constructor === Array ? [] : {};
       for (let i in obj) {
-        if (typeof obj[i] === 'object') {
-          newObj[i] = this.deepCopy(obj[i])
+        if (typeof obj[i] === "object") {
+          newObj[i] = this.deepCopy(obj[i]);
         } else {
-          newObj[i] = obj[i]
+          newObj[i] = obj[i];
         }
       }
-      return newObj
+      return newObj;
     },
     // 吊销当前消息
-    revokeMessage: function(){
-      console.log(111)
+    revokeMessage: function () {
+      console.log(111);
       store.commit("RemoveConnectStatus", this.orgin);
-
-    }
-  }
-
-}
-
+    },
+  },
+};
 </script>
 
 <style scoped>
