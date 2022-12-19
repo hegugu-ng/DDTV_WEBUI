@@ -102,16 +102,11 @@ const router = createRouter({
   history: createWebHashHistory(),
   routes,
 })
-// router.beforeEach(async (to, from, next) => {
-//   // 动态添加 title 后面拼接一个名称
-//   document.title = `DDTV WEB UI - ${to.meta.title}`
-//   let Authenticated = isAuthenticated()
-//   // 如果用户登录了还想要回到登录页 取消跳转
-//   if (to.path === '/login' && Authenticated) {
-//     next({ path: from.path })
-//   }
-//   next()
-// })
+router.beforeEach(async (to, from, next) => {
+  // 动态添加 title 后面拼接一个名称
+  document.title = `DDTV WEB UI - ${to.meta.title}`
+  next()
+})
 
 
 export default router
