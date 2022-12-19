@@ -1,22 +1,10 @@
 <template>
   <div class="footbar">
-    <a
-      class="bartext"
-      target="_blank"
-      :href="info.info.link"
-      v-if="info.info.show"
-      >{{ info.info.text }}</a
-    >
-    <a class="icp bartext" target="_blank" :href="info.ICP.link" v-if="info.ICP.show">{{
-      info.ICP.text
-    }}</a>
-    <div class="gabeian" target="_blank" :href="info.GA.link" v-if="info.GA.show">
-      <img
-        class="gaicon"
-        :src="require('../assets/img/gaba.png')"
-        alt="公安备案"
-      />
-      <a class="text bartext" target="_blank" :href="info.GA.link" >{{ info.GA.text }}</a>
+    <a class="bartext" target="_blank" :href="info.info.link" v-if="info.info.show">{{ info.info.text }}</a>
+    <a class="icp bartext" target="_blank" :href="info.ICP.link" v-if="info.ICP.show">{{ info.ICP.text }}</a>
+    <div class="gabeian" :href="info.GA.link" v-if="info.GA.show">
+      <img class="gaicon" :src="require('../assets/img/gaba.png')" alt="公安备案" />
+      <a class="text bartext" target="_blank" :href="info.GA.link">{{ info.GA.text }}</a>
     </div>
   </div>
 </template>
@@ -85,12 +73,11 @@ a:active {
   float: left;
   height: 20px;
   line-height: 20px;
-  margin: 0px 0px 0px 5px;
+  margin: 0 0 0 5px;
 }
 .gaicon {
   float: left;
   width: 15px;
-  height: 15px
+  height: 15px;
 }
 </style>
-
