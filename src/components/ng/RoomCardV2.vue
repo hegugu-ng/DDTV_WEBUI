@@ -199,7 +199,6 @@ export default {
   },
   methods: {
     handleOnkeyup(event) {
-      console.log(event);
       this.SearchLoading = true;
       if (event.keyCode === 13) {
         this.handleInputChange();
@@ -215,24 +214,26 @@ export default {
       }
     },
     handleInputChange() {
-      this.SearchResult = [];
       if (this.SearchKeywords !== "") {
-        for (let item of this.room) {
-          let Keywords = [item.title, item.uid, item.uname, item.room_id];
-
-          for (let Keyword of Keywords) {
-            if (this.fuzzyMatch(Keyword, this.SearchKeywords)) {
-              // 将找到的结果放到 SearchResult
-              this.SearchResult.push(item);
-              break;
+        //关键词直接写死
+        let Keywords = ["title", "uid", "uname", "room_id"];
+        //调用正则表达式实现模糊查询
+        const regex = new RegExp(this.SearchKeywords, "i");
+        //直接实现模糊查询，并给room二次赋值
+        this.room = this.room.filter((item) => {
+          for (let key of Keywords) {
+            //添加toString()方法，防止数字类型报错
+            if (item[key].toString().match(regex)) {
+              return true;
             }
           }
-        }
+          return false;
+        });
+      } else {
+        //字符串清空后回归原始数据
+        this.room = this.forkRoom;
       }
-      console.log(this.SearchResult.length, typeof [], this.SearchResult);
-
       //更新列表中显示的结果
-
       this.handleCheckedRoomChange();
     },
     stemo: function (id, height) {
@@ -280,34 +281,35 @@ export default {
       }
       return result;
     },
-    fuzzyMatch: function (str1, key) {
-      let index = -1,
-        flag = false;
-      str1 = String(str1).toLowerCase();
-      key = String(key).toLowerCase();
-      let i = 0,
-        arr = key.split("");
-      for (; i < arr.length; i++) {
-        //有一个关键字都没匹配到，则没有匹配到数据
-        if (str1.indexOf(arr[i]) < 0) {
-          break;
-        } else {
-          let match = str1.matchAll(arr[i]);
-          let next = match.next();
-          while (!next.done) {
-            if (next.value.index > index) {
-              index = next.value.index;
-              if (i === arr.length - 1) {
-                flag = true;
-              }
-              break;
-            }
-            next = match.next();
-          }
-        }
-      }
-      return flag;
-    },
+    // 已弃用
+    // fuzzyMatch: function (str1, key) {
+    //   let index = -1,
+    //     flag = false;
+    //   str1 = String(str1).toLowerCase();
+    //   key = String(key).toLowerCase();
+    //   let i = 0,
+    //     arr = key.split("");
+    //   for (; i < arr.length; i++) {
+    //     //有一个关键字都没匹配到，则没有匹配到数据
+    //     if (str1.indexOf(arr[i]) < 0) {
+    //       break;
+    //     } else {
+    //       let match = str1.matchAll(arr[i]);
+    //       let next = match.next();
+    //       while (!next.done) {
+    //         if (next.value.index > index) {
+    //           index = next.value.index;
+    //           if (i === arr.length - 1) {
+    //             flag = true;
+    //           }
+    //           break;
+    //         }
+    //         next = match.next();
+    //       }
+    //     }
+    //   }
+    //   return flag;
+    // },
     handleCheckAllChange(val) {
       this.CheckedRoom = val ? this.room : [];
       this.isIndeterminate = false;
