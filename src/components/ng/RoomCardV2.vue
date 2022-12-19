@@ -2,12 +2,13 @@
   <div>
     <div class="ng-lookup">
       <el-checkbox size="small" class="ng-checkbox right10" :indeterminate="isIndeterminate" v-model="CheckAll"
-        @change="handleCheckAllChange" border>全选</el-checkbox>
+                   @change="handleCheckAllChange" border>全选
+      </el-checkbox>
       <el-input class="ng-roominput right10" size="small" v-model="SearchKeywords" @keyup="handleOnkeyup($event)"
-        placeholder="搜索UID/房间号/昵称/标题" clearable>
+                placeholder="搜索UID/房间号/昵称/标题" clearable>
         <template #prefix>
           <el-icon class="el-input__icon">
-            <search />
+            <search/>
           </el-icon>
         </template>
       </el-input>
@@ -15,7 +16,8 @@
         <el-option v-for="item in BatchOperation" :key="item.value" :label="item.label" :value="item.value">
         </el-option>
       </el-select>
-      <el-button :disabled="BatchOperationSelect === ''" size="small" @click="$emit('requestgroup', BatchOperationSelect, CheckedRoom)">确定
+      <el-button :disabled="BatchOperationSelect === ''" size="small"
+                 @click="$emit('requestgroup', BatchOperationSelect, CheckedRoom)">确定
       </el-button>
     </div>
     <el-checkbox-group v-model="CheckedRoom">
@@ -26,7 +28,7 @@
           <div class="ng-roomManager" :id="'m' + index">
             <div class="ng-configbar">
               <el-icon class="el-icon-back ng-bticon" @click="stemo('#m' + index, '0%')">
-                <arrow-left />
+                <arrow-left/>
               </el-icon>
               <div class="ng-hostname">{{ item.uname }}</div>
             </div>
@@ -40,9 +42,10 @@
               <div>
                 <div class="ng-fromtitle">录制弹幕</div>
                 <el-switch size="small" v-model="item.IsRecDanmu" active-color="#3bdd83" inactive-color="#a0b5a9"
-                  @change="requestApi('Room_DanmuRec', item.uid, item.IsRecDanmu, index)" />
+                           @change="requestApi('Room_DanmuRec', item.uid, item.IsRecDanmu, index)"/>
                 <el-button v-if="item.IsDownload" style="margin-left: 12px;" size="small" type="danger"
-                  @click="requestApi('Rec_CancelDownload', item.uid, null, index)">停止录制</el-button>
+                           @click="requestApi('Rec_CancelDownload', item.uid, null, index)">停止录制
+                </el-button>
               </div>
             </div>
           </div>
@@ -52,16 +55,17 @@
               <div class="ng-isLive ng-floatbar" v-if="item.live_status === 1">正在直播</div>
               <div class="ng-floatbar">
                 <el-checkbox class="ng-checkbox" :label="item" :key="item"
-                  @change="handleCheckedRoomChange">{{}}</el-checkbox>
+                             @change="handleCheckedRoomChange">{{}}
+                </el-checkbox>
               </div>
               <div class="ng-clink" :onclick="`window.open('https://live.bilibili.com/${item.room_id}')`"></div>
-              <img class="ng-image" referrerPolicy="no-referrer" :src="item.cover_from_user" />
+              <img class="ng-image" referrerPolicy="no-referrer" :src="item.cover_from_user"/>
               <div class="ng-roomType ng-floatbar">{{ item.st }}</div>
             </div>
             <div class="ng-roominfo">
               <div class="ng-faceGroup" :onclick="`window.open('https://space.bilibili.com/${item.uid}')`">
                 <div class="ng-face">
-                  <img class="ng-image" referrerPolicy="no-referrer" :src="item.face" />
+                  <img class="ng-image" referrerPolicy="no-referrer" :src="item.face"/>
                 </div>
               </div>
               <div class="ng-roomnameCard">
@@ -69,9 +73,9 @@
                 <div class="ng-hostgroup">
                   <div class="ng-hostname">{{ item.uname }}</div>
                   <ng-svg icon-class="setting2" :size="{ width: '22px', height: '22px' }" class="ng-bticon"
-                    @click="stemo('#m' + index, '100%')" />
+                          @click="stemo('#m' + index, '100%')"/>
                   <el-switch v-model="item.IsAutoRec" active-color="#3bdd83" inactive-color="#6b997f"
-                    @change="requestApi('Room_AutoRec', item.uid, item.IsAutoRec, index)"></el-switch>
+                             @change="requestApi('Room_AutoRec', item.uid, item.IsAutoRec, index)"></el-switch>
                 </div>
               </div>
             </div>
@@ -79,19 +83,33 @@
         </li>
       </ul>
     </el-checkbox-group>
-    <el-empty v-if="IsNull" description="没有符合的搜索结果"></el-empty>
+    <el-empty v-if="room.length === 0" description="列表为空"></el-empty>
   </div>
 </template>
 <script>
-import { postFormAPI } from "@/api";
+import {postFormAPI} from "@/api";
 import TweenLite from 'gsap';
+
 export default {
   name: "RoomGroupV2",
+  props: {
+    roomFilterMap: {
+      type: Map,
+      default: () => []
+    }
+  },
   data: function () {
     return {
       IsNull: false,
       // 传递来的房间数据
-      room: this.$store.state.Room_AllInfo,
+      room: this.roomFilterMap.size > 0 ? this.$store.state.Room_AllInfo.filter((item) => {
+        for (let [key, value] of this.roomFilterMap) {
+          if (item[key] === value) {
+            return item;
+          }
+        }
+      }) : this.$store.state.Room_AllInfo,
+      forkRoom: undefined,
       // 工具栏 全选标志
       CheckAll: false,
       // 工具栏 被选择的房间
@@ -103,7 +121,7 @@ export default {
       // 搜索 结果
       SearchResult: [],
       // 搜索间隙的等待
-      SearchLoading:false,
+      SearchLoading: false,
       // 选择的批量操作
       BatchOperationSelect: '',
       // 可以供选择的批量操作
@@ -126,6 +144,7 @@ export default {
     };
   },
   mounted() {
+    this.forkRoom = this.room;
     this.timer = setInterval(() => {
       for (let i = 0; i < this.room.length; i++) {
         let item = this.room[i]
@@ -172,19 +191,19 @@ export default {
           }
         }
       }
-      console.log(this.SearchResult.length,typeof([] ),this.SearchResult)
+      console.log(this.SearchResult.length, typeof ([]), this.SearchResult)
 
       //更新列表中显示的结果
 
       this.handleCheckedRoomChange()
     },
     stemo: function (id, height) {
-      TweenLite.to(id, { height: height })
+      TweenLite.to(id, {height: height})
     },
     requestApi: async function (cmd, uid, data, index) {
       console.log(this.room[index])
       this.room[index].load = true;
-      let res = { code: -1 };
+      let res = {code: -1};
       try {
         if (cmd === "Room_AutoRec") res = await this.Room_AutoRec(uid, data);
         if (cmd === "Room_DanmuRec") res = await this.Room_DanmuRec(uid, data);
