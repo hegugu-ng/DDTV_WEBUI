@@ -22,8 +22,7 @@
       <ul class="ng-roomGroup" v-loading="SearchLoading">
         <!--这里放一个插槽，用来放置列表第一个定制的元素，比如添加房间-->
         <slot v-if="SearchResult.length === 0"></slot>
-        <li class="RoomCardV2" v-for="(item, index) in SearchResult.length === 0 ? room : SearchResult" :key="index"
-          v-loading="item.load">
+        <li class="RoomCardV2" v-for="(item, index) in room" :key="index" v-loading="item.load">
           <div class="ng-roomManager" :id="'m' + index">
             <div class="ng-configbar">
               <el-icon class="el-icon-back ng-bticon" @click="stemo('#m' + index, '0%')">
@@ -85,17 +84,14 @@
 </template>
 <script>
 import { postFormAPI } from "@/api";
-import { room_data } from "@/utils/data_cli";
-import { is } from "@babel/types";
 import TweenLite from 'gsap';
 export default {
   name: "RoomGroupV2",
-  props: ["room"],
   data: function () {
     return {
-      IsNull:false,
+      IsNull: false,
       // 传递来的房间数据
-      setRoom: this.room,
+      room: this.$store.state.Room_AllInfo,
       // 工具栏 全选标志
       CheckAll: false,
       // 工具栏 被选择的房间
@@ -187,7 +183,7 @@ export default {
     },
     requestApi: async function (cmd, uid, data, index) {
       console.log(this.room[index])
-      this.setRoom[index].load = true;
+      this.room[index].load = true;
       let res = { code: -1 };
       try {
         if (cmd === "Room_AutoRec") res = await this.Room_AutoRec(uid, data);
@@ -196,13 +192,13 @@ export default {
         if (cmd === "Rec_CancelDownload") res = await this.Rec_CancelDownload(uid)
         // 抛出错误
         if (res.code !== 0) return new Promise.Error("服务器返回错误");
-        if (cmd === "Room_Del") this.setRoom.splice(index, 1);
-        if (cmd === "Rec_CancelDownload") this.setRoom.splice(index, 1);
+        if (cmd === "Room_Del") this.room.splice(index, 1);
+        if (cmd === "Rec_CancelDownload") this.room.splice(index, 1);
       } catch (err) {
-        if (cmd === "Room_AutoRec") this.setRoom[index].IsAutoRec = !data;
-        if (cmd === "Room_DanmuRec") this.setRoom[index].IsRecDanmu = !data;
+        if (cmd === "Room_AutoRec") this.room[index].IsAutoRec = !data;
+        if (cmd === "Room_DanmuRec") this.room[index].IsRecDanmu = !data;
       } finally {
-        this.setRoom[index].load = false;
+        this.room[index].load = false;
       }
     },
     formatSeconds: function (value) {
