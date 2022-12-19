@@ -153,7 +153,7 @@ export default {
       let res = await postFormAPI("Room_AllInfo");
       let data = res.data;
       if (data.code === 0) {
-        await room_data(this, data.data);
+        this.room = await room_data(this.room, data.data);
       }
     },
     Room_AutoRec: async function (uid, data) {
