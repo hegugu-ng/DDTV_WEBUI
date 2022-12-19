@@ -7,17 +7,17 @@
         <div class="title">日志</div>
         <!--清空按钮-->
         <button type="button" class="ddtv-ui-bt toolbar-button flat icon-button" @click="logger_view.logs = []">
-          <div class="bt-content">
+          <template class="bt-content">
             <i class="el-icon-delete-solid"></i>
             <span class="default-slot"></span>
-          </div>
+          </template>
         </button>
         <!--关闭面板-->
         <button type="button" class="ddtv-ui-bt toolbar-button flat icon-button" @click="logger_view.show = false">
-          <div class="bt-content">
+          <template class="bt-content">
             <i class="el-icon-close"></i>
             <span class="default-slot"></span>
-          </div>
+          </template>
         </button>
       </div>
       <div class="logs">
