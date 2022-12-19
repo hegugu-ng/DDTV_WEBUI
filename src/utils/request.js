@@ -40,7 +40,7 @@ service.interceptors.response.use(response => {
     // 在存在 NetworkDisconnection 的情况下 吊销 失败信息，推送成功消息
     console.log(Store.state.connectStatus.indexOf(NetworkDisconnection))
     if (Store.state.connectStatus.indexOf(NetworkDisconnection) != -1) {
-        Store.commit('RemoveConnectStatus', NetworkDisconnection)
+        // Store.commit('RemoveConnectStatus', NetworkDisconnection)
         if (Store.state.connectStatus.indexOf(NetworkConnection) === -1) Store.commit('AddConnectStatus', NetworkConnection)
     }
 
