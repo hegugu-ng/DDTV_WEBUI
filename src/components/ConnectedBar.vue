@@ -10,34 +10,33 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
-import { NetworkConnection, NetworkDisconnection } from "../utils/error"
-import TweenLite from 'gsap';
+import { mapState } from "vuex";
+import { NetworkConnection, NetworkDisconnection } from "../utils/error";
+import TweenLite from "gsap";
 export default {
   name: "ConnectedBar",
   computed: {
-    ...mapState(['connectStatus']),
+    ...mapState(["connectStatus"]),
   },
   data() {
     return {
       message: "",
       icon: "",
       level: "success",
-      color: { error: "#F56C6C", warn: "#E6A23C", info: "#909399", success: "#c1ae67" }
+      color: { error: "#F56C6C", warn: "#E6A23C", info: "#909399", success: "#c1ae67" },
     };
   },
   watch: {
     connectStatus: {
       handler(newValue, oldValue) {
-        let index = newValue.indexOf(NetworkDisconnection)
-        if(index !== -1){
-          TweenLite.to('.con-msg-banner', { background: this.color[newValue[index].level],height: "45px" })
+        let index = newValue.indexOf(NetworkDisconnection);
+        if (index !== -1) {
+          TweenLite.to(".con-msg-banner", { background: this.color[newValue[index].level], height: "45px" });
         }
-        console.log(newValue)
-
+        console.log(newValue);
       },
-      deep: true
-    }
+      deep: true,
+    },
     // 'connectStatus.level': function (val) {
     //   let color = '#fff'
     //   switch (val) {
@@ -56,10 +55,8 @@ export default {
     //   }
     //   TweenLite.to('.connection-status', { background: color })
     // }
-  }
-
+  },
 };
-
 </script>
 
 <style scoped>
@@ -104,11 +101,11 @@ export default {
 }
 
 .error {
-  background: #F56C6C;
+  background: #f56c6c;
 }
 
 .warn {
-  background: #E6A23C;
+  background: #e6a23c;
 }
 
 .debug {
