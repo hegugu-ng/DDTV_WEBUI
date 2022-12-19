@@ -27,7 +27,7 @@ import DataGroup from "../components/ng/DataGroup";
 import RoomCardV2 from "../components/ng/RoomCardV2";
 import { room_data } from "../utils/data_cli";
 import { mapState } from "vuex";
-import { postFormAPI, getListAPIv2 } from "../api";
+import { postFormAPI } from "../api";
 import { NetworkConnection, NetworkDisconnection } from "../utils/error";
 import store from "@/store";
 export default {
@@ -105,10 +105,9 @@ export default {
     }
   },
   methods: {
-
-    pusherror(val){
-      if(val === 1)this.$store.commit("AddConnectStatus", NetworkDisconnection);
-      if(val === 2)this.$store.commit("AddConnectStatus", NetworkConnection);
+    pusherror(val) {
+      if (val === 1) this.$store.commit("AddConnectStatus", NetworkDisconnection);
+      if (val === 2) this.$store.commit("AddConnectStatus", NetworkConnection);
     },
     isNull(value) {
       return !value && typeof value != "undefined" && value !== 0;
