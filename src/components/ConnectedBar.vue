@@ -45,7 +45,8 @@ export default {
   },
   methods: {
     Generate: function (arr) {
-      var new = 
+      var newarr = this.deepCopy(arr)
+      
 
     },
     deepCopy: function (obj) {
