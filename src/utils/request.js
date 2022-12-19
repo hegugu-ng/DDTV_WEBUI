@@ -15,18 +15,18 @@ const service = axios.create({
     transformRequest: [function (data) {
         // 造一个表单
         let param = new window.FormData();
-        for(var n in data){
+        for (var n in data) {
             param.append(n, data[n]);
         }
         return param;
     }],
-    headers:{'Content-Type':'multipart/form-data'}
+    headers: { 'Content-Type': 'multipart/form-data' }
 })
 
 service.interceptors.request.use(config => {
-    console.debug(`[UI] ${config.url} 发送 ${config.method} 请求`,config.data)
+    console.debug(`[UI] ${config.url} 发送 ${config.method} 请求`, config.data)
     return config
-},error => {
+}, error => {
     return Promise.reject(error)
 })
 
@@ -57,7 +57,7 @@ service.interceptors.response.use(response => {
     return response
 }, error => {
     // 异常处理
-    console.debug('[UI] 请求服务器异常',error.message)
+    console.debug('[UI] 请求服务器异常', error.message)
     if (error && error.response) {
         console.debug(`[UI] 服务器返回错误${error.response.status}`)
     } else {
