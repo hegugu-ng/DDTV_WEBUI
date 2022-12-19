@@ -1,10 +1,9 @@
 <template>
-  <div id="connection-status" :class="connectStatus.level"
-    v-show="$route.path == '/login' ? connectStatus.type == 'networkError' : true">
-    <div class="banner">
+  <div class="connection-status">
+    <div class="con-msg-banner">
       <div class="content disconnected">
-        <ng-svg class="icon" icon-class="link" />
-        <div class="msg">{{ connectStatus.msg }}</div>
+        <ng-svg class="icon" :icon-class="icon" />
+        <div class="msg">{{ message }}</div>
       </div>
     </div>
   </div>
@@ -12,19 +11,30 @@
 
 <script>
 import { mapState } from 'vuex';
+import { NetworkConnection, NetworkDisconnection } from "../utils/error"
 import TweenLite from 'gsap';
 export default {
   name: "ConnectedBar",
   computed: {
     ...mapState(['connectStatus']),
   },
+  data() {
+    return {
+      message: "",
+      icon: "",
+      level: "success",
+      color: { error: "#F56C6C", warn: "#E6A23C", info: "#909399", success: "#c1ae67" }
+    };
+  },
   watch: {
     connectStatus: {
       handler(newValue, oldValue) {
+        let index = newValue.indexOf(NetworkDisconnection)
+        if(index !== -1){
+          TweenLite.to('.con-msg-banner', { background: this.color[newValue[index].level],height: "45px" })
+        }
         console.log(newValue)
-        // 注意：在嵌套的变更中，
-        // 只要没有替换对象本身，
-        // 那么这里的 `newValue` 和 `oldValue` 相同
+
       },
       deep: true
     }
@@ -44,7 +54,7 @@ export default {
     //       color = '#c1ae67'
     //       break;
     //   }
-    //   TweenLite.to('#connection-status', { background: color })
+    //   TweenLite.to('.connection-status', { background: color })
     // }
   }
 
@@ -53,10 +63,9 @@ export default {
 </script>
 
 <style scoped>
-
-.banner {
+.con-msg-banner {
   color: #fff;
-  height: 45px;
+  /* height: 45px; */
   position: relative;
 }
 
