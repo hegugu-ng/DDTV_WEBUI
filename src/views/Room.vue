@@ -1,17 +1,28 @@
 <template>
-  <div class="room">
-    <el-drawer v-model="drawer" :direction="direction" :before-close="handleClose" size="60%">
-      <template #title>
-        <div>
-          <div>添加房间</div>
-          <el-input style="margin-top: 10px" size="small" v-model="addkeywords" placeholder="搜索 房间号/昵称" clearable>
-            <el-icon style="vertical-align: middle;">
-              <search />
-            </el-icon>
-          </el-input>
-          <div class="ng-ultitle">找到{{ seview.length }}位主播</div>
-        </div>
-      </template>
+	<div class="room">
+		<el-drawer
+			v-model="drawer"
+			:direction="direction"
+			:before-close="handleClose"
+			size="60%"
+		>
+			<template #title>
+				<div>
+					<div>添加房间</div>
+					<el-input
+						style="margin-top: 10px"
+						size="small"
+						v-model="addkeywords"
+						placeholder="搜索 房间号/昵称"
+						clearable
+					>
+						<el-icon style="vertical-align: middle">
+							<search />
+						</el-icon>
+					</el-input>
+					<div class="ng-ultitle">找到{{ seview.length }}位主播</div>
+				</div>
+			</template>
 
       <template class="drawer"  #default>
         <div class="ng-btngroup" v-if="seview.length !== 0">
@@ -61,33 +72,34 @@
       </li>
     </ng-roomcard>
   </div>
+
 </template>
 <script>
 import { postFormAPI } from "../api";
 import { room_data } from "../utils/data_cli";
 import RoomCardV2 from "../components/ng/RoomCardV2";
 export default {
-  name: "Room",
-  components: {
-    "ng-roomcard": RoomCardV2,
-  },
-  data() {
-    return {
-      drawer: false,
-      direction: "ltr",
-      room: [],
-      addkeywords: '',
-      seview: [],
-    };
-  },
-  mounted:async function() {
-    console.debug("[UI] 挂载房间配置页面");
-    await this.Room_AllInfo();
-    this.timer = setInterval(this.Room_AllInfo, 5000);
-  },
-  beforeUnmount() {
-    clearInterval(this.timer);
-  },
+	name: "Room",
+	components: {
+		"ng-roomcard": RoomCardV2,
+	},
+	data() {
+		return {
+			drawer: false,
+			direction: "ltr",
+			room: [],
+			addkeywords: "",
+			seview: [],
+		};
+	},
+	mounted: async function () {
+		console.debug("[UI] 挂载房间配置页面");
+		await this.Room_AllInfo();
+		this.timer = setInterval(this.Room_AllInfo, 5000);
+	},
+	beforeUnmount() {
+		clearInterval(this.timer);
+	},
 
   watch:{
     addkeywords:async function(newval){
@@ -187,37 +199,38 @@ export default {
       return res.data;
     }
   },
+
 };
 </script>
 <style>
-.el-drawer__body{
-  padding: 0!important;
+.el-drawer__body {
+	padding: 0 !important;
 }
-.el-drawer__header{
-  align-items: flex-start!important;
-  margin-bottom: 10px!important;
+.el-drawer__header {
+	align-items: flex-start !important;
+	margin-bottom: 10px !important;
 }
 .iconbar {
-  position: absolute;
-  right: -20px;
-  top: -11px;
+	position: absolute;
+	right: -20px;
+	top: -11px;
 }
 .ng-pull {
-  flex: 1;
-  overflow: auto;
+	flex: 1;
+	overflow: auto;
 }
 .ng-pull-box {
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
 }
-.bottombt{
-  width: 100%;
-    position: absolute;
-    bottom: 0;
-    background-color: #fff;
-    padding: 10px;
-    border: 1px solid #c7c8ca
+.bottombt {
+	width: 100%;
+	position: absolute;
+	bottom: 0;
+	background-color: #fff;
+	padding: 10px;
+	border: 1px solid #c7c8ca;
 }
 .inserver {
   width: 110px;
@@ -228,102 +241,104 @@ export default {
   /* opacity: 0.5; */
 }
 .icon-b {
-  background-image: url('../assets/icons.png');
+	background-image: url("../assets/icons.png");
 }
-.icon-add{
-  width: 40px;
-  height: 40px;
-  background-position: -716px -332px;
-  padding-bottom: 10px;
+.icon-add {
+	width: 40px;
+	height: 40px;
+	background-position: -716px -332px;
+	padding-bottom: 10px;
 }
 .live {
-  background-color: #f6313e;
+	background-color: #f6313e;
 }
 .nolive {
-  background-color: #878787;
+	background-color: #878787;
 }
 .ng-username {
-  text-overflow: ellipsis;
-  overflow: hidden;
-  display: -webkit-box;
-  -webkit-line-clamp: 1;
-  -webkit-box-orient: vertical;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	display: -webkit-box;
+	-webkit-line-clamp: 1;
+	-webkit-box-orient: vertical;
 }
 .keyword {
-  color: #888;
-  font-style: normal;
-  font-weight: 400;
+	color: #888;
+	font-style: normal;
+	font-weight: 400;
 }
 .ng-inline {
-  display: inline;
+	display: inline;
 }
 .ng-center {
-  display: flex;
-  justify-content: center;
+	display: flex;
+	justify-content: center;
 }
 .ng-pagelist {
-  margin-top: 20px;
+	margin-top: 20px;
 }
 .ng-pageitem {
-  color: #222;
-  cursor: pointer;
-  outline: none;
-  text-align: center;
-  border-radius: 4px;
-  background-color: #fff;
-  border: 1px solid #ddd;
-  background-image: none;
-  transition: all 0.2s;
-  font-size: 10px;
-  min-width: 15px;
-  margin: 0 2px;
-  padding: 0 8px;
-  display: inline-block;
-  height: 30px;
-  line-height: 30px;
+	color: #222;
+	cursor: pointer;
+	outline: none;
+	text-align: center;
+	border-radius: 4px;
+	background-color: #fff;
+	border: 1px solid #ddd;
+	background-image: none;
+	transition: all 0.2s;
+	font-size: 10px;
+	min-width: 15px;
+	margin: 0 2px;
+	padding: 0 8px;
+	display: inline-block;
+	height: 30px;
+	line-height: 30px;
 }
 .ng-pageitem:hover,
 .ng-pageitem-active {
-  background: #00a1d6;
-  color: #fff;
-  border: 1px solid #00a1d6;
+	background: #00a1d6;
+	color: #fff;
+	border: 1px solid #00a1d6;
 }
 .room {
-  padding: 10px;
+	padding: 10px;
 }
 .ng-addroom {
-  cursor: pointer;
-  display: inline-block;
-  width: 226px;
-  height: 175px;
-  border: 2px dashed #e9eaec;
-  padding: 10px 2px;
-  margin: 0 0.8rem 0.8rem 0;
-  border-radius: 8px;
-  background: #fff;
-  position: relative;
-  overflow: hidden;
+	cursor: pointer;
+	display: inline-block;
+	width: 226px;
+	height: 175px;
+	border: 2px dashed #e9eaec;
+	padding: 10px 2px;
+	margin: 0 0.8rem 0.8rem 0;
+	border-radius: 8px;
+	background: #fff;
+	position: relative;
+	overflow: hidden;
 }
 .ng-addroom:hover {
-  box-shadow: 0 13px 20px 0 rgb(59 64 72 / 22%);
-  transition: transform 0.3s cubic-bezier(0.63, -0.01, 0.59, 1);
+	box-shadow: 0 13px 20px 0 rgb(59 64 72 / 22%);
+	transition: transform 0.3s cubic-bezier(0.63, -0.01, 0.59, 1);
 }
 
 .ng-add {
-  height: 100%;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+	height: 100%;
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
 }
 .ng-additem {
+
   display: flex;
   flex-direction: column;
   align-items: center;
+
 }
 .addicon {
-  color: #888;
-  font-size: 4rem;
+	color: #888;
+	font-size: 4rem;
 }
 .ng-addtitle {
   color: #888;
@@ -336,62 +351,63 @@ export default {
   margin-inline-start: 0;
   margin-inline-end: 0;
   padding-inline-start: 0;
+
 }
 .ng-user-item {
-  display: inline-block;
-  border: 1px solid #e9eaec;
-  padding: 10px;
-  border-radius: 8px;
-  background: #fff;
-  margin-right: 10px;
-  margin-bottom: 10px;
-  position: relative;
-  overflow: hidden;
+	display: inline-block;
+	border: 1px solid #e9eaec;
+	padding: 10px;
+	border-radius: 8px;
+	background: #fff;
+	margin-right: 10px;
+	margin-bottom: 10px;
+	position: relative;
+	overflow: hidden;
 }
 .ng-user-itemvi {
-  width: 190px;
-  display: flex;
+	width: 190px;
+	display: flex;
 }
 .ng-user-item:hover {
-  box-shadow: 0 0 7px rgb(0 0 0 / 30%);
+	box-shadow: 0 0 7px rgb(0 0 0 / 30%);
 }
 .ng-ultitle {
-  font-size: 16px;
-  font-weight: 400;
-  color: #646c7a;
-  padding: 10px 0px 10px 0px;
+	font-size: 16px;
+	font-weight: 400;
+	color: #646c7a;
+	padding: 10px 0px 10px 0px;
 }
 .ng-faceGroup-Big {
-  width: 70px;
-  height: 70px;
-  border-radius: 50%;
-  border: 1px solid #c2cee7;
-  overflow: hidden;
-  margin-right: 10px;
+	width: 70px;
+	height: 70px;
+	border-radius: 50%;
+	border: 1px solid #c2cee7;
+	overflow: hidden;
+	margin-right: 10px;
 }
 .ng-face-Big {
-  width: 70px;
-  height: 70px;
+	width: 70px;
+	height: 70px;
 }
 .ng-faceflex {
-  flex-shrink: 0;
+	flex-shrink: 0;
 }
 .ng-userinfo {
-  flex: 1;
+	flex: 1;
 }
 .ng-liveStuat {
-  height: 20px;
-  width: 50px;
-  border-radius: 7px;
-  font-size: 13px;
-  color: #fff;
-  text-indent: 6px;
-  line-height: 20px;
-  margin-top: 5px;
+	height: 20px;
+	width: 50px;
+	border-radius: 7px;
+	font-size: 13px;
+	color: #fff;
+	text-indent: 6px;
+	line-height: 20px;
+	margin-top: 5px;
 }
 .ng-ps {
-  color: #888;
-  font-size: 13px;
-  margin-top: 5px;
+	color: #888;
+	font-size: 13px;
+	margin-top: 5px;
 }
 </style>

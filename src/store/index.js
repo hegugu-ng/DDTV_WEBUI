@@ -1,5 +1,6 @@
 import { createStore } from 'vuex'
 
+
 export default createStore({
   state() {
     return {
@@ -41,10 +42,12 @@ export default createStore({
     clearLog: state => state.log = [],
     setStatus: (state, payload) => state.connectStatus = payload,
     screenWidth: (state, payload) => state.screenWidth = payload,
+
     beforeStatus: (state, payload) => state.beforeStatus = payload,
     System_Resources: (state, payload) => state.System_Resources = payload,
     Rec_RecordingInfo_Lite: (state, payload) => state.Rec_RecordingInfo_Lite = payload,
     Room_AllInfo: (state, payload) => state.Room_AllInfo = payload
+
   },
   actions: {
     setStatusAsync(context, payload) {
@@ -59,9 +62,11 @@ export default createStore({
     },
     Rec_RecordingInfo_Lite: async function (context, payload) {
       let res = await postFormAPI("Rec_RecordingInfo_Lite");
+
       context.commit('Rec_RecordingInfo_Lite', payload);
     },
   },
   modules: {
   }
 })
+
