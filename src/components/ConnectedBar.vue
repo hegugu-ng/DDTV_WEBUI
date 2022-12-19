@@ -47,36 +47,38 @@ export default {
     },
     orgin: {
       handler(newValue, oldValue) {
+        // 如果 不是第一条消息
+        if (oldValue !== undefined && this.orgin !== undefined) {
+          if (newValue.type === oldValue.action) {
+            // store.dispatch("AsyncRemoveConnectStatus", oldValue);
+            store.commit("RemoveConnectStatus", oldValue);
+          }
+        }
         // 如果 消息队列不是变成空的
         if (newValue !== undefined) {
           // 状态栏下拉
           TweenLite.to(".con-msg-banner", {
+            duration: 0.3,
             background: this.color[newValue.level],
             height: "45px",
           });
           // 如果 消息action为 auto
-          if (this.show.action === "auto") {
-            if (store.state.connectStatus.length >= 3) {
+          if (newValue.action === "auto") {
+            var tl = TweenLite.timeline();
+            tl.add(
               TweenLite.to(".con-msg-banner", {
+                duration: 0.3,
                 background: this.color[newValue.level],
-                onComplete: store.commit("RemoveConnectStatus", newValue),
-              });
-            } else {
-              // 自动一秒后吊销
+              })
+            );
+            tl.add(
               TweenLite.to(".con-msg-banner", {
-                background: this.color[newValue.level],
-                height: "0px",
-                delay: 1,
-                // 回调中自动吊销自己
-                onComplete: store.commit("RemoveConnectStatus", newValue),
-              });
-            }
-          }
-        }
-        // 如果 不是第一条消息
-        if (oldValue !== undefined && this.orgin !== undefined) {
-          if (newValue.type === oldValue.action) {
-            store.commit("RemoveConnectStatus", oldValue);
+                duration: 0.3,
+                delay: 0.5,
+                height: store.state.connectStatus.length === 1 ? "0px" : "45px",
+              })
+            );
+            tl.to(".con-msg-banner", { onComplete: store.commit("RemoveConnectStatus", newValue) });
           }
         }
       },

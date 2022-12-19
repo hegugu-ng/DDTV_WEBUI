@@ -1,8 +1,9 @@
 <template>
   <div class="home">
     <!--核心数据-->
-    <el-button @click="pusherror(1)">报错 1</el-button>
-    <el-button @click="pusherror(2)">报错 2</el-button>
+    <el-button @click="pusherror(1)">高优先级报错 1</el-button>
+    <el-button @click="pusherror(2)">吊销报错 2</el-button>
+    <!-- <el-button @click="pusherror(3)">底优先级消息 3</el-button> -->
     <ng-infocard title="核心数据" :update="coreUpdateTime_time">
       <ng-datagroup :CardItem="CoreData"></ng-datagroup>
     </ng-infocard>
@@ -28,7 +29,7 @@ import RoomCardV2 from "../components/ng/RoomCardV2";
 import { room_data } from "@/utils/data_cli";
 import { mapState } from "vuex";
 import { postFormAPI } from "@/api";
-import { NetworkConnection, NetworkDisconnection } from "@/utils/error";
+import { NetworkConnection, NetworkDisconnection, TestInfo } from "@/utils/error";
 import store from "@/store";
 export default {
   computed: {
@@ -108,6 +109,7 @@ export default {
     pusherror(val) {
       if (val === 1) this.$store.commit("AddConnectStatus", NetworkDisconnection);
       if (val === 2) this.$store.commit("AddConnectStatus", NetworkConnection);
+      if (val === 3) this.$store.commit("AddConnectStatus", TestInfo);
     },
     isNull(value) {
       return !value && typeof value != "undefined" && value !== 0;
@@ -211,10 +213,12 @@ export default {
   padding: 10px;
   /* background-color: #fff; */
 }
+
 .ng-table-group {
   display: flex;
   margin-top: 1vh;
 }
+
 .ng-table {
   height: 170px;
   width: 245px;
@@ -226,11 +230,13 @@ export default {
   border: 1px solid #e5dbdb;
   margin-right: 10px;
 }
+
 .ng-table-title {
   margin-bottom: 18px;
   font-weight: 700;
   font-size: 14px;
 }
+
 .ng-table-app-title {
   margin-bottom: 8px;
   font-size: 10px;

@@ -49,11 +49,10 @@ export default createStore({
     Room_AllInfo: (state, payload) => (state.Room_AllInfo = payload),
   },
   actions: {
-    setStatusAsync(context, payload) {
-      // 异步的修改状态栏，延迟2秒
+    AsyncRemoveConnectStatus: async function (context, payload) {
       setTimeout(() => {
-        context.commit("setStatus", payload);
-      }, 2000);
+        context.commit("RemoveConnectStatus", payload);
+      }, 1100);
     },
     System_Resources: async function (context, payload) {
       context.commit("System_Resources", payload);
