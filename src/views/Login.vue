@@ -55,12 +55,9 @@
 	</div>
 </template>
 <script>
-import {
-	postFormAPI,
-	// getListAPIv2,
-	postListAPIv2,
-} from "../api";
+import {postFormAPI, postListAPIv2} from "@/api";
 // import gt from "../utils/gt";
+import {isAuthenticated} from '@/utils/authenticated'
 export default {
 	name: "Room",
 	components: {},
@@ -80,7 +77,13 @@ export default {
 			},
 		};
 	},
-	mounted: async function () {},
+  beforeRouteEnter(to, from, next) {
+    if (isAuthenticated()) {
+      next(false);
+    }else {
+      next()
+    }
+  },
 	methods: {
 		/**
 		 * 本函数会使用所给的title和message构造一个全屏黑底弹窗
