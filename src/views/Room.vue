@@ -61,7 +61,7 @@
       </template>
       </el-drawer>
 
-    <ng-roomcard :room="room" @request="test" @requestgroup="test2">
+    <ng-roomcard @request="test" @requestgroup="test2">
       <li class="ng-addroom" @click="drawer = true">
         <div class="ng-add">
           <div class="ng-additem">
@@ -78,7 +78,6 @@
 import { postFormAPI } from "../api";
 import { room_data } from "../utils/data_cli";
 import RoomCardV2 from "../components/ng/RoomCardV2";
-import { mapState } from "vuex";
 export default {
 	name: "Room",
 	components: {
