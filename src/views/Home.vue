@@ -26,6 +26,7 @@ import RoomCardV2 from "../components/ng/RoomCardV2";
 import { room_data } from "../utils/data_cli";
 import { mapState } from "vuex";
 import { postFormAPI, getListAPIv2 } from "../api";
+import store from "@/store";
 export default {
   computed: {
     ...mapState(["screenWidth"]),
@@ -72,8 +73,10 @@ export default {
       updateTimeManger: null,
     };
   },
-  mounted: async function () {
-    this.$store.state.System_Resources ? (await this.UpdateDataView()) && (await this.UpdateRoomView()): this.initView();
+  mounted () {
+    this.UpdateDataView();
+    this.UpdateRoomView();
+    console.log("mount");
     this.updateTimeManger = setInterval(this.Updatetime, 2000);
     this.timer = setInterval(this.initView, 20000);
   },
@@ -81,18 +84,25 @@ export default {
     clearInterval(this.timer);
     console.log("beforeUnmount");
   },
+  beforeRouteEnter(to, from, next) {
+    if(store.state.System_Resources&&store.state.Rec_RecordingInfo_Lite&&store.state.Room_AllInfo){
+      next();
+    }else {
+      Promise
+          .all([postFormAPI("System_Resources"), postFormAPI("Rec_RecordingInfo_Lite"), postFormAPI("Room_AllInfo")])
+          .then((res) => {
+            store.commit("System_Resources", res[0].data.data);
+            store.commit("Rec_RecordingInfo_Lite", res[1].data.data);
+            store.commit("Room_AllInfo", res[2].data.data);
+            next();
+          })
+    }
+  },
   methods: {
     isNull(value) {
       return !value && typeof value != "undefined" && value !== 0;
     },
     initView(){
-      Promise.all([this.System_Resources(), this.Rec_RecordingInfo_Lite(), this.Room_AllInfo()]).then((res) => {
-        this.$store.commit("System_Resources", res[0]);
-        this.$store.commit("Rec_RecordingInfo_Lite", res[1]);
-        this.$store.commit("Room_AllInfo", res[2]);
-        this.UpdateDataView();
-        this.UpdateRoomView();
-      });
     },
     Updatetime(){
       const time = new Date();
@@ -178,17 +188,17 @@ export default {
       const time = new Date();
       this.liveUpdateTime = time.getTime();
     },
-    Room_AllInfo: async function () {
+    Room_AllInfo: async function() {
       let res = await postFormAPI("Room_AllInfo");
-      return res.data.data;
+      this.$store.commit("Room_AllInfo", res.data.data);
     },
     System_Resources: async function () {
       let res = await postFormAPI("System_Resources");
-      return res.data.data;
+      this.$store.commit("System_Resources", res.data.data);
     },
     Rec_RecordingInfo_Lite: async function () {
       let res = await postFormAPI("Rec_RecordingInfo_Lite");
-      return res.data.data;
+      this.$store.commit("Rec_RecordingInfo_Lite", res.data.data);
     },
   },
 };
