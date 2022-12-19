@@ -265,7 +265,6 @@ export default {
 
       if (theTime > 60) {
         middle = Math.round(theTime / 60);
-        theTime = Math.round(theTime % 60);
         if (middle > 60) {
           hour = Math.round(middle / 60);
           middle = Math.round(middle % 60);
@@ -431,7 +430,7 @@ export default {
 }
 
 .ng-roomManager {
-  height: 0%;
+  height: 0;
   width: 100%;
   position: absolute;
   z-index: 101;
@@ -445,7 +444,7 @@ export default {
 }
 
 .ng-configbar {
-  padding: 10px 10px 0px 10px;
+  padding: 10px 10px 0 10px;
   font-size: 25px;
   display: flex;
   align-items: center;

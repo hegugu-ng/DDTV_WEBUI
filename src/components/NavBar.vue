@@ -7,7 +7,7 @@
         v-for="(item, count) in info"
         :key="count"
         @click="$router.push({ path: item.router })"
-        :style="item.router == $route.path ? 'background-color: #1863ff;' : ''"
+        :style="item.router === $route.path ? 'background-color: #1863ff;' : ''"
       >
         <el-tooltip class="item" effect="dark" :content="item.title" placement="right" :disabled="!navBar">
           <button class="ddtv-ui-bt nav-bt" :style="itemcss">
