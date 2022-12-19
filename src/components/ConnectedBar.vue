@@ -69,7 +69,8 @@ export default {
   },
   methods: {
     Generate: function (arr) {
-      var newarr = this.deepCopy(arr);
+      console.log(arr);
+      const newarr = this.deepCopy(arr);
       newarr.sort((a, b) => b.priority - a.priority);
       // 最高优先级的消息
       // 没有消息
@@ -77,11 +78,11 @@ export default {
         this.orgin = newarr[0];
         this.show = newarr[0];
       } else {
-        var keylist = [];
-        for (var item of newarr) {
+        const keylist = [];
+        for (const item of newarr) {
           keylist.push(item.type);
         }
-        var dx = keylist.indexOf(this.orgin.action);
+        const dx = keylist.indexOf(this.orgin.action);
         if (dx !== -1) {
           this.orgin = newarr[dx];
           this.show = newarr[dx];
@@ -141,7 +142,7 @@ export default {
 
 .fade-enter,
 .fade-leave-to {
-  height: 0px;
+  height: 0;
   opacity: 0;
 }
 
