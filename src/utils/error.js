@@ -2,7 +2,7 @@ export let NetworkDisconnection = {
   message: "无法与后端建立连接",
   level: "error",
   priority: 99,
-  action: "Until Network Restored",
+  action: "Network Restored",
   type: "Network Disconnection",
   icon: "wifi",
 };

@@ -37,16 +37,18 @@ export default {
     // 监听vuex 数据变更 生成推送优先级
     connectStatus: {
       handler(Value) {
-        console.log(Value);
+        console.log(Value)
         this.Generate(Value);
       },
       deep: true,
     },
     orgin: {
       handler(newValue, oldValue) {
-        console.log(newValue, oldValue);
         if (newValue !== undefined) {
-          TweenLite.to(".con-msg-banner", { background: this.color[newValue.level], height: "45px" });
+          TweenLite.to(".con-msg-banner", {
+            background: this.color[newValue.level],
+            height: "45px",
+          });
           if (this.show.action === "auto") {
             TweenLite.to(".con-msg-banner", {
               background: this.color[newValue.level],
@@ -56,13 +58,17 @@ export default {
             });
           }
         }
+        if (oldValue !== undefined) {
+          if (newValue.type === oldValue.action) {
+            store.commit("RemoveConnectStatus", oldValue);
+          }
+        }
       },
       deep: true,
     },
   },
   methods: {
     Generate: function (arr) {
-      console.log(arr);
       var newarr = this.deepCopy(arr);
       newarr.sort((a, b) => b.priority - a.priority);
       // 最高优先级的消息
