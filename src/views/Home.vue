@@ -25,10 +25,10 @@
 import InfoCard from "../components/ng/InfoCard";
 import DataGroup from "../components/ng/DataGroup";
 import RoomCardV2 from "../components/ng/RoomCardV2";
-import { room_data } from "../utils/data_cli";
+import { room_data } from "@/utils/data_cli";
 import { mapState } from "vuex";
-import { postFormAPI } from "../api";
-import { NetworkConnection, NetworkDisconnection } from "../utils/error";
+import { postFormAPI } from "@/api";
+import { NetworkConnection, NetworkDisconnection } from "@/utils/error";
 import store from "@/store";
 export default {
   computed: {
