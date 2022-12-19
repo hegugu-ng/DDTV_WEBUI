@@ -1,9 +1,9 @@
 <template>
   <div>
     <div class="ng-lookup">
-      <el-checkbox size="small" class="ng-checkbox right10" :indeterminate="isIndeterminate" v-model="checkAll"
+      <el-checkbox size="small" class="ng-checkbox right10" :indeterminate="isIndeterminate" v-model="CheckAll"
         @change="handleCheckAllChange" border>全选</el-checkbox>
-      <el-input class="ng-roominput right10" size="small" v-model="lp" @keyup="handleOnkeyup($event)"
+      <el-input class="ng-roominput right10" size="small" v-model="SearchKeywords" @keyup="handleOnkeyup($event)"
         placeholder="搜索UID/房间号/昵称/标题" clearable>
         <template #prefix>
           <el-icon class="el-input__icon">
@@ -11,18 +11,18 @@
           </el-icon>
         </template>
       </el-input>
-      <el-select class="ng-todo right10" v-model="select" size="small" placeholder="执行的操作">
-        <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+      <el-select class="ng-todo right10" v-model="BatchOperationSelect" size="small" placeholder="执行的操作">
+        <el-option v-for="item in BatchOperation" :key="item.value" :label="item.label" :value="item.value">
         </el-option>
       </el-select>
-      <el-button :disabled="select === ''" size="small" @click="$emit('requestgroup', select, checkedRoom)">确定
+      <el-button :disabled="BatchOperationSelect === ''" size="small" @click="$emit('requestgroup', BatchOperationSelect, CheckedRoom)">确定
       </el-button>
     </div>
-    <el-checkbox-group v-model="checkedRoom">
+    <el-checkbox-group v-model="CheckedRoom">
       <ul class="ng-roomGroup">
         <!--这里放一个插槽，用来放置列表第一个定制的元素，比如添加房间-->
-        <slot v-if="lp === ''"></slot>
-        <li class="RoomCardV2" v-for="(item, index) in lproom.length === 0 ? room : lproom" :key="index"
+        <slot v-if="SearchKeywords === ''"></slot>
+        <li class="RoomCardV2" v-for="(item, index) in SearchResult.length === 0 ? room : SearchResult" :key="index"
           v-loading="item.load">
           <div class="ng-roomManager" :id="'m' + index">
             <div class="ng-configbar">
@@ -80,7 +80,7 @@
         </li>
       </ul>
     </el-checkbox-group>
-    <el-empty v-if="lproom.length === 0 && lp === '' ? room.length === 0 : lproom.length === 0"
+    <el-empty v-if="SearchResult.length === 0 && SearchKeywords === '' ? room.length === 0 : SearchResult.length === 0"
       description="没有符合的搜索结果"></el-empty>
   </div>
 </template>
@@ -93,15 +93,20 @@ export default {
   props: ["room"],
   data: function () {
     return {
-      // 工具栏全选标志
-      checkAll: false,
-      // 工具栏选择列表
-      checkedRoom: [],
-      //工具栏部分选择标志
+      // 工具栏 全选标志
+      CheckAll: false,
+      // 工具栏 被选择的房间
+      CheckedRoom: [],
+      //工具栏 全选 部分选择标志
       isIndeterminate: false,
-      select: '',
-      lp: "",
-      options: [
+      // 搜索 关键词
+      SearchKeywords: "",
+      // 搜索 结果
+      SearchResult: [],
+      // 选择的批量操作
+      BatchOperationSelect: '',
+      // 可以供选择的批量操作
+      BatchOperation: [
         {
           value: "stoprec",
           label: "停止录制",
@@ -115,7 +120,6 @@ export default {
           label: "开启录制",
         },
       ],
-      lproom: [],
       timer: null,
       setRoom: this.room,
       lastTimeStamp: 0
@@ -152,22 +156,22 @@ export default {
       }
     },
     handleInputChange() {
-      this.lproom = [];
-      if (this.lp !== "") {
+      this.SearchResult = [];
+      if (this.SearchKeywords !== "") {
         for (let i = 0; i < this.room.length; i++) {
           let item = this.room[i];
           let kstr = [item.title, item.uid, item.uname, item.room_id];
 
           for (let j = 0; j < kstr.length; j++) {
             let expstr = kstr[j];
-            if (this.fuzzyMatch(expstr, this.lp)) {
-              this.lproom.push(item);
+            if (this.fuzzyMatch(expstr, this.SearchKeywords)) {
+              this.SearchResult.push(item);
               break;
             }
           }
         }
       }
-      this.handleCheckedRoomChange()
+      // this.handleCheckedRoomChange()
     },
     stemo: function (id, height) {
       TweenLite.to(id, { height: height })
@@ -242,14 +246,14 @@ export default {
       return flag;
     },
     handleCheckAllChange(val) {
-      this.checkedRoom = val ? this.setRoom : []
+      this.CheckedRoom = val ? this.setRoom : []
       this.isIndeterminate = false
     },
     handleCheckedRoomChange() {
-      const checkedCount = this.checkedRoom.length
-      this.checkAll = checkedCount === this.setRoom.length
+      const checkedCount = this.CheckedRoom.length
+      this.CheckAll = checkedCount === this.setRoom.length
       this.isIndeterminate = checkedCount > 0 && checkedCount < this.setRoom.length
-      console.log(this.checkedRoom)
+      console.log(this.CheckedRoom)
     },
 
     Room_AutoRec: async function (uid, data) {
