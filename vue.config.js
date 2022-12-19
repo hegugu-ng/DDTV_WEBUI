@@ -13,7 +13,7 @@ module.exports = {
   lintOnSave: false,
   chainWebpack: (config) => {
     config.plugin("html").tap((args) => {
-      args[0].title = "DDTV WEB UI - 登录";
+      args[0].title = "DDTV WEB UI";
       return args;
     });
     config.module.rules.delete("svg"); //重点:删除默认配置中处理svg,

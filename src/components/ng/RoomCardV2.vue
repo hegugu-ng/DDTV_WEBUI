@@ -35,8 +35,8 @@
         >确定
       </el-button>
     </div>
-    <el-checkbox-group v-model="CheckedRoom">
-      <ul class="ng-roomGroup" v-loading="SearchLoading">
+    <el-checkbox-group v-model="CheckedRoom" v-loading="SearchLoading">
+      <ul class="ng-roomGroup">
         <!--这里放一个插槽，用来放置列表第一个定制的元素，比如添加房间-->
         <slot v-if="SearchResult.length === 0"></slot>
         <li class="RoomCardV2" v-for="(item, index) in room" :key="index" v-loading="item.load">
@@ -207,11 +207,11 @@ export default {
         setTimeout(() => {
           //1s后比较二者是否还相同（因为只要还有事件触发，lastTimeStamp就会被改写，不再是当前事件函数的时间戳）
           if (this.lastTimeStamp === event.timeStamp) {
-            this.SearchLoading = false;
             this.handleInputChange();
           }
         }, 500);
       }
+      this.SearchLoading = false;
     },
     handleInputChange() {
       if (this.SearchKeywords !== "") {
@@ -234,7 +234,8 @@ export default {
         this.room = this.forkRoom;
       }
       //更新列表中显示的结果
-      this.handleCheckedRoomChange();
+      // ng: 加入这个函数可能导致 搜索后列表为空时 全选打勾
+      // this.handleCheckedRoomChange();
     },
     stemo: function (id, height) {
       TweenLite.to(id, { height: height });

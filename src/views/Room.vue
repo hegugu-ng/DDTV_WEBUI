@@ -2,12 +2,13 @@
   <div class="room">
     <el-drawer v-model="drawer" :direction="direction" :before-close="handleClose" size="60%">
       <template #title>
-        <div>
+        <div v-loading="SearchLoading">
           <div>添加房间</div>
           <el-input
             style="margin-top: 10px"
             size="small"
-            v-model="addkeywords"
+            v-model="SearchKeywords"
+            @keyup="handleOnkeyup($event)"
             placeholder="搜索 房间号/昵称"
             clearable
           >
@@ -86,6 +87,7 @@ export default {
       room: [],
       addkeywords: "",
       seview: [],
+      SearchKeywords: "",
     };
   },
   mounted: async function () {
@@ -103,6 +105,27 @@ export default {
     },
   },
   methods: {
+    handleOnkeyup: async function (event) {
+      this.SearchLoading = true;
+      if (event.keyCode === 13) {
+        this.SearchRoomByKeywordsInBilibili();
+      } else {
+        this.lastTimeStamp = event.timeStamp;
+        setTimeout(() => {
+          //1s后比较二者是否还相同（因为只要还有事件触发，lastTimeStamp就会被改写，不再是当前事件函数的时间戳）
+          if (this.lastTimeStamp === event.timeStamp) {
+            this.SearchRoomByKeywordsInBilibili();
+          }
+        }, 500);
+      }
+      this.SearchLoading = false;
+    },
+    SearchRoomByKeywordsInBilibili: async function () {
+      if (this.SearchKeywords !== "") {
+        let res = await this.User_Search(this.SearchKeywords);
+        this.seview = res.data.data.result;
+      } else this.seview = [];
+    },
     initView: function () {
       Promise.all([this.Room_AllInfo()]).then((res) => {
         this.$store.commit("Room_AllInfo", res[0]);
