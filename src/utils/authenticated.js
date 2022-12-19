@@ -1,19 +1,22 @@
 // import { postFormAPI } from '../api'
 
-export function getCookie(cname) {
-    var name = cname + "=";
-    var decodedCookie = decodeURIComponent(document.cookie);
-    var ca = decodedCookie.split(';');
-    for (var i = 0; i < ca.length; i++) {
-        var c = ca[i];
-        while (c.charAt(0) == ' ') {
-            c = c.substring(1);
-        }
-        if (c.indexOf(name) == 0) {
-            return c.substring(name.length, c.length);
-        }
-    }
-    return null;
+export function getCookie(name) {
+  // 获取所有的 cookie
+  const cookies = document.cookie;
+
+  // 查找 cookie 名为 "name" 的值
+  name += "=";
+  let start = cookies.indexOf(name);
+  if (start === -1) return null;
+
+  // 跳过 cookie 名称，获取 cookie 值
+  start += name.length;
+  let end = cookies.indexOf(";", start);
+  if (end === -1) end = cookies.length;
+  const value = cookies.substring(start, end);
+
+  // 将 cookie 值解码并返回
+  return decodeURIComponent(value);
 }
 
 // /**
@@ -41,13 +44,11 @@ export function getCookie(cname) {
 
 /**
  * 进行一次鉴权
- * @returns 布尔值
+ * @returns boolean
  */
- export function isAuthenticated() {
-    // 获取cookies
-    var cookieToken = getCookie("DDTVUser");
-    // 如果为空，认定鉴权失败、
-    if (cookieToken == "") return false
-    if (cookieToken == null) return false
-    else return true
+export function isAuthenticated() {
+  // 获取cookies
+  const cookieToken = getCookie("DDTVUser");
+  // 如果为空，认定鉴权失败、
+  return cookieToken != null && cookieToken !== "";
 }

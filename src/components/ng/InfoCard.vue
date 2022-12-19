@@ -1,25 +1,23 @@
 <template>
   <div class="ng-info-card">
     <div class="title">
-      <div class="desc">{{title}}</div>
-      <div class="date">{{update}}</div>
-      
+      <div class="desc">{{ title }}</div>
+      <div class="date">{{ update }}</div>
     </div>
     <slot></slot>
   </div>
 </template>
 <script>
 export default {
-  name: "InforCard",
-  props: ['title','update']
+  name: "InfoCard",
+  props: ["title", "update"],
 };
 </script>
-
 
 <style>
 .ng-info-card {
   background-color: #fff;
-  border: 1px solid #ebeef5;  
+  border: 1px solid #ebeef5;
   border-radius: 10px;
   padding: 20px;
   box-shadow: 0 2px 22px 0 rgb(0 0 0 / 10%);

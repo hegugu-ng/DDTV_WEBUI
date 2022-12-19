@@ -1,11 +1,18 @@
 <template>
   <div class="status-bar" v-if="$route.meta.show">
     <!--LoggerBox-->
-    <transition name = "fade">
+    <transition name="fade">
       <div class="logger-view" v-if="show">
         <div class="pane-toolbar">
           <div class="title">日志</div>
-          <button type="button" class="ddtv-ui-bt toolbar-button flat icon-button" @click="ToBottom('#logsbox');Scroll = true">
+          <button
+            type="button"
+            class="ddtv-ui-bt toolbar-button flat icon-button"
+            @click="
+              new ToBottom('#logsbox');
+              Scroll = true;
+            "
+          >
             <el-icon :size="15"><Top /></el-icon>
           </button>
           <button type="button" class="ddtv-ui-bt toolbar-button flat icon-button" @click="clearLog()">
@@ -17,9 +24,9 @@
         </div>
         <div class="logs" id="logsbox" @mousewheel="Scroll = false">
           <transition-group name="R_slide-fade">
-            <div class="logger-message" v-for="(log,count) in log" :key="count">
-              <ng-lever :level="log.level" :levelshow="log.level != null ? true:false" />
-              <div class="message" :class="log.level != null ? 'm12':null">{{ log.msg }}</div>
+            <div class="logger-message" v-for="(log, count) in log" :key="count">
+              <ng-lever :level="log.level" :levelshow="log.level != null" />
+              <div class="message" :class="log.level != null ? 'm12' : null">{{ log.msg }}</div>
               <div class="date">{{ log.time }}</div>
             </div>
           </transition-group>
@@ -30,18 +37,23 @@
       <div class="section action current-project">
         <el-icon :size="15"><HomeFilled /></el-icon>
       </div>
-      <div class="section action console-log"  @click="show = !show">
+      <div class="section action console-log" @click="show = !show">
         <i class="el-icon-s-order icon-bar"></i>
         <div class="massgelist">
-          <div class="logger-message a-brush-move-in-top" style="padding: 2px 2px;" v-for="(item,count) in logpool" :key="count" :v-if="false">
-            <ng-lever :level="item.level" :levelshow="item.level != null ? true:false"></ng-lever>
-            <div class="message"  :class="item.level != null ? 'm12':null">{{ item.msg }}</div>
+          <div
+            class="logger-message a-brush-move-in-top"
+            style="padding: 2px 2px"
+            v-for="(item, count) in logpool"
+            :key="count"
+            :v-if="false"
+          >
+            <ng-lever :level="item.level" :levelshow="item.level != null"></ng-lever>
+            <div class="message" :class="item.level != null ? 'm12' : null">{{ item.msg }}</div>
             <div class="date" v-if="item.time">{{ item.time }}</div>
           </div>
         </div>
-
       </div>
-      <div class="section action current-project" >
+      <div class="section action current-project">
         <el-icon :size="15"><ChatLineRound /></el-icon>
       </div>
       <div class="section action current-project" @click="reload()">
@@ -53,86 +65,86 @@
 
 <script>
 import loglever from "./TypeTag.vue";
-import { mapState,mapMutations,mapGetters} from 'vuex';
+import { mapState, mapMutations, mapGetters } from "vuex";
 
 export default {
   name: "status-bar",
   components: {
-    "ng-lever":loglever
+    "ng-lever": loglever,
   },
   data() {
     return {
       show: false,
-      logpool:[{"level":null,"msg":"没有日志","time":null}],
-      Scroll: true
+      logpool: [{ level: null, msg: "没有日志", time: null }],
+      Scroll: true,
     };
   },
-  computed:{
-    ...mapState(['log']),
-    ...mapGetters(['newLog','log'])
+  computed: {
+    ...mapState(["log"]),
+    ...mapGetters(["newLog", "log"]),
   },
-  watch:{
+  watch: {
     //监听newLog发生的变化
-    "newLog": function(val,oldval){
-      let nulldata = {"level":null,"msg":"没有日志","time":null};
+    newLog: function (val, oldval) {
+      let nulldata = { level: null, msg: "没有日志", time: null };
       // 当用户删除了日志
       if (val == null) val = nulldata;
       if (oldval == null) oldval = nulldata;
       // this.logpool=[oldval];
       // 当显示日志模块的时候，同时符合自动滚动的条件，进行自动滚动
-      if (this.Scroll && this.show) this.ToBottom('#logsbox');
-      this.logpool=[val];
-      this.logprint(val.level,val.msg,val.time)
+      if (this.Scroll && this.show) this.ToBottom("#logsbox");
+      this.logpool = [val];
+      this.logprint(val.level, val.msg, val.time);
     },
     // 监听用户触发日志模块的情况并处理
-    show: function(val){
+    show: function (val) {
       // 当用户关闭日志模块时，复位
-      if (val){ 
+      if (val) {
         this.Scroll = true;
-        this.ToBottom('#logsbox')
+        this.ToBottom("#logsbox");
       }
-    }
+    },
   },
   props: {},
-  methods:{
-    ...mapMutations(['clearLog']),
+  methods: {
+    ...mapMutations(["clearLog"]),
 
-    reload(){
+    reload() {
       location.reload();
     },
-    logprint(level,msg,time){
+    logprint(level, msg, time) {
       // 将日志打印到控制台
-      let data = "[UI]：" + msg + "  - ["+time+"]";
-      if (level == "info" || level == null) console.info(data);
-      if (level == "error") console.error(data);
-      if (level == "warn") console.warn(data);
-      if (level == "debug") console.debug(data);
+      let data = "[UI]：" + msg + "  - [" + time + "]";
+      if (level === "info" || level == null) console.info(data);
+      if (level === "error") console.error(data);
+      if (level === "warn") console.warn(data);
+      if (level === "debug") console.debug(data);
     },
-    ToBottom(elementId){
+    ToBottom(elementId) {
       // 将日志滚动到最下方
       this.$nextTick(() => {
-        var container  = this.$el.querySelector(elementId);
-        container.scrollTop = container.scrollHeight
-      })
-    }
-  }
+        const container = this.$el.querySelector(elementId);
+        container.scrollTop = container.scrollHeight;
+      });
+    },
+  },
 };
 </script>
 
 <style scoped>
-.a-brush-move-in-top{
-  animation: brush-move-in-top cubic-bezier(.22,.58,.12,.98) .4s;
+.a-brush-move-in-top {
+  animation: brush-move-in-top cubic-bezier(0.22, 0.58, 0.12, 0.98) 0.4s;
 }
 @keyframes brush-move-in-top {
-    from {
-        opacity: 0;
-        transform: translate(0,20px)
-    }
+  from {
+    opacity: 0;
+    transform: translate(0, 20px);
+  }
 
-    to {
-        opacity: 1;
-        transform: translate(0,0)
-    }
+  to {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
 }
 .ddtv-ui-bt.icon-button {
   padding: 0;
@@ -156,13 +168,13 @@ export default {
   background: #1d2935;
   color: #fff;
 }
-.logger-view .pane-toolbar{
+.logger-view .pane-toolbar {
   grid-area: toolbar;
 }
-.logger-message  {
+.logger-message {
   font-size: 12px;
 }
-.massgelist{
+.massgelist {
   flex: auto;
   display: flex;
   flex-direction: column;
@@ -176,14 +188,14 @@ export default {
   grid-template-columns: 1fr;
   grid-template-rows: auto 1fr;
   grid-template-areas:
-      "toolbar"
-      "logs";
+    "toolbar"
+    "logs";
 }
-.logger-message{
+.logger-message {
   display: flex;
   flex-direction: row;
   align-items: baseline;
-  font-family: Roboto Mono,monospace;
+  font-family: Roboto Mono, monospace;
   box-sizing: border-box;
   padding: 2px 20px;
   flex: 100% 1 1;
@@ -227,91 +239,93 @@ export default {
   overflow-y: auto;
 }
 .logger-message .message {
-  white-space: pre-wrap;
   flex: 100% 1 1;
   width: 0;
   overflow: hidden;
   -ms-text-overflow: ellipsis;
   text-overflow: ellipsis;
-  white-space:nowrap;
+  white-space: nowrap;
 }
 .logger-message .date {
-  opacity: .5;
+  opacity: 0.5;
 }
-.logger-message>.date {
-    flex: auto 0 0;
+.logger-message > .date {
+  flex: auto 0 0;
 }
-.m12{
+.m12 {
   margin-left: 12px;
 }
-.fade-enter-active, .fade-leave-active {
+.fade-enter-active,
+.fade-leave-active {
   transition: all 0.4s ease;
 }
-.fade-enter, .fade-leave-to {
-  height: 0px;
+.fade-enter,
+.fade-leave-to {
+  height: 0;
   opacity: 0;
 }
 .logger-view .logger-message:hover {
-    background: rgba(107, 88, 111, 0.1);
+  background: rgba(107, 88, 111, 0.1);
 }
 .status-bar .section.action {
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  cursor: pointer;
 }
 .status-bar .section {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    padding: 0 8px;
-    height: 100%;
-    cursor: default;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0 8px;
+  height: 100%;
+  cursor: default;
 }
 .status-bar .section:hover {
-    background: #2c3e51;
+  background: #2c3e51;
 }
-.icon-bar{
+.icon-bar {
   font-size: 15px;
 }
 .status-bar .console-log {
-    flex: 100% 1 1;
-    width: 0;
+  flex: 100% 1 1;
+  width: 0;
 }
 
 .slide-fade-enter-active {
-  transition: all .5s ease;
+  transition: all 0.5s ease;
 }
 .slide-fade-leave-active {
-  transition: all .2s ease;
+  transition: all 0.2s ease;
 }
-.slide-fade-enter{
-  height: 0px;
+.slide-fade-enter {
+  height: 0;
   opacity: 0;
 }
-.slide-fade-leave-to{
-  height: 0px;
+.slide-fade-leave-to {
+  height: 0;
   opacity: 0;
 }
 .logs::-webkit-scrollbar {
-    width: 10px;
-    height: 10px;
+  width: 10px;
+  height: 10px;
 }
 .logs::-webkit-scrollbar-thumb {
-    background-color: #b4c7d0c0;
-    border: 3px solid transparent;
-    background-clip: padding-box;
-    border-radius: 5px;
+  background-color: #b4c7d0c0;
+  border: 3px solid transparent;
+  background-clip: padding-box;
+  border-radius: 5px;
 }
 .logs::-webkit-scrollbar-thumb:hover {
-    background-color: #b2c4cc;
+  background-color: #b2c4cc;
 }
 .logs::-webkit-scrollbar-track-piece {
-    background: 0 0;
+  background: 0 0;
 }
-.R_slide-fade-enter-active ,.R_slide-fade-leave-active {
-  transition: all .2s ease;
+.R_slide-fade-enter-active,
+.R_slide-fade-leave-active {
+  transition: all 0.2s ease;
 }
 .R_slide-fade-enter, .R_slide-fade-leave-to
 /* .slide-fade-leave-active for below version 2.1.8 */ {

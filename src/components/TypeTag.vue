@@ -6,7 +6,7 @@ export default {
   name: "TypeTag",
   props: {
     level: String,
-    levelshow:Boolean
+    levelshow: Boolean,
   },
 };
 </script>
@@ -19,16 +19,16 @@ export default {
   border-radius: 3px;
   flex: auto 0 0;
   width: 30px;
-  text-align:center
+  text-align: center;
 }
 .info {
   background: #03c2e6;
 }
 .error {
-  background: #F56C6C;
+  background: #f56c6c;
 }
 .warn {
-  background: #E6A23C;
+  background: #e6a23c;
 }
 .debug {
   background: #909399;

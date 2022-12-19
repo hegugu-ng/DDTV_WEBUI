@@ -4,6 +4,7 @@
 </template>
 <script>
 import gt from "../utils/gt";
+import { getListAPIv2 } from "@/api";
 export default {
   data() {
     return {};
@@ -29,7 +30,8 @@ export default {
           console.debug("[UI] 极验已经准备好了");
         })
         .onSuccess(function () {
-          var result = captchaObj.getValidate();
+          const result = captchaObj.getValidate();
+          console.log("result", result);
         });
       btn.onclick = function () {
         captchaObj.verify();
@@ -46,7 +48,7 @@ export default {
   outline: none;
   border: none;
   width: 100%;
-  padding: 10px 0px 10px 0px;
+  padding: 10px 0 10px 0;
   color: #fff;
   border-radius: 9px;
 }
