@@ -1,14 +1,26 @@
 <template>
   <div>
     <div class="ng-lookup">
-      <el-checkbox size="small" class="ng-checkbox right10" :indeterminate="isIndeterminate" v-model="CheckAll"
-                   @change="handleCheckAllChange" border>全选
+      <el-checkbox
+        size="small"
+        class="ng-checkbox right10"
+        :indeterminate="isIndeterminate"
+        v-model="CheckAll"
+        @change="handleCheckAllChange"
+        border
+        >全选
       </el-checkbox>
-      <el-input class="ng-roominput right10" size="small" v-model="SearchKeywords" @keyup="handleOnkeyup($event)"
-                placeholder="搜索UID/房间号/昵称/标题" clearable>
+      <el-input
+        class="ng-roominput right10"
+        size="small"
+        v-model="SearchKeywords"
+        @keyup="handleOnkeyup($event)"
+        placeholder="搜索UID/房间号/昵称/标题"
+        clearable
+      >
         <template #prefix>
           <el-icon class="el-input__icon">
-            <search/>
+            <search />
           </el-icon>
         </template>
       </el-input>
@@ -16,8 +28,11 @@
         <el-option v-for="item in BatchOperation" :key="item.value" :label="item.label" :value="item.value">
         </el-option>
       </el-select>
-      <el-button :disabled="BatchOperationSelect === ''" size="small"
-                 @click="$emit('requestgroup', BatchOperationSelect, CheckedRoom)">确定
+      <el-button
+        :disabled="BatchOperationSelect === ''"
+        size="small"
+        @click="$emit('requestgroup', BatchOperationSelect, CheckedRoom)"
+        >确定
       </el-button>
     </div>
     <el-checkbox-group v-model="CheckedRoom">
@@ -28,7 +43,7 @@
           <div class="ng-roomManager" :id="'m' + index">
             <div class="ng-configbar">
               <el-icon class="el-icon-back ng-bticon" @click="stemo('#m' + index, '0%')">
-                <arrow-left/>
+                <arrow-left />
               </el-icon>
               <div class="ng-hostname">{{ item.uname }}</div>
             </div>
@@ -36,15 +51,26 @@
               <div>
                 <div class="ng-fromtitle">基础管理</div>
                 <el-button size="small">管理文件</el-button>
-                <el-button size="small" type="danger" @click="requestApi('Room_Del', item.uid, null, index)">删除房间
+                <el-button size="small" type="danger" @click="requestApi('Room_Del', item.uid, null, index)"
+                  >删除房间
                 </el-button>
               </div>
               <div>
                 <div class="ng-fromtitle">录制弹幕</div>
-                <el-switch size="small" v-model="item.IsRecDanmu" active-color="#3bdd83" inactive-color="#a0b5a9"
-                           @change="requestApi('Room_DanmuRec', item.uid, item.IsRecDanmu, index)"/>
-                <el-button v-if="item.IsDownload" style="margin-left: 12px;" size="small" type="danger"
-                           @click="requestApi('Rec_CancelDownload', item.uid, null, index)">停止录制
+                <el-switch
+                  size="small"
+                  v-model="item.IsRecDanmu"
+                  active-color="#3bdd83"
+                  inactive-color="#a0b5a9"
+                  @change="requestApi('Room_DanmuRec', item.uid, item.IsRecDanmu, index)"
+                />
+                <el-button
+                  v-if="item.IsDownload"
+                  style="margin-left: 12px"
+                  size="small"
+                  type="danger"
+                  @click="requestApi('Rec_CancelDownload', item.uid, null, index)"
+                  >停止录制
                 </el-button>
               </div>
             </div>
@@ -54,28 +80,36 @@
             <div class="ng-roomCover">
               <div class="ng-isLive ng-floatbar" v-if="item.live_status === 1">正在直播</div>
               <div class="ng-floatbar">
-                <el-checkbox class="ng-checkbox" :label="item" :key="item"
-                             @change="handleCheckedRoomChange">{{}}
+                <el-checkbox class="ng-checkbox" :label="item" :key="item" @change="handleCheckedRoomChange"
+                  >{{}}
                 </el-checkbox>
               </div>
               <div class="ng-clink" :onclick="`window.open('https://live.bilibili.com/${item.room_id}')`"></div>
-              <img class="ng-image" referrerPolicy="no-referrer" :src="item.cover_from_user"/>
+              <img class="ng-image" referrerPolicy="no-referrer" :src="item.cover_from_user" />
               <div class="ng-roomType ng-floatbar">{{ item.st }}</div>
             </div>
             <div class="ng-roominfo">
               <div class="ng-faceGroup" :onclick="`window.open('https://space.bilibili.com/${item.uid}')`">
                 <div class="ng-face">
-                  <img class="ng-image" referrerPolicy="no-referrer" :src="item.face"/>
+                  <img class="ng-image" referrerPolicy="no-referrer" :src="item.face" />
                 </div>
               </div>
               <div class="ng-roomnameCard">
                 <div class="ng-roomtitle">{{ item.title }}</div>
                 <div class="ng-hostgroup">
                   <div class="ng-hostname">{{ item.uname }}</div>
-                  <ng-svg icon-class="setting2" :size="{ width: '22px', height: '22px' }" class="ng-bticon"
-                          @click="stemo('#m' + index, '100%')"/>
-                  <el-switch v-model="item.IsAutoRec" active-color="#3bdd83" inactive-color="#6b997f"
-                             @change="requestApi('Room_AutoRec', item.uid, item.IsAutoRec, index)"></el-switch>
+                  <ng-svg
+                    icon-class="setting2"
+                    :size="{ width: '22px', height: '22px' }"
+                    class="ng-bticon"
+                    @click="stemo('#m' + index, '100%')"
+                  />
+                  <el-switch
+                    v-model="item.IsAutoRec"
+                    active-color="#3bdd83"
+                    inactive-color="#6b997f"
+                    @change="requestApi('Room_AutoRec', item.uid, item.IsAutoRec, index)"
+                  ></el-switch>
                 </div>
               </div>
             </div>
@@ -87,28 +121,32 @@
   </div>
 </template>
 <script>
-import {postFormAPI} from "@/api";
-import TweenLite from 'gsap';
+import { postFormAPI } from "@/api";
+import TweenLite from "gsap";
 
 export default {
   name: "RoomGroupV2",
   props: {
     roomFilterMap: {
       type: Map,
-      default: () => []
-    }
+      default: () => [],
+    },
   },
   data: function () {
     return {
       IsNull: false,
       // 传递来的房间数据
-      room: this.roomFilterMap.size > 0 ? this.$store.state.Room_AllInfo.filter((item) => {
-        for (let [key, value] of this.roomFilterMap) {
-          if (item[key] === value) {
-            return item;
-          }
-        }
-      }) : this.$store.state.Room_AllInfo,
+      room:
+        this.roomFilterMap.size > 0
+          ? this.$store.state.Room_AllInfo.filter((item) => {
+              for (let [key, value] of this.roomFilterMap) {
+                if (item[key] !== value) {
+                  return false;
+                }
+              }
+              return true;
+            })
+          : this.$store.state.Room_AllInfo,
       forkRoom: undefined,
       // 工具栏 全选标志
       CheckAll: false,
@@ -123,7 +161,7 @@ export default {
       // 搜索间隙的等待
       SearchLoading: false,
       // 选择的批量操作
-      BatchOperationSelect: '',
+      BatchOperationSelect: "",
       // 可以供选择的批量操作
       BatchOperation: [
         {
@@ -140,38 +178,38 @@ export default {
         },
       ],
       timer: null,
-      lastTimeStamp: 0
+      lastTimeStamp: 0,
     };
   },
   mounted() {
     this.forkRoom = this.room;
     this.timer = setInterval(() => {
       for (let i = 0; i < this.room.length; i++) {
-        let item = this.room[i]
-        if (item.live_status !== 1) continue
-        let now = Date.now()
-        let time = this.formatSeconds((now / 1000 - item.live_time))
-        let room = this.room
-        room[i].st = time
+        let item = this.room[i];
+        if (item.live_status !== 1) continue;
+        let now = Date.now();
+        let time = this.formatSeconds(now / 1000 - item.live_time);
+        let room = this.room;
+        room[i].st = time;
       }
-    }, 1000)
+    }, 1000);
   },
   beforeUnmount() {
     clearInterval(this.timer);
   },
   methods: {
     handleOnkeyup(event) {
-      console.log(event)
-      this.SearchLoading = true
+      console.log(event);
+      this.SearchLoading = true;
       if (event.keyCode === 13) {
-        this.handleInputChange()
+        this.handleInputChange();
       } else {
         this.lastTimeStamp = event.timeStamp;
         setTimeout(() => {
           //1s后比较二者是否还相同（因为只要还有事件触发，lastTimeStamp就会被改写，不再是当前事件函数的时间戳）
           if (this.lastTimeStamp === event.timeStamp) {
-            this.SearchLoading = false
-            this.handleInputChange()
+            this.SearchLoading = false;
+            this.handleInputChange();
           }
         }, 500);
       }
@@ -191,24 +229,24 @@ export default {
           }
         }
       }
-      console.log(this.SearchResult.length, typeof ([]), this.SearchResult)
+      console.log(this.SearchResult.length, typeof [], this.SearchResult);
 
       //更新列表中显示的结果
 
-      this.handleCheckedRoomChange()
+      this.handleCheckedRoomChange();
     },
     stemo: function (id, height) {
-      TweenLite.to(id, {height: height})
+      TweenLite.to(id, { height: height });
     },
     requestApi: async function (cmd, uid, data, index) {
-      console.log(this.room[index])
+      console.log(this.room[index]);
       this.room[index].load = true;
-      let res = {code: -1};
+      let res = { code: -1 };
       try {
         if (cmd === "Room_AutoRec") res = await this.Room_AutoRec(uid, data);
         if (cmd === "Room_DanmuRec") res = await this.Room_DanmuRec(uid, data);
         if (cmd === "Room_Del") res = await this.Room_Del(uid);
-        if (cmd === "Rec_CancelDownload") res = await this.Rec_CancelDownload(uid)
+        if (cmd === "Rec_CancelDownload") res = await this.Rec_CancelDownload(uid);
         // 抛出错误
         if (res.code !== 0) return new Promise.Error("服务器返回错误");
         if (cmd === "Room_Del") this.room.splice(index, 1);
@@ -244,10 +282,12 @@ export default {
       return result;
     },
     fuzzyMatch: function (str1, key) {
-      let index = -1, flag = false;
+      let index = -1,
+        flag = false;
       str1 = String(str1).toLowerCase();
       key = String(key).toLowerCase();
-      let i = 0, arr = key.split("");
+      let i = 0,
+        arr = key.split("");
       for (; i < arr.length; i++) {
         //有一个关键字都没匹配到，则没有匹配到数据
         if (str1.indexOf(arr[i]) < 0) {
@@ -270,14 +310,14 @@ export default {
       return flag;
     },
     handleCheckAllChange(val) {
-      this.CheckedRoom = val ? this.room : []
-      this.isIndeterminate = false
+      this.CheckedRoom = val ? this.room : [];
+      this.isIndeterminate = false;
     },
     handleCheckedRoomChange() {
-      const checkedCount = this.CheckedRoom.length
-      this.CheckAll = checkedCount === this.room.length
-      this.isIndeterminate = checkedCount > 0 && checkedCount < this.room.length
-      console.log(this.CheckedRoom)
+      const checkedCount = this.CheckedRoom.length;
+      this.CheckAll = checkedCount === this.room.length;
+      this.isIndeterminate = checkedCount > 0 && checkedCount < this.room.length;
+      console.log(this.CheckedRoom);
     },
 
     Room_AutoRec: async function (uid, data) {
@@ -316,9 +356,8 @@ export default {
       };
       let res = await postFormAPI("Rec_CancelDownload", param);
       return res.data;
-    }
+    },
   },
-
 };
 </script>
 
@@ -338,7 +377,6 @@ export default {
   padding-inline-start: 0;
   margin-block-start: 0;
   margin-block-end: 0;
-
 }
 
 .right10 {
@@ -356,7 +394,6 @@ export default {
 }
 
 .ng-lookup {
-
   margin: 0.8rem 0 0.8rem 0;
   display: flex;
   align-items: center;
@@ -371,8 +408,8 @@ export default {
 }
 
 .ng-fromtitle {
-  font-size: .8rem;
-  padding: .5rem 0 .5rem 0;
+  font-size: 0.8rem;
+  padding: 0.5rem 0 0.5rem 0;
   color: #161313;
 }
 
@@ -573,6 +610,5 @@ export default {
   line-height: 26px;
   border-radius: 4px;
   cursor: pointer;
-
 }
 </style>
