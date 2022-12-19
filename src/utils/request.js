@@ -64,14 +64,8 @@ service.interceptors.response.use(
     console.debug("[UI] 请求服务器异常", error.message);
     if (error && error.response) {
       console.debug(`[UI] 服务器返回错误${error.response.status}`);
-    } else {
-      // 超时处理
-      if (JSON.stringify(error).includes("timeout")) {
-        // 推送错误消息
-        // 判断 是否存在 Network Disconnection 没有的话推送消息 因为 NetworkDisconnection 的动作是 在网络恢复后吊销
-        if (Store.state.connectStatus.indexOf(NetworkDisconnection) === -1)
-          Store.commit("AddConnectStatus", NetworkDisconnection);
-        console.debug("[UI] 网络连接超时");
+      if (Store.state.connectStatus.indexOf(NetworkDisconnection) === -1) {
+        Store.commit("AddConnectStatus", NetworkDisconnection);
       }
     }
     return Promise.resolve(error.response);

@@ -28,7 +28,7 @@ export default {
   },
   data() {
     return {
-      show: [{ icon: "wifi", message: null }],
+      show: { icon: "wifi", message: null },
       color: { error: "#F56C6C", warn: "#E6A23C", info: "#909399", success: "#c1ae67" },
       orgin: undefined,
     };
