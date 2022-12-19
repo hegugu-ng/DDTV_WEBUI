@@ -2,8 +2,8 @@
   <div class="connection-status">
     <div class="con-msg-banner">
       <div class="content disconnected">
-        <ng-svg class="icon" :icon-class="icon" />
-        <div class="msg">{{ message }}</div>
+        <ng-svg class="icon" :icon-class="show.icon" />
+        <div class="msg">{{ show.message }}</div>
       </div>
     </div>
   </div>
@@ -13,6 +13,12 @@
 import { mapState } from 'vuex';
 import { NetworkConnection, NetworkDisconnection } from "../utils/error"
 import TweenLite from 'gsap';
+
+// 告警 信息的推送 解除 
+// 推送 是指接收到需要展示的告警信息后，展示
+// 解除 是告警信息打到解除的条件 action 后 解除
+
+// 优先级 优先级大的信息会被优先展示 如果高优先级的信息没有被解除 那么将不会推送低优先级的信息，直到高优先级的信息被解除
 export default {
   name: "ConnectedBar",
   computed: {
@@ -20,45 +26,43 @@ export default {
   },
   data() {
     return {
-      message: "",
-      icon: "",
-      level: "success",
-      color: { error: "#F56C6C", warn: "#E6A23C", info: "#909399", success: "#c1ae67" }
+      show: { icon: "wifi", message: null },
+      color: { error: "#F56C6C", warn: "#E6A23C", info: "#909399", success: "#c1ae67" },
+      orgin: undefined
     };
   },
   watch: {
+    // 监听vuex 数据变更 生成推送优先级
     connectStatus: {
-      handler(newValue, oldValue) {
-        let index = newValue.indexOf(NetworkDisconnection)
-        if(index !== -1){
-          TweenLite.to('.con-msg-banner', { background: this.color[newValue[index].level],height: "45px" })
-        }
-        console.log(newValue)
+      handler(Value) {
+        //根据优先级排序
+        console.log(Value)
+
 
       },
       deep: true
+    },
+  },
+  methods: {
+    Generate: function (arr) {
+      var new = 
+
+    },
+    deepCopy: function (obj) {
+      let newObj = obj.constructor === Array ? [] : {}
+      for (let i in obj) {
+        if (typeof obj[i] === 'object') {
+          newObj[i] = this.deepCopy(obj[i])
+        } else {
+          newObj[i] = obj[i]
+        }
+      }
+      return newObj
     }
-    // 'connectStatus.level': function (val) {
-    //   let color = '#fff'
-    //   switch (val) {
-    //     case 'error':
-    //       color = '#F56C6C';
-    //       break;
-    //     case 'warn':
-    //       color = '#E6A23C';
-    //       break;
-    //     case 'info':
-    //       color = '#909399';
-    //       break;
-    //     case 'success':
-    //       color = '#c1ae67'
-    //       break;
-    //   }
-    //   TweenLite.to('.connection-status', { background: color })
-    // }
+
   }
 
-};
+}
 
 </script>
 

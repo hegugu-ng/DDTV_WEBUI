@@ -1,7 +1,8 @@
 <template>
   <div class="home">
     <!--核心数据-->
-    <el-button @click="pusherror">报错</el-button>
+    <el-button @click="pusherror(1)">报错 1</el-button>
+    <el-button @click="pusherror(2)">报错 2</el-button>
     <ng-infocard title="核心数据" :update="coreUpdateTime_time">
       <ng-datagroup :CardItem="CoreData"></ng-datagroup>
     </ng-infocard>
@@ -101,8 +102,9 @@ export default {
     }
   },
   methods: {
-    pusherror(){
-      this.$store.commit("AddConnectStatus", NetworkDisconnection);
+    pusherror(val){
+      if(val === 1)this.$store.commit("AddConnectStatus", NetworkDisconnection);
+      if(val === 2)this.$store.commit("AddConnectStatus", NetworkConnection);
     },
     isNull(value) {
       return !value && typeof value != "undefined" && value !== 0;
