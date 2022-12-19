@@ -16,7 +16,7 @@
     </div>
 
     <ng-infocard title="录制中房间管理" :update="liveUpdateTime_time" style="margin-top: 3vh">
-      <ng-roomcard :room="room" @requestApi="requestApi"></ng-roomcard>
+      <ng-roomcard :roomFilterMap="roomFilterMap" @requestApi="requestApi"></ng-roomcard>
     </ng-infocard>
   </div>
 </template>
@@ -40,6 +40,7 @@ export default {
   },
   data() {
     return {
+      roomFilterMap: new Map([['IsDownload', true]]),
       monitor:window.apiObj.monitor,
       mount: window.apiObj.mount,
       coreUpdateTime: null,
