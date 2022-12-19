@@ -1,4 +1,5 @@
 import { createStore } from 'vuex'
+import { postFormAPI} from "../api";
 
 
 export default createStore({
@@ -26,7 +27,8 @@ export default createStore({
   },
   getters: {
     log: state => state.log,
-    connectStatus: state => state.connectStatus,
+    // 返回状态栏推送的消息
+    GetConnectStatus: state => state.connectStatus,
     // 最新的一条日志
     newLog: state => state.log.length !== 0 ? state.log[state.log.length - 1] : null,
     navBar: state => state.screenWidth < 1300,
