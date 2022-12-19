@@ -17,10 +17,9 @@ export default createStore({
       // 正在直播的房间
       Is_live: [],
       // 房间列表
-      room_list: [],
       System_Resources: undefined,
       Rec_RecordingInfo_Lite: undefined,
-      Room_AllInfo: undefined
+      Room_AllInfo: undefined,
     }
   },
   getters: {

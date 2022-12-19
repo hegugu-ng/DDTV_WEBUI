@@ -19,9 +19,9 @@
       </el-button>
     </div>
     <el-checkbox-group v-model="CheckedRoom">
-      <ul class="ng-roomGroup">
+      <ul class="ng-roomGroup" v-loading="SearchLoading">
         <!--这里放一个插槽，用来放置列表第一个定制的元素，比如添加房间-->
-        <slot v-if="SearchKeywords === ''"></slot>
+        <slot v-if="SearchResult.length === 0"></slot>
         <li class="RoomCardV2" v-for="(item, index) in SearchResult.length === 0 ? room : SearchResult" :key="index"
           v-loading="item.load">
           <div class="ng-roomManager" :id="'m' + index">
@@ -80,19 +80,22 @@
         </li>
       </ul>
     </el-checkbox-group>
-    <el-empty v-if="SearchResult.length === 0 && SearchKeywords === '' ? room.length === 0 : SearchResult.length === 0"
-      description="没有符合的搜索结果"></el-empty>
+    <el-empty v-if="IsNull" description="没有符合的搜索结果"></el-empty>
   </div>
 </template>
 <script>
 import { postFormAPI } from "@/api";
 import { room_data } from "@/utils/data_cli";
+import { is } from "@babel/types";
 import TweenLite from 'gsap';
 export default {
   name: "RoomGroupV2",
   props: ["room"],
   data: function () {
     return {
+      IsNull:false,
+      // 传递来的房间数据
+      setRoom: this.room,
       // 工具栏 全选标志
       CheckAll: false,
       // 工具栏 被选择的房间
@@ -103,6 +106,8 @@ export default {
       SearchKeywords: "",
       // 搜索 结果
       SearchResult: [],
+      // 搜索间隙的等待
+      SearchLoading:false,
       // 选择的批量操作
       BatchOperationSelect: '',
       // 可以供选择的批量操作
@@ -121,7 +126,6 @@ export default {
         },
       ],
       timer: null,
-      setRoom: this.room,
       lastTimeStamp: 0
     };
   },
@@ -143,6 +147,7 @@ export default {
   methods: {
     handleOnkeyup(event) {
       console.log(event)
+      this.SearchLoading = true
       if (event.keyCode === 13) {
         this.handleInputChange()
       } else {
@@ -150,28 +155,32 @@ export default {
         setTimeout(() => {
           //1s后比较二者是否还相同（因为只要还有事件触发，lastTimeStamp就会被改写，不再是当前事件函数的时间戳）
           if (this.lastTimeStamp === event.timeStamp) {
+            this.SearchLoading = false
             this.handleInputChange()
           }
-        }, 1000);
+        }, 500);
       }
     },
     handleInputChange() {
       this.SearchResult = [];
       if (this.SearchKeywords !== "") {
-        for (let i = 0; i < this.room.length; i++) {
-          let item = this.room[i];
-          let kstr = [item.title, item.uid, item.uname, item.room_id];
+        for (let item of this.room) {
+          let Keywords = [item.title, item.uid, item.uname, item.room_id];
 
-          for (let j = 0; j < kstr.length; j++) {
-            let expstr = kstr[j];
-            if (this.fuzzyMatch(expstr, this.SearchKeywords)) {
+          for (let Keyword of Keywords) {
+            if (this.fuzzyMatch(Keyword, this.SearchKeywords)) {
+              // 将找到的结果放到 SearchResult
               this.SearchResult.push(item);
               break;
             }
           }
         }
       }
-      // this.handleCheckedRoomChange()
+      console.log(this.SearchResult.length,typeof([] ),this.SearchResult)
+
+      //更新列表中显示的结果
+
+      this.handleCheckedRoomChange()
     },
     stemo: function (id, height) {
       TweenLite.to(id, { height: height })
@@ -196,7 +205,7 @@ export default {
         this.setRoom[index].load = false;
       }
     },
-    formatSeconds(value) {
+    formatSeconds: function (value) {
       let theTime = parseInt(value); // 秒
       let middle = 0; // 分
       let hour = 0; // 小时
@@ -219,7 +228,7 @@ export default {
       }
       return result;
     },
-    fuzzyMatch(str1, key) {
+    fuzzyMatch: function (str1, key) {
       let index = -1, flag = false;
       str1 = String(str1).toLowerCase();
       key = String(key).toLowerCase();
@@ -246,13 +255,13 @@ export default {
       return flag;
     },
     handleCheckAllChange(val) {
-      this.CheckedRoom = val ? this.setRoom : []
+      this.CheckedRoom = val ? this.room : []
       this.isIndeterminate = false
     },
     handleCheckedRoomChange() {
       const checkedCount = this.CheckedRoom.length
-      this.CheckAll = checkedCount === this.setRoom.length
-      this.isIndeterminate = checkedCount > 0 && checkedCount < this.setRoom.length
+      this.CheckAll = checkedCount === this.room.length
+      this.isIndeterminate = checkedCount > 0 && checkedCount < this.room.length
       console.log(this.CheckedRoom)
     },
 
