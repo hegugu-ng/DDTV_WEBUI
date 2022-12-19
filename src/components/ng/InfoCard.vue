@@ -9,7 +9,7 @@
 </template>
 <script>
 export default {
-  name: "InforCard",
+  name: "InfoCard",
   props: ["title", "update"],
 };
 </script>
