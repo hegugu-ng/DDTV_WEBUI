@@ -20,7 +20,7 @@
         </div>
       </template>
 
-      <template class="drawer" #default>
+      <template #default>
         <div class="ng-btngroup" v-if="seview.length !== 0">
           <ul class="ng-userGroup">
             <li
@@ -59,27 +59,35 @@
       </template>
     </el-drawer>
 
-    <ng-roomcard @request="test" @requestgroup="test2">
-      <li class="ng-addroom" @click="drawer = true">
-        <div class="ng-add">
-          <div class="ng-additem">
-            <div class="icon-add icon-b"></div>
-            <div class="ng-addtitle">点击添加房间</div>
-          </div>
-        </div>
-      </li>
-    </ng-roomcard>
+    <ng-infocard title="录制中房间管理" :update="liveUpdateTime_time" style="margin-top: 3vh">
+      <Suspense>
+        <template #default>
+          <RoomCardV2 @request="test" @requestgroup="test2">
+            <li class="ng-addroom" @click="drawer = true">
+              <div class="ng-add">
+                <div class="ng-additem">
+                  <div class="icon-add icon-b"></div>
+                  <div class="ng-addtitle">点击添加房间</div>
+                </div>
+              </div>
+            </li>
+          </RoomCardV2></template
+        >
+        <template #fallback> 加载中... </template>
+      </Suspense>
+    </ng-infocard>
   </div>
 </template>
+<script setup>
+import { defineAsyncComponent } from "vue";
+const RoomCardV2 = defineAsyncComponent(() => import("@/components/ng/RoomCardV2"));
+</script>
+
 <script>
 import { postFormAPI } from "../api";
 import { room_data } from "../utils/data_cli";
-import RoomCardV2 from "../components/ng/RoomCardV2";
 export default {
   name: "Room",
-  components: {
-    "ng-roomcard": RoomCardV2,
-  },
   data() {
     return {
       drawer: false,
@@ -87,7 +95,7 @@ export default {
       room: [],
       addkeywords: "",
       seview: [],
-      SearchKeywords: "",
+      SearchKeywords: ""
     };
   },
   mounted: async function () {
@@ -102,7 +110,7 @@ export default {
         let res = await this.User_Search(newval);
         this.seview = res.data.data.result;
       } else this.seview = [];
-    },
+    }
   },
   methods: {
     handleOnkeyup: async function (event) {
@@ -137,19 +145,19 @@ export default {
         dangerouslyUseHTMLString: true,
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        type: "warning",
+        type: "warning"
       })
         .then(() => {
           fun(uid);
           this.$message({
             type: "success",
-            message: `${active}成功!`,
+            message: `${active}成功!`
           });
         })
         .catch(() => {
           this.$message({
             type: "info",
-            message: `已取消${active}`,
+            message: `已取消${active}`
           });
         });
     },
@@ -179,7 +187,7 @@ export default {
     },
     User_Search: async function (KeyWord) {
       let param = {
-        keyword: KeyWord,
+        keyword: KeyWord
       };
       let res = await postFormAPI("User_Search", param);
       return res.data;
@@ -195,7 +203,7 @@ export default {
     Room_AutoRec: async function (uid, data) {
       let param = {
         UID: uid,
-        IsAutoRec: data,
+        IsAutoRec: data
       };
       let res = await postFormAPI("Room_AutoRec", param);
       return res.data;
@@ -203,26 +211,26 @@ export default {
     Room_DanmuRec: async function (uid, data) {
       let param = {
         UID: uid,
-        IsRecDanmu: data,
+        IsRecDanmu: data
       };
       let res = await postFormAPI("Room_DanmuRec", param);
       return res.data;
     },
     Room_Del: async function (uid) {
       let param = {
-        UID: uid,
+        UID: uid
       };
       let res = await postFormAPI("Room_Del", param);
       return res.data;
     },
     Room_Add: async function (uid) {
       let param = {
-        UID: uid,
+        UID: uid
       };
       let res = await postFormAPI("Room_Add", param);
       return res.data;
-    },
-  },
+    }
+  }
 };
 </script>
 <style>

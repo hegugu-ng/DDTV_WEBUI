@@ -5,7 +5,10 @@
     <el-button @click="pusherror(2)">吊销报错 2</el-button>
     <!-- <el-button @click="pusherror(3)">底优先级消息 3</el-button> -->
     <ng-infocard title="核心数据" :update="coreUpdateTime_time">
-      <ng-datagroup :CardItem="CoreData"></ng-datagroup>
+      <Suspense>
+        <template #default><DataGroup :CardItem="CoreData"></DataGroup></template>
+        <template #fallback> 加载中... </template>
+      </Suspense>
     </ng-infocard>
     <div class="ng-table-group" v-if="monitor">
       <div class="ng-table" v-for="(item, index) in labe" :key="index">
@@ -18,14 +21,22 @@
     </div>
 
     <ng-infocard title="录制中房间管理" :update="liveUpdateTime_time" style="margin-top: 3vh">
-      <ng-roomcard :roomFilterMap="roomFilterMap" @requestApi="requestApi"></ng-roomcard>
+      <Suspense>
+        <template #default><RoomCardV2 :roomFilterMap="roomFilterMap" @requestApi="requestApi"></RoomCardV2></template>
+        <template #fallback> 加载中... </template>
+      </Suspense>
     </ng-infocard>
   </div>
 </template>
+
+<script setup>
+import { defineAsyncComponent } from "vue";
+const RoomCardV2 = defineAsyncComponent(() => import("@/components/ng/RoomCardV2"));
+const DataGroup = defineAsyncComponent(() => import("@/components/ng/DataGroup"));
+</script>
+
 <script>
 import InfoCard from "../components/ng/InfoCard";
-import DataGroup from "../components/ng/DataGroup";
-import RoomCardV2 from "../components/ng/RoomCardV2";
 import { room_data } from "@/utils/data_cli";
 import { mapState } from "vuex";
 import { postFormAPI } from "@/api";
@@ -33,12 +44,10 @@ import { NetworkConnection, NetworkDisconnection, TestInfo } from "@/utils/error
 import store from "@/store";
 export default {
   computed: {
-    ...mapState(["screenWidth", "connectStatus"]),
+    ...mapState(["screenWidth", "connectStatus"])
   },
   components: {
-    "ng-infocard": InfoCard,
-    "ng-datagroup": DataGroup,
-    "ng-roomcard": RoomCardV2,
+    "ng-infocard": InfoCard
   },
   data() {
     return {
@@ -53,16 +62,16 @@ export default {
       options: [
         {
           value: "1",
-          label: "停止录制",
+          label: "停止录制"
         },
         {
           value: "2",
-          label: "删除房间并停止录制",
+          label: "删除房间并停止录制"
         },
         {
           value: "3",
-          label: "删除房间",
-        },
+          label: "删除房间"
+        }
       ],
       OneDayFrom: null,
       room: [],
@@ -72,10 +81,10 @@ export default {
         { title: "CPU占用", data: "--" },
         { title: "内存占用", data: "--" },
         { title: "硬盘占用", data: "--" },
-        { title: "下载总量", data: "--" },
+        { title: "下载总量", data: "--" }
       ],
       timer: null,
-      updateTimeManger: null,
+      updateTimeManger: null
     };
   },
   mounted() {
@@ -96,7 +105,7 @@ export default {
       Promise.all([
         postFormAPI("System_Resources"),
         postFormAPI("Rec_RecordingInfo_Lite"),
-        postFormAPI("Room_AllInfo"),
+        postFormAPI("Room_AllInfo")
       ]).then((res) => {
         store.commit("System_Resources", res[0].data.data);
         store.commit("Rec_RecordingInfo_Lite", res[1].data.data);
@@ -167,13 +176,13 @@ export default {
         { title: "CPU占用", data: `${data.CPU_usage}%` },
         {
           title: "内存占用",
-          data: `${(((data.Memory.Total - data.Memory.Available) / data.Memory.Total) * 100).toFixed(1)}%`,
+          data: `${(((data.Memory.Total - data.Memory.Available) / data.Memory.Total) * 100).toFixed(1)}%`
         },
         { title: "硬盘占用", data: HDD.Used },
         {
           title: "下载总量",
-          data: dl_all > 1000000000 ? (dl_all / 1000000000).toFixed(2) + "GB" : (dl_all / 1000000).toFixed(2) + "MB",
-        },
+          data: dl_all > 1000000000 ? (dl_all / 1000000000).toFixed(2) + "GB" : (dl_all / 1000000).toFixed(2) + "MB"
+        }
       ];
       var time = new Date();
       this.coreUpdateTime = time.getTime(); //获取当前时间,毫秒数
@@ -203,8 +212,8 @@ export default {
     Rec_RecordingInfo_Lite: async function () {
       let res = await postFormAPI("Rec_RecordingInfo_Lite");
       this.$store.commit("Rec_RecordingInfo_Lite", res.data.data);
-    },
-  },
+    }
+  }
 };
 </script>
 

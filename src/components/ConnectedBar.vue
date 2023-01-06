@@ -24,13 +24,13 @@ import store from "@/store";
 export default {
   name: "ConnectedBar",
   computed: {
-    ...mapState(["connectStatus"]),
+    ...mapState(["connectStatus"])
   },
   data() {
     return {
       show: { icon: "wifi", message: null },
       color: { error: "#F56C6C", warn: "#E6A23C", info: "#909399", success: "#c1ae67" },
-      orgin: undefined,
+      orgin: undefined
     };
   },
   watch: {
@@ -43,7 +43,7 @@ export default {
         }
         this.Generate(Value);
       },
-      deep: true,
+      deep: true
     },
     orgin: {
       handler(newValue, oldValue) {
@@ -60,7 +60,7 @@ export default {
           TweenLite.to(".con-msg-banner", {
             duration: 0.3,
             background: this.color[newValue.level],
-            height: "45px",
+            height: "45px"
           });
           // 如果 消息action为 auto
           if (newValue.action === "auto") {
@@ -68,22 +68,22 @@ export default {
             tl.add(
               TweenLite.to(".con-msg-banner", {
                 duration: 0.3,
-                background: this.color[newValue.level],
+                background: this.color[newValue.level]
               })
             );
             tl.add(
               TweenLite.to(".con-msg-banner", {
                 duration: 0.3,
                 delay: 0.5,
-                height: store.state.connectStatus.length === 1 ? "0px" : "45px",
+                height: store.state.connectStatus.length === 1 ? "0px" : "45px"
               })
             );
             tl.to(".con-msg-banner", { onComplete: store.commit("RemoveConnectStatus", newValue) });
           }
         }
       },
-      deep: true,
-    },
+      deep: true
+    }
   },
   methods: {
     Generate: function (arr) {
@@ -116,8 +116,8 @@ export default {
         }
       }
       return newObj;
-    },
-  },
+    }
+  }
 };
 </script>
 
