@@ -120,6 +120,15 @@
     <el-empty v-if="room.length === 0" description="列表为空"></el-empty>
   </div>
 </template>
+<script setup>
+import store from "@/store";
+await postFormAPI("Rec_RecordingInfo_Lite").then((res) => {
+  store.commit("Rec_RecordingInfo_Lite", res.data.data);
+});
+await postFormAPI("Room_AllInfo").then((res) => {
+  store.commit("Room_AllInfo", res.data.data);
+});
+</script>
 <script>
 import { postFormAPI } from "@/api";
 import TweenLite from "gsap";
@@ -129,8 +138,8 @@ export default {
   props: {
     roomFilterMap: {
       type: Map,
-      default: () => [],
-    },
+      default: () => []
+    }
   },
   data: function () {
     return {
@@ -166,19 +175,19 @@ export default {
       BatchOperation: [
         {
           value: "stoprec",
-          label: "停止录制",
+          label: "停止录制"
         },
         {
           value: "delete",
-          label: "删除房间",
+          label: "删除房间"
         },
         {
           value: "startrec",
-          label: "开启录制",
-        },
+          label: "开启录制"
+        }
       ],
       timer: null,
-      lastTimeStamp: 0,
+      lastTimeStamp: 0
     };
   },
   mounted() {
@@ -325,7 +334,7 @@ export default {
     Room_AutoRec: async function (uid, data) {
       let param = {
         UID: uid,
-        IsAutoRec: data,
+        IsAutoRec: data
       };
       let res = await postFormAPI("Room_AutoRec", param);
       return res.data;
@@ -333,33 +342,33 @@ export default {
     Room_DanmuRec: async function (uid, data) {
       let param = {
         UID: uid,
-        IsRecDanmu: data,
+        IsRecDanmu: data
       };
       let res = await postFormAPI("Room_DanmuRec", param);
       return res.data;
     },
     Room_Del: async function (uid) {
       let param = {
-        UID: uid,
+        UID: uid
       };
       let res = await postFormAPI("Room_Del", param);
       return res.data;
     },
     Room_Add: async function (uid) {
       let param = {
-        UID: uid,
+        UID: uid
       };
       let res = await postFormAPI("Room_Add", param);
       return res.data;
     },
     Rec_CancelDownload: async function (uid) {
       let param = {
-        UID: uid,
+        UID: uid
       };
       let res = await postFormAPI("Rec_CancelDownload", param);
       return res.data;
-    },
-  },
+    }
+  }
 };
 </script>
 

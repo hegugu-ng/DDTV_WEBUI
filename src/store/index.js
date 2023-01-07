@@ -15,7 +15,7 @@ export default createStore({
       // 房间列表
       System_Resources: undefined,
       Rec_RecordingInfo_Lite: undefined,
-      Room_AllInfo: undefined,
+      Room_AllInfo: undefined
     };
   },
   getters: {
@@ -24,7 +24,7 @@ export default createStore({
     // 最新的一条日志
     newLog: (state) => (state.log.length !== 0 ? state.log[state.log.length - 1] : null),
     navBar: (state) => state.screenWidth < 1300,
-    sys_core_data: (state) => state.sys_core_data,
+    sys_core_data: (state) => state.sys_core_data
   },
   mutations: {
     addLog(state, payload) {
@@ -46,7 +46,7 @@ export default createStore({
     beforeStatus: (state, payload) => (state.beforeStatus = payload),
     System_Resources: (state, payload) => (state.System_Resources = payload),
     Rec_RecordingInfo_Lite: (state, payload) => (state.Rec_RecordingInfo_Lite = payload),
-    Room_AllInfo: (state, payload) => (state.Room_AllInfo = payload),
+    Room_AllInfo: (state, payload) => (state.Room_AllInfo = payload)
   },
   actions: {
     AsyncRemoveConnectStatus: async function (context, payload) {
@@ -59,7 +59,7 @@ export default createStore({
     },
     Rec_RecordingInfo_Lite: async function (context, payload) {
       context.commit("Rec_RecordingInfo_Lite", payload);
-    },
+    }
   },
-  modules: {},
+  modules: {}
 });
