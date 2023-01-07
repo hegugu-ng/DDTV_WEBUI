@@ -1,7 +1,6 @@
 <template>
   <div class="home">
     <!--核心数据-->
-    <ng-cd-skeleton></ng-cd-skeleton>
     <ng-infocard title="核心数据" :update="coreUpdateTime_time">
       <Suspense>
         <template #default><DataGroup :CardItem="CoreData"></DataGroup></template>
@@ -23,7 +22,7 @@
     <ng-infocard title="录制中房间管理" :update="liveUpdateTime_time" style="margin-top: 3vh">
       <Suspense>
         <template #default><RoomCardV2 :roomFilterMap="roomFilterMap" @requestApi="requestApi"></RoomCardV2></template>
-        <template #fallback> 加载中... </template>
+        <template #fallback><div v-loading="true" style="height: 300px"></div></template>
       </Suspense>
     </ng-infocard>
   </div>
