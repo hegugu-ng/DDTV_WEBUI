@@ -6,10 +6,19 @@
     </div>
   </div>
 </template>
+
+<script setup>
+import { postFormAPI } from "@/api";
+import store from "@/store";
+await postFormAPI("System_Resources").then((res) => {
+  store.commit("System_Resources", res.data.data);
+});
+</script>
+
 <script>
 export default {
   name: "DataGroup",
-  props: ["CardItem"],
+  props: ["CardItem"]
 };
 </script>
 
