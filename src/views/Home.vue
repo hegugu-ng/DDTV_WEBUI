@@ -1,13 +1,13 @@
 <template>
   <div class="home">
     <!--核心数据-->
-    <el-button @click="pusherror(1)">高优先级报错 1</el-button>
-    <el-button @click="pusherror(2)">吊销报错 2</el-button>
-    <!-- <el-button @click="pusherror(3)">底优先级消息 3</el-button> -->
+    <ng-cd-skeleton></ng-cd-skeleton>
     <ng-infocard title="核心数据" :update="coreUpdateTime_time">
       <Suspense>
         <template #default><DataGroup :CardItem="CoreData"></DataGroup></template>
-        <template #fallback> 加载中... </template>
+        <template #fallback>
+          <ng-cd-skeleton></ng-cd-skeleton>
+        </template>
       </Suspense>
     </ng-infocard>
     <div class="ng-table-group" v-if="monitor">
@@ -36,6 +36,7 @@ const DataGroup = defineAsyncComponent(() => import("@/components/ng/DataGroup")
 </script>
 
 <script>
+import DataGroupSkeleton from "../components/ng/DataSkeleton";
 import InfoCard from "../components/ng/InfoCard";
 import { room_data } from "@/utils/data_cli";
 import { mapState } from "vuex";
@@ -47,7 +48,8 @@ export default {
     ...mapState(["screenWidth", "connectStatus"])
   },
   components: {
-    "ng-infocard": InfoCard
+    "ng-infocard": InfoCard,
+    "ng-cd-skeleton": DataGroupSkeleton
   },
   data() {
     return {
@@ -130,16 +132,12 @@ export default {
       let coreUp, liveUp;
       if (this.isNull(this.coreUpdateTime)) coreUp = "更新中";
       else coreUp = Math.round((NowTime - this.coreUpdateTime) / 1000);
-
       if (this.isNull(this.liveUpdateTime)) liveUp = "更新中";
       else liveUp = Math.round((NowTime - this.liveUpdateTime) / 1000);
-
       if (coreUp < 8 || coreUp === "更新中") coreUp = "刚刚";
       else coreUp = coreUp + "秒前更新";
-
       if (liveUp < 8 || coreUp === "更新中") liveUp = "刚刚";
       else liveUp = liveUp + "秒前更新";
-
       this.coreUpdateTime_time = coreUp;
       this.liveUpdateTime_time = liveUp;
     },
@@ -147,7 +145,6 @@ export default {
       console.log(type, roomid, data);
       // TODO 分配一下
     },
-
     UpdateDataView: async function () {
       this.coreUpdateTime_time = "更新中";
       let data = this.$store.state.System_Resources;
@@ -222,12 +219,10 @@ export default {
   padding: 10px;
   /* background-color: #fff; */
 }
-
 .ng-table-group {
   display: flex;
   margin-top: 1vh;
 }
-
 .ng-table {
   height: 170px;
   width: 245px;
@@ -239,13 +234,11 @@ export default {
   border: 1px solid #e5dbdb;
   margin-right: 10px;
 }
-
 .ng-table-title {
   margin-bottom: 18px;
   font-weight: 700;
   font-size: 14px;
 }
-
 .ng-table-app-title {
   margin-bottom: 8px;
   font-size: 10px;

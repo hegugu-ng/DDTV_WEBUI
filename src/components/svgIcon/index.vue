@@ -10,30 +10,30 @@ export default {
   props: {
     iconClass: {
       type: String,
-      required: true,
+      required: true
     },
     className: {
       type: String,
-      default: "",
+      default: ""
     },
     size: {
       type: Object,
       default: () => {
         return { width: "1em", height: "1em" };
-      },
+      }
     },
     color: {
       type: String,
-      default: "#2c3e50",
-    },
+      default: "#2c3e50"
+    }
   },
   data: function () {
     return {
       style: {
         width: this.size.width,
         height: this.size.height,
-        color: this.color,
-      },
+        color: this.color
+      }
     };
   },
   computed: {
@@ -46,8 +46,8 @@ export default {
       } else {
         return "svg-icon";
       }
-    },
-  },
+    }
+  }
 };
 </script>
 

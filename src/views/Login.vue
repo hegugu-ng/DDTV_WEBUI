@@ -54,13 +54,13 @@ export default {
       login: {
         loginname: null,
         password: null,
-        save7days: true,
+        save7days: true
       },
       ngevent: {
         appid: null,
         key: null,
-        save: true,
-      },
+        save: true
+      }
     };
   },
   beforeRouteEnter(to, from, next) {
@@ -80,7 +80,7 @@ export default {
     openWindows(message, title) {
       // message 与 title 对弹窗进行描述
       this.$alert(message, title, {
-        confirmButtonText: "确定",
+        confirmButtonText: "确定"
       });
     },
     /**
@@ -114,7 +114,7 @@ export default {
       let param = {
         UserName: this.login.loginname,
         Password: this.login.password,
-        CookieExpires: this.login.save7days,
+        CookieExpires: this.login.save7days
       };
       // 发请求
       try {
@@ -137,8 +137,8 @@ export default {
       } finally {
         this.load = false;
       }
-    },
-  },
+    }
+  }
 };
 </script>
 

@@ -12,9 +12,9 @@
 export default {
   data() {
     return {
-      info: window.BarInfo,
+      info: window.BarInfo
     };
-  },
+  }
 };
 </script>
 

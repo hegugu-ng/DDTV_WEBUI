@@ -78,7 +78,7 @@ import { postFormAPI } from "@/api";
 
 export default {
   components: {
-    "ng-infocard": InfoCard,
+    "ng-infocard": InfoCard
   },
   data() {
     return {
@@ -89,15 +89,15 @@ export default {
       options: [
         {
           value: "MB",
-          label: "MB",
+          label: "MB"
         },
         {
           value: "GB",
-          label: "GB",
-        },
+          label: "GB"
+        }
       ],
       value: "MB",
-      timer: null,
+      timer: null
     };
   },
   mounted: async function () {
@@ -110,7 +110,7 @@ export default {
   methods: {
     beforeChangeRecode: async function () {
       let param = {
-        state: !this.liverecode,
+        state: !this.liverecode
       };
       let res = await postFormAPI("Config_Transcod", param);
       this.$message({ type: "success", message: res.data.data });
@@ -120,7 +120,7 @@ export default {
 
     beforeChangeDanmuk: async function () {
       let param = {
-        state: !this.livedamaku,
+        state: !this.livedamaku
       };
       let res = await postFormAPI("Config_DanmuRec", param);
       this.$message({ type: "success", message: res.data.data });
@@ -173,12 +173,12 @@ export default {
         Data = 0;
       }
       let param = {
-        Size: Data,
+        Size: Data
       };
       if (Data < 104857600 && Data > 0) {
         this.$message({
           type: "error",
-          message: "操作失败！不应该小于100MB。",
+          message: "操作失败！不应该小于100MB。"
         });
         this.value = "MB";
         this.num = 100;
@@ -188,8 +188,8 @@ export default {
       let res = await postFormAPI("Config_FileSplit", param);
       this.$message({ type: "success", message: res.data.data });
       this.System_Config();
-    },
-  },
+    }
+  }
 };
 </script>
 

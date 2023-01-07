@@ -17,8 +17,8 @@ import { mapState } from "vuex";
 export default {
   name: "top-bar",
   computed: {
-    ...mapState(["screenWidth"]),
-  },
+    ...mapState(["screenWidth"])
+  }
 };
 </script>
 

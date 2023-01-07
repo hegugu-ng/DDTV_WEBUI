@@ -147,7 +147,7 @@ export async function room_data(localRoomData, Room_AllInfo) {
         check: false,
         IsAutoRec: adddata.IsAutoRec,
         IsRecDanmu: adddata.IsRecDanmu,
-        load: false,
+        load: false
       };
     localRoomData.push(pushdata);
   }

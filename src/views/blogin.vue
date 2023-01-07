@@ -45,14 +45,14 @@
 <script>
 import InfoCard from "../components/ng/InfoCard";
 import {
-  postFormAPI,
+  postFormAPI
   // getListAPI
 } from "../api";
 import axios from "axios";
 
 export default {
   components: {
-    "ng-infocard": InfoCard,
+    "ng-infocard": InfoCard
   },
   data() {
     return {
@@ -62,7 +62,7 @@ export default {
       is_effect: false,
       qreffect: null,
       tscount: 0,
-      loginst: null,
+      loginst: null
     };
   },
   mounted: async function () {
@@ -83,19 +83,19 @@ export default {
         dangerouslyUseHTMLString: true,
         confirmButtonText: "继续",
         cancelButtonText: "取消",
-        type: "warning",
+        type: "warning"
       })
         .then(() => {
           fun();
           this.$message({
             type: "success",
-            message: `正在执行${active}`,
+            message: `正在执行${active}`
           });
         })
         .catch(() => {
           this.$message({
             type: "info",
-            message: `已取消${active}`,
+            message: `已取消${active}`
           });
         });
     },
@@ -153,7 +153,7 @@ export default {
       axios({
         method: "get",
         url: host + "/api/loginqr",
-        responseType: "blob",
+        responseType: "blob"
       })
         .then((response) => {
           const content = response.data;
@@ -167,8 +167,8 @@ export default {
       let url = window.URL.createObjectURL(new Blob([data]));
       this.traceSrc = url;
       console.log(url);
-    },
-  },
+    }
+  }
 };
 </script>
 

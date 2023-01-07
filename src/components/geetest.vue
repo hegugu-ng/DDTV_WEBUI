@@ -22,7 +22,7 @@ export default {
       gt: gt_,
       challenge: challenge,
       offline: !offline,
-      new_captcha: new_captcha,
+      new_captcha: new_captcha
     };
     let handle = function (captchaObj) {
       captchaObj
@@ -38,8 +38,8 @@ export default {
       };
     };
 
-    initGeetest(gt_config, handle);
-  },
+    // initGeetest(gt_config, handle);
+  }
 };
 </script>
 <style>

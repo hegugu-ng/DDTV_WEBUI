@@ -4,7 +4,7 @@ export let NetworkDisconnection = {
   priority: 99,
   action: "Network Restored",
   type: "Network Disconnection",
-  icon: "link",
+  icon: "link"
 };
 export let NetworkConnection = {
   message: "已经建立连接",
@@ -12,7 +12,7 @@ export let NetworkConnection = {
   priority: 99,
   action: "auto",
   type: "Network Restored",
-  icon: "link",
+  icon: "link"
 };
 export let TestInfo = {
   message: "消息",
@@ -20,5 +20,5 @@ export let TestInfo = {
   priority: 9,
   action: "Until Network Restored",
   type: "1Network Disconnection",
-  icon: "wifi",
+  icon: "wifi"
 };

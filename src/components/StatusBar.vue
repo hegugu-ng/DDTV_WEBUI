@@ -70,18 +70,18 @@ import { mapState, mapMutations, mapGetters } from "vuex";
 export default {
   name: "status-bar",
   components: {
-    "ng-lever": loglever,
+    "ng-lever": loglever
   },
   data() {
     return {
       show: false,
       logpool: [{ level: null, msg: "没有日志", time: null }],
-      Scroll: true,
+      Scroll: true
     };
   },
   computed: {
     ...mapState(["log"]),
-    ...mapGetters(["newLog", "log"]),
+    ...mapGetters(["newLog", "log"])
   },
   watch: {
     //监听newLog发生的变化
@@ -103,7 +103,7 @@ export default {
         this.Scroll = true;
         this.ToBottom("#logsbox");
       }
-    },
+    }
   },
   props: {},
   methods: {
@@ -126,8 +126,8 @@ export default {
         const container = this.$el.querySelector(elementId);
         container.scrollTop = container.scrollHeight;
       });
-    },
-  },
+    }
+  }
 };
 </script>
 
