@@ -99,7 +99,7 @@
 
 <script>
 import {
-  postFormAPI,
+  postFormAPI
   // getListAPI
 } from "../api";
 // import { play_str } from "../utils/play_url"
@@ -110,8 +110,8 @@ export default {
         FilesRoot: [],
         table_head: { selent: false, isIndeterminate: false },
         checked: [],
-        table_body: [],
-      },
+        table_body: []
+      }
     };
   },
 
@@ -130,7 +130,7 @@ export default {
         type: item.FileType,
         name: item.Name,
         date: item.DateTime,
-        size: item.Size,
+        size: item.Size
       };
       this.table.table_body.push(dataitem);
       i = i + 1;
@@ -168,7 +168,7 @@ export default {
           type: item.FileType,
           name: item.Name,
           date: item.DateTime,
-          size: item.Size,
+          size: item.Size
         };
         this.table.table_body.push(dataitem);
         i = i + 1;
@@ -205,7 +205,7 @@ export default {
           type: item.FileType,
           name: item.Name,
           date: item.DateTime,
-          size: item.Size,
+          size: item.Size
         };
         this.table.table_body.push(dataitem);
         i = i + 1;
@@ -241,7 +241,7 @@ export default {
             type: item.FileType,
             name: item.Name,
             date: item.DateTime,
-            size: item.Size,
+            size: item.Size
           };
           this.table.table_body.push(dataitem);
           i = i + 1;
@@ -308,8 +308,8 @@ export default {
       }
 
       console.log(this.table.checked);
-    },
-  },
+    }
+  }
 };
 </script>
 

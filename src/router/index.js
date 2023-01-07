@@ -9,7 +9,7 @@ const About = () => import("../views/About.vue");
 const Files = () => import("../views/Files.vue");
 const blogin = () => import("../views/blogin.vue");
 
-import { isAuthenticated } from "@/utils/authenticated";
+// import { isAuthenticated } from "@/utils/authenticated";
 
 // Vue.use(VueRouter)
 
@@ -21,8 +21,8 @@ const routes = [
     meta: {
       login: true,
       show: true,
-      title: "概览",
-    },
+      title: "概览"
+    }
   },
   {
     path: "/about",
@@ -31,8 +31,8 @@ const routes = [
     meta: {
       login: false,
       show: false,
-      title: "关于",
-    },
+      title: "关于"
+    }
   },
   {
     path: "/room",
@@ -41,8 +41,8 @@ const routes = [
     meta: {
       login: true,
       show: true,
-      title: "房间配置",
-    },
+      title: "房间配置"
+    }
   },
   {
     path: "/files",
@@ -51,8 +51,8 @@ const routes = [
     meta: {
       login: true,
       show: true,
-      title: "文件管理",
-    },
+      title: "文件管理"
+    }
   },
   {
     path: "/setting",
@@ -61,8 +61,8 @@ const routes = [
     meta: {
       login: true,
       show: true,
-      title: "系统设置",
-    },
+      title: "系统设置"
+    }
   },
   {
     path: "/login",
@@ -71,8 +71,8 @@ const routes = [
     meta: {
       login: false,
       show: false,
-      title: "登录",
-    },
+      title: "登录"
+    }
   },
   {
     path: "/flv",
@@ -81,8 +81,8 @@ const routes = [
     meta: {
       login: true,
       show: true,
-      title: "FLV",
-    },
+      title: "FLV"
+    }
   },
   {
     path: "/blogin",
@@ -91,14 +91,14 @@ const routes = [
     meta: {
       login: true,
       show: true,
-      title: "登录B站",
-    },
-  },
+      title: "登录B站"
+    }
+  }
 ];
 
 const router = createRouter({
   history: createWebHashHistory(),
-  routes,
+  routes
 });
 router.beforeEach(async (to, from, next) => {
   // 动态添加 title 后面拼接一个名称

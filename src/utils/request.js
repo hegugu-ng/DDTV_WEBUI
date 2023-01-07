@@ -20,9 +20,9 @@ const service = axios.create({
         param.append(n, data[n]);
       }
       return param;
-    },
+    }
   ],
-  headers: { "Content-Type": "multipart/form-data" },
+  headers: { "Content-Type": "multipart/form-data" }
 });
 
 service.interceptors.request.use(

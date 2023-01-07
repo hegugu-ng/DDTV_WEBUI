@@ -25,7 +25,7 @@ module.exports = {
       .use("svg-sprite-loader")
       .loader("svg-sprite-loader")
       .options({
-        symbolId: "icon-[name]",
+        symbolId: "icon-[name]"
       });
   },
   devServer: {
@@ -33,8 +33,8 @@ module.exports = {
       //配置跨域
       "/api": {
         target: "http://localhost:11419/",
-        changOrigin: true, //允许跨域
-      },
-    },
-  },
+        changOrigin: true //允许跨域
+      }
+    }
+  }
 };

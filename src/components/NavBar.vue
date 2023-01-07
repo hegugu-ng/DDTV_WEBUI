@@ -34,7 +34,7 @@ export default {
   name: "navBar",
   computed: {
     ...mapGetters(["navBar"]),
-    ...mapState(["screenWidth"]),
+    ...mapState(["screenWidth"])
   },
   data() {
     return {
@@ -46,9 +46,9 @@ export default {
         { title: "概览", router: "/", icon: "home" },
         { title: "房间配置", router: "/room", icon: "roomsettimg" },
         { title: "系统设置", router: "/setting", icon: "setting" },
-        { title: "文件管理", router: "/files", icon: "folder" },
+        { title: "文件管理", router: "/files", icon: "folder" }
         // {title:"任务管理",router:'/event',icon:'rank_fill'},
-      ],
+      ]
     };
   },
   beforeMount() {
@@ -64,7 +64,7 @@ export default {
       // if(!this.$route.meta.show){return}
       TweenLite.to(".nav", { width: this.dw, duration: 0.3 });
       // }
-    },
+    }
   },
   methods: {
     ...mapMutations(["addLog"]),
@@ -80,8 +80,8 @@ export default {
       this.addLog({ lv: "debug", msg: "导航栏收缩" });
       this.dw = 46;
       this.itemcss = { "justify-content": "center" };
-    },
-  },
+    }
+  }
 };
 </script>
 

@@ -56,28 +56,28 @@ export default {
       user: [
         {
           face: "https://i1.hdslb.com/bfs/face/217a3e473ac7b18af679facf226fc8a3876c0558.jpg@240w_240h_1c_1s.webp",
-          nick: "寒曦朦",
+          nick: "寒曦朦"
         },
         {
           face: "https://i2.hdslb.com/bfs/face/c21f7053c896130d10ca31cd362b4d83708ca657.jpg@240w_240h_1c_1s.webp",
-          nick: "蓝的温柔像羽毛",
+          nick: "蓝的温柔像羽毛"
         },
         {
           face: "https://i2.hdslb.com/bfs/face/3c7a5154645318cc7e3adb9605fe572fe0647d41.jpg@240w_240h_1c_1s.webp",
-          nick: "枫の雨",
+          nick: "枫の雨"
         },
         {
           face: "https://i2.hdslb.com/bfs/face/27f20d1cdbd66d8f01d496e7605a9ce396e03c5e.jpg@240w_240h_1c_1s.webp",
-          nick: "蒂蒂媞薇_Official",
+          nick: "蒂蒂媞薇_Official"
         },
         {
           face: "https://i1.hdslb.com/bfs/face/2f30ce11b11d2412c94d417d1e13899f575ab827.jpg@240w_240h_1c_1s.webp",
-          nick: "禾咕咕Official",
+          nick: "禾咕咕Official"
         },
         {
           face: "https://i1.hdslb.com/bfs/face/b796fc234e84db55d37f48562004a070705c2258.jpg@240w_240h_1c_1s.webp",
-          nick: "DMC",
-        },
+          nick: "DMC"
+        }
       ],
       message: [
         {
@@ -85,56 +85,56 @@ export default {
           face: "https://i1.hdslb.com/bfs/face/b796fc234e84db55d37f48562004a070705c2258.jpg@240w_240h_1c_1s.webp",
           nick: "DMC",
           message: "#查询web进度",
-          type: "left",
+          type: "left"
         },
         {
           event: "message",
           face: "https://i2.hdslb.com/bfs/face/c21f7053c896130d10ca31cd362b4d83708ca657.jpg@240w_240h_1c_1s.webp",
           nick: "蓝的温柔像羽毛",
           message: "#",
-          type: "left",
+          type: "left"
         },
         {
           event: "message",
           face: "https://i2.hdslb.com/bfs/face/c21f7053c896130d10ca31cd362b4d83708ca657.jpg@240w_240h_1c_1s.webp",
           nick: "蓝的温柔像羽毛",
           message: "你知道我要查什么的",
-          type: "left",
+          type: "left"
         },
         {
           event: "message",
           face: "https://i1.hdslb.com/bfs/face/2f30ce11b11d2412c94d417d1e13899f575ab827.jpg@240w_240h_1c_1s.webp",
           nick: "禾咕咕Official",
           message: "在写了在写了",
-          type: "right",
+          type: "right"
         },
         {
           event: "notice",
-          message: "蓝的温柔像羽毛被禁言1分钟",
+          message: "蓝的温柔像羽毛被禁言1分钟"
         },
         {
           event: "message",
           face: "https://i2.hdslb.com/bfs/face/c21f7053c896130d10ca31cd362b4d83708ca657.jpg@240w_240h_1c_1s.webp",
           nick: "蓝的温柔像羽毛",
           message: "cnm",
-          type: "left",
+          type: "left"
         },
         {
           event: "message",
           face: "https://i1.hdslb.com/bfs/face/217a3e473ac7b18af679facf226fc8a3876c0558.jpg@240w_240h_1c_1s.webp",
           nick: "寒曦朦",
           message: "笑死",
-          type: "left",
+          type: "left"
         },
         {
           event: "message",
           face: "https://i1.hdslb.com/bfs/face/2f30ce11b11d2412c94d417d1e13899f575ab827.jpg@240w_240h_1c_1s.webp",
           nick: "禾咕咕Official",
           message: "欢迎加入ddtv官方群聊进行催更（？）",
-          type: "right",
-        },
+          type: "right"
+        }
       ],
-      msg: [],
+      msg: []
     };
   },
   mounted() {
@@ -171,7 +171,7 @@ export default {
             </div>
           </div></a>`,
       type: "left",
-      event: "message",
+      event: "message"
     };
     this.msg.push(group);
   },
@@ -221,8 +221,8 @@ export default {
         arrNew.push(mm);
       }
       return arrNew;
-    },
-  },
+    }
+  }
 };
 </script>
 

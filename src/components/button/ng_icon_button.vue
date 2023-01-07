@@ -7,8 +7,8 @@
 export default {
   name: "ddtv_ui_bt",
   props: {
-    icon: String,
-  },
+    icon: String
+  }
 };
 </script>
 <style scoped>

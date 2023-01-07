@@ -9,7 +9,7 @@ const http = {
   get(url, params) {
     const config = {
       method: "get",
-      url: url,
+      url: url
     };
     if (params) config.params = params;
     return request(config);
@@ -17,7 +17,7 @@ const http = {
   post(url, params) {
     const config = {
       method: "post",
-      url: url,
+      url: url
     };
     if (params) config.data = params;
     return request(config);
@@ -25,7 +25,7 @@ const http = {
   put(url, params) {
     const config = {
       method: "put",
-      url: url,
+      url: url
     };
     if (params) config.params = params;
     return request(config);
@@ -33,11 +33,11 @@ const http = {
   delete(url, params) {
     const config = {
       method: "delete",
-      url: url,
+      url: url
     };
     if (params) config.params = params;
     return request(config);
-  },
+  }
 };
 //导出
 export default http;

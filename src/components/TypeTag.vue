@@ -6,8 +6,8 @@ export default {
   name: "TypeTag",
   props: {
     level: String,
-    levelshow: Boolean,
-  },
+    levelshow: Boolean
+  }
 };
 </script>
 
