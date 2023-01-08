@@ -1,5 +1,5 @@
 <template>
-  <div class="room">
+  <div class="room" style="height: calc(100% - 0.8rem - 7px)">
     <el-drawer v-model="drawer" :direction="direction" :before-close="handleClose" size="60%">
       <template #title>
         <div v-loading="SearchLoading">
@@ -71,9 +71,9 @@
                 </div>
               </div>
             </li>
-          </RoomCardV2></template
-        >
-        <template #fallback> 加载中... </template>
+          </RoomCardV2>
+        </template>
+        <template #fallback><div v-loading="true" style="height: 100%"></div></template>
       </Suspense>
     </ng-infocard>
   </div>

@@ -138,7 +138,7 @@ export default {
   props: {
     roomFilterMap: {
       type: Map,
-      default: () => []
+      default: () => new Map()
     }
   },
   data: function () {
