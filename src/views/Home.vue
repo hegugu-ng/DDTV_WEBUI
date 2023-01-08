@@ -2,14 +2,14 @@
   <div class="home">
     <!--核心数据-->
     <ng-ts-coredata></ng-ts-coredata>
-    <ng-infocard title="核心数据" :update="coreUpdateTime_time">
+    <!-- <ng-infocard title="核心数据" :update="coreUpdateTime_time">
       <Suspense>
         <template #default><DataGroup :CardItem="CoreData"></DataGroup></template>
         <template #fallback>
           <ng-cd-skeleton></ng-cd-skeleton>
         </template>
       </Suspense>
-    </ng-infocard>
+    </ng-infocard> -->
     <div class="ng-table-group" v-if="monitor">
       <div class="ng-table" v-for="(item, index) in labe" :key="index">
         <div class="ng-table-title">{{ item.title }}</div>
@@ -92,32 +92,32 @@ export default {
     };
   },
   mounted() {
-    this.UpdateDataView();
-    this.UpdateRoomView();
-    console.log("mount");
-    this.updateTimeManger = setInterval(this.Updatetime, 2000);
-    this.timer = setInterval(this.initView, 20000);
+    // this.UpdateDataView();
+    // this.UpdateRoomView();
+    // console.log("mount");
+    // this.updateTimeManger = setInterval(this.Updatetime, 2000);
+    // this.timer = setInterval(this.initView, 20000);
   },
   beforeUnmount() {
     clearInterval(this.timer);
     console.log("beforeUnmount");
   },
-  beforeRouteEnter(to, from, next) {
-    if (store.state.System_Resources && store.state.Rec_RecordingInfo_Lite && store.state.Room_AllInfo) {
-      next();
-    } else {
-      Promise.all([
-        postFormAPI("System_Resources"),
-        postFormAPI("Rec_RecordingInfo_Lite"),
-        postFormAPI("Room_AllInfo")
-      ]).then((res) => {
-        store.commit("System_Resources", res[0].data.data);
-        store.commit("Rec_RecordingInfo_Lite", res[1].data.data);
-        store.commit("Room_AllInfo", res[2].data.data);
-        next();
-      });
-    }
-  },
+  // beforeRouteEnter(to, from, next) {
+  //   if (store.state.System_Resources && store.state.Rec_RecordingInfo_Lite && store.state.Room_AllInfo) {
+  //     next();
+  //   } else {
+  //     Promise.all([
+  //       postFormAPI("System_Resources"),
+  //       postFormAPI("Rec_RecordingInfo_Lite"),
+  //       postFormAPI("Room_AllInfo")
+  //     ]).then((res) => {
+  //       store.commit("System_Resources", res[0].data.data);
+  //       store.commit("Rec_RecordingInfo_Lite", res[1].data.data);
+  //       store.commit("Room_AllInfo", res[2].data.data);
+  //       next();
+  //     });
+  //   }
+  // },
   methods: {
     pusherror(val) {
       if (val === 1) this.$store.commit("AddConnectStatus", NetworkDisconnection);
