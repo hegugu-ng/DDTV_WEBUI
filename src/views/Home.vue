@@ -1,6 +1,7 @@
 <template>
   <div class="home">
     <!--核心数据-->
+    <ng-ts-coredata></ng-ts-coredata>
     <ng-infocard title="核心数据" :update="coreUpdateTime_time">
       <Suspense>
         <template #default><DataGroup :CardItem="CoreData"></DataGroup></template>
@@ -35,6 +36,7 @@ const DataGroup = defineAsyncComponent(() => import("@/components/ng/DataGroup")
 </script>
 
 <script>
+import testCoredata from "../components/ng/Coredata";
 import DataGroupSkeleton from "../components/ng/DataSkeleton";
 import InfoCard from "../components/ng/InfoCard";
 import { room_data } from "@/utils/data_cli";
@@ -48,7 +50,8 @@ export default {
   },
   components: {
     "ng-infocard": InfoCard,
-    "ng-cd-skeleton": DataGroupSkeleton
+    "ng-cd-skeleton": DataGroupSkeleton,
+    "ng-ts-coredata": testCoredata
   },
   data() {
     return {

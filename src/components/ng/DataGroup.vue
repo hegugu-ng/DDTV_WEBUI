@@ -18,7 +18,12 @@ await postFormAPI("System_Resources").then((res) => {
 <script>
 export default {
   name: "DataGroup",
-  props: ["CardItem"]
+  props: ["CardItem"],
+  data: function () {
+    return {
+      IsNull: false
+    };
+  }
 };
 </script>
 
