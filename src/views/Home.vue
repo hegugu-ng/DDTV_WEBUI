@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <!--核心数据-->
-    <ng-cd-skeleton></ng-cd-skeleton>
+    <!-- <ng-cd-skeleton></ng-cd-skeleton> -->
     <ng-infocard title="核心数据" :update="coreUpdateTime_time">
       <Suspense>
         <template #default><DataGroup :CardItem="CoreData"></DataGroup></template>
