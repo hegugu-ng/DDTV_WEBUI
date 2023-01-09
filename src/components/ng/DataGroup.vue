@@ -8,9 +8,9 @@
 </template>
 
 <script setup>
-import { postFormAPI } from "@/api";
+import { getSystemResources } from "@/newapi";
 import store from "@/store";
-await postFormAPI("System_Resources").then((res) => {
+await getSystemResources().then((res) => {
   store.commit("System_Resources", res.data.data);
 });
 </script>

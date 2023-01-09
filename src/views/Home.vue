@@ -42,6 +42,7 @@ import InfoCard from "../components/ng/InfoCard";
 import { room_data } from "@/utils/data_cli";
 import { mapState } from "vuex";
 import { postFormAPI } from "@/api";
+import { getRoomAllInfo, getSystemResources, getRecordingInfoLite } from "@/newapi";
 import { NetworkConnection, NetworkDisconnection, TestInfo } from "@/utils/error";
 import store from "@/store";
 export default {
@@ -201,16 +202,19 @@ export default {
       this.liveUpdateTime = time.getTime();
     },
     Room_AllInfo: async function () {
-      let res = await postFormAPI("Room_AllInfo");
-      this.$store.commit("Room_AllInfo", res.data.data);
+      await getRoomAllInfo().then((res) => {
+        this.$store.commit("Room_AllInfo", res.data.data);
+      });
     },
     System_Resources: async function () {
-      let res = await postFormAPI("System_Resources");
-      this.$store.commit("System_Resources", res.data.data);
+      await getSystemResources().then((res) => {
+        this.$store.commit("System_Resources", res.data.data);
+      });
     },
     Rec_RecordingInfo_Lite: async function () {
-      let res = await postFormAPI("Rec_RecordingInfo_Lite");
-      this.$store.commit("Rec_RecordingInfo_Lite", res.data.data);
+      await getRecordingInfoLite().then((res) => {
+        this.$store.commit("Rec_RecordingInfo_Lite", res.data.data);
+      });
     }
   }
 };
