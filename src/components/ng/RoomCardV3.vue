@@ -84,7 +84,8 @@
                     <el-switch size="small" v-model="item.IsRecDanmu" active-color="#3bdd83" inactive-color="#a0b5a9"
                       @change="requestApi('Room_DanmuRec', item.uid, item.IsRecDanmu, index)" />
                     <el-button v-if="item.IsDownload" style="margin-left: 12px" size="small" type="danger"
-                      @click="requestApi('Rec_CancelDownload', item.uid, null, index)">停止录制
+                      @click="cancelDownload(item.uid), (item.IsDownload = !item.IsDownload)"
+                      >停止录制
                     </el-button>
                   </div>
                 </div>
@@ -113,8 +114,12 @@
                       <div class="ng-hostname">{{ item.uname }}</div>
                       <ng-svg icon-class="setting2" :size="{ width: '22px', height: '22px' }" class="ng-bticon"
                         @click="stemo('#m' + index, '100%')" />
-                      <el-switch v-model="item.IsAutoRec" active-color="#3bdd83" inactive-color="#6b997f"
-                        @change="requestApi('Room_AutoRec', item.uid, item.IsAutoRec, index)"></el-switch>
+                      <el-switch
+                        v-model="item.IsAutoRec"
+                        active-color="#3bdd83"
+                        inactive-color="#6b997f"
+                        @change="updateRoomAutoRec(item.uid, item.IsAutoRec), (item.IsAutoRec = !item.IsAutoRec), (console.log(item.uid, item.IsAutoRec))"
+                      ></el-switch>
                     </div>
                   </div>
                 </div>
@@ -131,7 +136,7 @@
 <script>
 // roomCard 需要所有的房间数据，并且将其展示 如果需要在开播的房间，则需要处理筛选
 import TweenLite from "gsap";
-import { getRoomAllInfo } from "@/newapi";
+import { getRoomAllInfo, updateRoomAutoRec } from "@/newapi";
 import store from "@/store";
 import { room_data } from "@/utils/data_cli";
 import InfoCard from "./InfoCard";
@@ -206,12 +211,12 @@ export default {
     LoadData: function () {
       if (store.state.Room_AllInfo) {
         console.log("RoomCard发现store中已经存在数据");
-        this.UpdateDataView(true);
+        this.UpdateDataView();
       } else {
         Promise.all([getRoomAllInfo()]).then((res) => {
           console.log("RoomCard组件请求数据成功", res);
           store.commit("Room_AllInfo", res[0].data.data);
-          this.UpdateDataView(true);
+          this.UpdateDataView();
         });
       }
     },
@@ -235,7 +240,7 @@ export default {
       }
       setTimeout(() => {
         this.Loading = false;
-      }, 1000);
+      }, 500);
 
       this.UpdateTime = Date().toString();
     },
