@@ -1,8 +1,16 @@
 <template>
-  <div class="nav" :style="{ width: dw + 'px' }" id="navbar" v-show="$route.meta.show && screenWidth > 1024">
+  <div class="nav" id="navbar">
     <div class="logo"></div>
     <div class="router-bar">
-      <div
+      <el-menu router :collapse="isCollapse" class="nav">
+        <el-menu-item :index="item.router" v-for="(item, count) in info" :key="count">
+          <el-icon><ng-svg class="nav-icon" :icon-class="item.icon" /></el-icon>
+          <template #title>
+            <div class="title">{{ item.title }}</div>
+          </template>
+        </el-menu-item>
+      </el-menu>
+      <!-- <div
         class="bar-item"
         v-for="(item, count) in info"
         :key="count"
@@ -15,10 +23,10 @@
             <div class="title" v-show="titleshow">{{ item.title }}</div>
           </button>
         </el-tooltip>
-      </div>
+      </div> -->
     </div>
     <div :class="'/about' === $route.path ? 'bar-item navon' : 'bar-item'" @click="$router.push({ path: '/about' })">
-      <button class="ddtv-ui-bt nav-bt" :style="itemcss">
+      <button class="ddtv-ui-bt nav-bt" :style="itemcss" @change="updateRoomAutoRec(1, 2), (1, 2)">
         <ng-svg class="nav-icon" icon-class="more" />
         <div class="title" v-if="titleshow">更多</div>
       </button>
@@ -26,9 +34,14 @@
   </div>
 </template>
 
+<script setup>
+import { ref } from "vue";
+const isCollapse = ref(false);
+</script>
+
 <script>
-import { mapGetters, mapState, mapMutations } from "vuex";
-import TweenLite from "gsap";
+import { mapGetters, mapState } from "vuex";
+import { updateRoomAutoRec } from "@/newapi";
 
 export default {
   name: "navBar",
@@ -50,44 +63,51 @@ export default {
         // {title:"任务管理",router:'/event',icon:'rank_fill'},
       ]
     };
-  },
-  beforeMount() {
-    // 在挂载页面前 规定起始宽度，避免闪烁
-    if (document.documentElement.clientWidth < 1400) this.NavOff();
-    else this.NavOn();
-  },
-  watch: {
-    navBar: function (val) {
-      if (val) this.NavOff();
-      else this.NavOn();
-      // if (oldval != val &&  this.screenWidth> 1024) {
-      // if(!this.$route.meta.show){return}
-      TweenLite.to(".nav", { width: this.dw, duration: 0.3 });
-      // }
-    }
-  },
-  methods: {
-    ...mapMutations(["addLog"]),
-    NavOn: function () {
-      this.titleshow = true;
-      this.addLog({ lv: "debug", msg: "导航栏展开" });
-      // console.debug("[UI] 导航栏展开")
-      this.dw = 220;
-      this.itemcss = { "justify-content": "flex-start", "padding-left": "10px" };
-    },
-    NavOff: function () {
-      this.titleshow = false;
-      this.addLog({ lv: "debug", msg: "导航栏收缩" });
-      this.dw = 46;
-      this.itemcss = { "justify-content": "center" };
-    }
   }
+  // beforeMount() {
+  //   // 在挂载页面前 规定起始宽度，避免闪烁
+  //   if (document.documentElement.clientWidth < 1400) this.NavOff();
+  //   else this.NavOn();
+  // },
+  // watch: {
+  //   navBar: function (val) {
+  //     if (val) this.NavOff();
+  //     else this.NavOn();
+  //     // if (oldval != val &&  this.screenWidth> 1024) {
+  //     // if(!this.$route.meta.show){return}
+  //     TweenLite.to(".nav", { width: this.dw, duration: 0.3 });
+  //     // }
+  //   }
+  // },
+  // methods: {
+  //   ...mapMutations(["addLog"]),
+  //   NavOn: function () {
+  //     this.titleshow = true;
+  //     this.addLog({ lv: "debug", msg: "导航栏展开" });
+  //     // console.debug("[UI] 导航栏展开")
+  //     this.dw = 220;
+  //     this.itemcss = { "justify-content": "flex-start", "padding-left": "10px" };
+  //   },
+  //   NavOff: function () {
+  //     this.titleshow = false;
+  //     this.addLog({ lv: "debug", msg: "导航栏收缩" });
+  //     this.dw = 46;
+  //     this.itemcss = { "justify-content": "center" };
+  //   }
+  // }
 };
 </script>
 
 <style scoped>
+@media screen and (min-width: 1024px) {
+  .nav {
+    width: 206px;
+    display: none;
+    justify-content: "flex-start";
+    padding-left: "10px";
+  }
+}
 .nav {
-  width: 208px;
   z-index: 2;
   background-color: #05072b;
   flex-shrink: 0;
@@ -139,7 +159,6 @@ export default {
 .title {
   flex-shrink: 0;
   font-size: 16px;
-  padding-left: 15px;
   color: #fff;
 }
 </style>
