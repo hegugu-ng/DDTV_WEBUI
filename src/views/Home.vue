@@ -2,14 +2,6 @@
   <div class="home">
     <!--核心数据-->
     <ng-ts-coredata></ng-ts-coredata>
-    <!-- <ng-infocard title="核心数据" :update="coreUpdateTime_time">
-      <Suspense>
-        <template #default><DataGroup :CardItem="CoreData"></DataGroup></template>
-        <template #fallback>
-          <ng-cd-skeleton></ng-cd-skeleton>
-        </template>
-      </Suspense>
-    </ng-infocard> -->
     <div class="ng-table-group" v-if="monitor">
       <div class="ng-table" v-for="(item, index) in labe" :key="index">
         <div class="ng-table-title">{{ item.title }}</div>
@@ -32,16 +24,13 @@
 <script setup>
 import { defineAsyncComponent } from "vue";
 const RoomCardV2 = defineAsyncComponent(() => import("@/components/ng/RoomCardV2"));
-const DataGroup = defineAsyncComponent(() => import("@/components/ng/DataGroup"));
 </script>
 
 <script>
 import testCoredata from "../components/ng/Coredata";
-import DataGroupSkeleton from "../components/ng/DataSkeleton";
 import InfoCard from "../components/ng/InfoCard";
 import { room_data } from "@/utils/data_cli";
 import { mapState } from "vuex";
-import { postFormAPI } from "@/api";
 import { getRoomAllInfo, getSystemResources, getRecordingInfoLite } from "@/newapi";
 import { NetworkConnection, NetworkDisconnection, TestInfo } from "@/utils/error";
 import store from "@/store";
@@ -51,7 +40,6 @@ export default {
   },
   components: {
     "ng-infocard": InfoCard,
-    "ng-cd-skeleton": DataGroupSkeleton,
     "ng-ts-coredata": testCoredata
   },
   data() {
