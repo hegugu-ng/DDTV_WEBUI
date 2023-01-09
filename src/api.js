@@ -12,7 +12,7 @@ let resquest = "api";
 export function postFormAPI(url, params = undefined) {
   if (params) params.CMD = url;
   else params = { CMD: url };
-  return http.post(`${resquest}/${url}`, params);
+  return http.post(`${resquest}/${url}`, params)
 }
 export function postListAPIv2(url, params = undefined) {
   return http.post(url, params);
