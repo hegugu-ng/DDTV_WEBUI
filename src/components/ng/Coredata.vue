@@ -1,6 +1,6 @@
 <template>
   <ng-infocard title="核心数据" :update="UpdateTime">
-    <el-skeleton class="ng-data-group" :loading="Loading" :throttle="1000" :count="6" animated>
+    <el-skeleton class="ng-data-group" :loading="Loading" :count="6" animated>
       <template #template>
         <div style="border: 1px solid #e9eaec; border-radius: 8px; background: #fff; padding: 10px">
           <el-skeleton-item variant="text" style="font-size: 15px; width: 40%" />
@@ -8,9 +8,11 @@
         </div>
       </template>
       <template #default>
-        <div class="data-item" v-for="(item, count) in CoreData" :key="count">
-          <div class="title">{{ item.title }}</div>
-          <div class="data">{{ item.data }}</div>
+        <div class="ng-data-group">
+          <div class="data-item" v-for="(item, count) in CoreData" :key="count">
+            <div class="title">{{ item.title }}</div>
+            <div class="data">{{ item.data }}</div>
+          </div>
         </div>
       </template>
     </el-skeleton>
@@ -31,7 +33,7 @@ export default {
       Loading: true,
       monitor: window.apiObj.monitor,
       mount: window.apiObj.mount,
-      UpdateTime: "刚刚",
+      UpdateTime: "正在更新数据",
       CoreData: null
     };
   },
@@ -42,19 +44,21 @@ export default {
     LoadData: function () {
       if (store.state.System_Resources && store.state.Rec_RecordingInfo_Lite && store.state.Room_AllInfo) {
         this.UpdateDataView();
-        // this.Loading = false;
+        this.Loading = false;
+        this.UpdateTime = Date().toString();
       } else {
         Promise.all([
           postFormAPI("System_Resources"),
           postFormAPI("Rec_RecordingInfo_Lite"),
           postFormAPI("Room_AllInfo")
         ]).then((res) => {
+          console.log(res);
           store.commit("System_Resources", res[0].data.data);
           store.commit("Rec_RecordingInfo_Lite", res[1].data.data);
           store.commit("Room_AllInfo", res[2].data.data);
           this.UpdateDataView();
           this.UpdateTime = Date().toString();
-          // this.Loading = false;
+          this.Loading = false;
         });
       }
     },
