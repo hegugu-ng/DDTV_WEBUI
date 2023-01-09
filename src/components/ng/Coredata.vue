@@ -19,14 +19,16 @@
   </ng-infocard>
 </template>
 <script>
+// TODO 整理逻辑和添加轮询
 import InfoCard from "./InfoCard";
-import { postFormAPI } from "@/api";
+// import { postFormAPI } from "@/api";
+import { getSystemResources, getRecordingInfoLite, getRoomAllInfo } from "@/newapi";
 import store from "@/store";
 export default {
   name: "CoreDataComponents",
   components: {
     // 基础卡片样式的组件
-    "ng-infocard": InfoCard,
+    "ng-infocard": InfoCard
   },
   data: function () {
     return {
@@ -47,12 +49,8 @@ export default {
         this.Loading = false;
         this.UpdateTime = Date().toString();
       } else {
-        Promise.all([
-          postFormAPI("System_Resources"),
-          postFormAPI("Rec_RecordingInfo_Lite"),
-          postFormAPI("Room_AllInfo")
-        ]).then((res) => {
-          console.log(res);
+        Promise.all([getSystemResources(), getRecordingInfoLite(), getRoomAllInfo()]).then((res) => {
+          console.log("CoreData组件请求数据成功", res);
           store.commit("System_Resources", res[0].data.data);
           store.commit("Rec_RecordingInfo_Lite", res[1].data.data);
           store.commit("Room_AllInfo", res[2].data.data);
@@ -112,7 +110,7 @@ export default {
   color: #242f57;
 }
 
-.ng-info-card>.title {
+.ng-info-card > .title {
   display: flex;
   align-items: center;
   flex-direction: row;
@@ -120,11 +118,11 @@ export default {
   /* padding: 0px 25px 0px 25px; */
 }
 
-.ng-info-card>.title>.desc {
+.ng-info-card > .title > .desc {
   font-weight: bold;
 }
 
-.ng-info-card>.title>.date {
+.ng-info-card > .title > .date {
   font-size: 13px;
   color: #d3d3d3;
 }
@@ -137,7 +135,7 @@ export default {
   grid-column-gap: 2vh;
 }
 
-.ng-data-group>.data-item {
+.ng-data-group > .data-item {
   border: 1px solid #e9eaec;
   border-radius: 8px;
   background: #fff;
@@ -145,16 +143,16 @@ export default {
   padding: 10px;
 }
 
-.ng-data-group>.data-item:hover {
+.ng-data-group > .data-item:hover {
   /* margin-top: 20px; */
   box-shadow: 1px 0 20px 0 rgb(59 64 72 / 16%);
 }
 
-.ng-data-group>.data-item>.title {
+.ng-data-group > .data-item > .title {
   font-size: 15px;
 }
 
-.ng-data-group>.data-item>.data {
+.ng-data-group > .data-item > .data {
   margin-top: 7px;
   font-size: 30px;
   font-weight: bold;
