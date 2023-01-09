@@ -465,7 +465,7 @@ export function getLoginState() {
 /**
  * 获取录制中的任务情况详细情况
  * @returns {Promise<AxiosResponse<any, any>>} 返回一个axios生成的promise对象，返回值样例：
- * //待补充
+ * //FIXME 待补充
  * {"code":0,"cmd":"Rec_RecordingInfo","massage":"","data":[]}
  */
 export function getRecordingInfo() {
@@ -477,7 +477,7 @@ export function getRecordingInfo() {
 /**
  * 获取录制中的任务情况简略情况
  * @returns {Promise<AxiosResponse<any, any>>} 返回一个axios生成的promise对象，返回值样例：
- * //待补充
+ * //FIXME 待补充
  * {"code":0,"cmd":"Rec_RecordingInfo","massage":"","data":[]}
  */
 export function getRecordingInfoLite() {
@@ -489,7 +489,7 @@ export function getRecordingInfoLite() {
 /**
  * 获取已经录制完成的任务详细情况
  * @returns {Promise<AxiosResponse<any, any>>} 返回一个axios生成的promise对象，返回值样例：
- * //待补充
+ * //FIXME 待补充
  * {"code":0,"cmd":"Rec_RecordCompleteInfon","massage":"","data":[]}
  */
 export function getRecordCompleteInfon() {
@@ -501,7 +501,7 @@ export function getRecordCompleteInfon() {
 /**
  * 获取已经录制完成的任务简略情况
  * @returns {Promise<AxiosResponse<any, any>>} 返回一个axios生成的promise对象，返回值样例：
- * //待补充
+ * //FIXME 待补充
  * {"code":0,"cmd":"Rec_RecordCompleteInfon","massage":"","data":[]}
  */
 export function getRecordCompleteInfonLite() {
@@ -515,7 +515,7 @@ export function getRecordCompleteInfonLite() {
  * 注意事项 注意！是UID！是UID！不是房间号！
  * @param {Number} uid 要取消任务的账号UID
  * @returns {Promise<AxiosResponse<any, any>>} 返回一个axios生成的promise对象，返回值样例：
- * //待补充
+ * //FIXME 待补充
  */
 export function cancelDownload(uid) {
   const params = new URLSearchParams();
@@ -727,7 +727,7 @@ export function getRoomSummaryInfo() {
  * 如果请求过多，可能会造成频率过高导致412鉴权错误导致IP被黑名单半小时左右。
  * @param {Number} uid 要增加到房间配置中的账号UID
  * @returns {Promise<AxiosResponse<any, any>>} 返回一个axios生成的promise对象，返回值样例：
- * //待补充
+ * //FIXME 待补充
  */
 export function addRoom(uid) {
   const params = new URLSearchParams();
@@ -740,7 +740,7 @@ export function addRoom(uid) {
  * 删除一个房间配置
  * @param {Number} uid 要增加到房间配置中的账号UID
  * @returns {Promise<AxiosResponse<any, any>>} 返回一个axios生成的promise对象，返回值样例：
- * //待补充
+ * //FIXME 待补充
  */
 export function deleteRoom(uid) {
   const params = new URLSearchParams();
@@ -754,7 +754,7 @@ export function deleteRoom(uid) {
  * @param {Number} uid 要修改自动录制配置的账号UID
  * @param {Boolean} is_auto_rec 打开\关闭开播自动录制
  * @returns {Promise<AxiosResponse<any, any>>} 返回一个axios生成的promise对象，返回值样例：
- * //待补充
+ * //FIXME 待补充
  */
 export function updateRoomAutoRec(uid, is_auto_rec) {
   const params = new URLSearchParams();
@@ -769,6 +769,7 @@ export function updateRoomAutoRec(uid, is_auto_rec) {
  * @param {Number} uid 要修改弹幕录制配置的账号UID
  * @param {Boolean} is_auto_rec 打开\关闭该房间的弹幕录制功能
  * @returns {Promise<AxiosResponse<any, any>>} 返回一个axios生成的promise对象，返回值样例：
+ * //FIXME 待补充
  */
 export function updateRoomDanmuRec(uid, is_rec_danmu) {
   const params = new URLSearchParams();
