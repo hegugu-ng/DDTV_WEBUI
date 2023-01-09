@@ -2,7 +2,7 @@ import axios from "axios";
 
 /**
  * 获取系统运行情况
- * @returns 返回一个axios生成的promise对象，返回值样例：
+ * @returns {Promise<AxiosResponse<any, any>>} 返回一个axios生成的promise对象，返回值样例：
  * {
  *  "code": 0,
  *  "cmd": "System_Info",
@@ -38,7 +38,7 @@ export function getSystemInfo() {
 
 /**
  * 获取系统配置文件信息
- * @returns 返回一个axios生成的promise对象，返回值样例：
+ * @returns {Promise<AxiosResponse<any, any>>} 返回一个axios生成的promise对象，返回值样例：
  * {
         "code": 0,
         "cmd": "System_Config",
@@ -64,7 +64,7 @@ export function getSystemConfig() {
 /**
  * 获取系统硬件资源使用情况
  * 注意事项 该接口消耗的系统硬件资源较高，请勿频繁调用！！！！！
- * @returns 返回一个axios生成的promise对象，返回值样例：
+ * @returns {Promise<AxiosResponse<any, any>>} 返回一个axios生成的promise对象，返回值样例：
  * {
         "code": 0,
         "cmd": "System_Resources",
@@ -97,9 +97,9 @@ export function getSystemResources() {
 
 /**
  * 获取历史日志
- * @param page int 第几页
- * @param quantity int 每页多少条
- * @returns 返回一个axios生成的promise对象，返回值样例：
+ * @param {Number} page 第几页
+ * @param {Number} quantity 每页多少条
+ * @returns {Promise<AxiosResponse<any, any>>} 返回一个axios生成的promise对象，返回值样例：
  * {
         "code": 0,
         "cmd": "System_Log",
@@ -131,8 +131,8 @@ export function getSystemLog(page, quantity) {
 
 /**
  * 获取最新日志
- * @param quantity int 最新的多少条
- * @returns 返回一个axios生成的promise对象，返回值样例：
+ * @param {Number} quantity  最新的多少条
+ * @returns {Promise<AxiosResponse<any, any>>} 返回一个axios生成的promise对象，返回值样例：
  * {
         "code": 0,
         "cmd": "System_LatestLog",
@@ -161,7 +161,7 @@ export function getSystemLatestLog(quantity) {
 /**
  * 返回一个可以自行设定的初始化状态值(用于前端自行判断)
  * 注意事项 该接口用于前端自行判断，启动后默认值都为真，不能作为DDTV是否正在运行的参考
- * @returns 返回一个axios生成的promise对象，返回值样例：
+ * @returns {Promise<AxiosResponse<any, any>>} 返回一个axios生成的promise对象，返回值样例：
  * {
         "code": 0,
         "cmd": "System_QueryWebFirstStart",
@@ -178,8 +178,8 @@ export function getSystemQueryWebFirstStart() {
 /**
  * 设置初始化状态值
  * 注意事项 用于设置初始化状态值(WEB_FirstStart)；该值无实际的逻辑处理，用于前端自行判断使用。
- * @param state bool 设置初始化状态值
- * @returns 返回一个axios生成的promise对象，返回值样例：
+ * @param {Boolean} state 设置初始化状态值
+ * @returns {Promise<AxiosResponse<any, any>>} 返回一个axios生成的promise对象，返回值样例：
  * {
     "code": 0,
     "cmd": "System_SetWEBFirstStart",
@@ -199,7 +199,7 @@ export function setWebFirstStart(state) {
  * 注意事项
    该接口应该是用于登陆状态是否有效的检测，检测到登陆状态失效就应该停止调用本接口，直到登陆状态恢复
    检测登陆中时是否登陆成功，应该使用/api/LoingState进行查询
- * @returns 返回一个axios生成的promise对象，返回值样例：
+ * @returns {Promise<AxiosResponse<any, any>>} 返回一个axios生成的promise对象，返回值样例：
  * {
     "code": 0,
     "cmd": "System_QueryUserState",
@@ -216,8 +216,8 @@ export function getSystemQueryUserState() {
 /**
  * 设置自动转码总开关
  * 注意事项 该接口需要依赖ffmpeg，请根据进阶功能说明中的自动转码页面的内容进行检查是否已经安装ffmpeg
- * @param state bool 打开或者关闭自动转码开关调用
- * @returns 返回一个axios生成的promise对象，返回值样例：
+ * @param {Boolean} state 打开或者关闭自动转码开关调用
+ * @returns {Promise<AxiosResponse<any, any>>} 返回一个axios生成的promise对象，返回值样例：
  * {
     "code": 0,
     "cmd": "Config_Transcod",
@@ -236,8 +236,8 @@ export function setConfigTranscod(state) {
  * 根据文件大小自动切片
  * 注意事项 请勿输入1-10485760(1MB)的数值，在某些清晰度较高的直播间中，
  * 初始数据包会大于这个数值，这种情况下会报错
- * @param size long 设置自动分割文件大小(单位为byte)，为0时为关闭该功能
- * @returns 返回一个axios生成的promise对象，返回值样例：
+ * @param {Number} size 设置自动分割文件大小(单位为byte)，为0时为关闭该功能
+ * @returns {Promise<AxiosResponse<any, any>>} 返回一个axios生成的promise对象，返回值样例：
  * {
     "code": 0,
     "cmd": "Config_FileSplit",
@@ -257,8 +257,8 @@ export function setConfigFileSplit(size) {
  * 注意事项 该弹幕录制接口总共开关包括礼物、舰队、SC的录制开关，
  * 并且个房间自己在房间配置列表单独设置，这个只是是否启用弹幕录制功能的总共开关，
  * 要录制某个房间除了打开这个设置还需要房间配置启动打开录制
- * @param state bool 打开或关闭弹幕录制总开关
- * @returns 返回一个axios生成的promise对象，返回值样例：
+ * @param {Boolean} state 打开或关闭弹幕录制总开关
+ * @returns {Promise<AxiosResponse<any, any>>} 返回一个axios生成的promise对象，返回值样例：
  * {
     "code": 0,
     "cmd": "Config_DanmuRec",
@@ -276,7 +276,7 @@ export function setConfigDanmuRec(state) {
 /**
  * 导入关注列表中的V
  * 注意事项 该接口需要依赖哔哩哔哩账号登陆，使用前请确认已经扫码登陆
- * @returns 返回一个axios生成的promise对象，返回值样例：
+ * @returns {Promise<AxiosResponse<any, any>>} 返回一个axios生成的promise对象，返回值样例：
  * {
     "code": 0,
     "cmd": "Config_GetFollow",
@@ -299,7 +299,7 @@ export function getConfigGetFollow() {
 
 /**
  * 获取已录制的文件列表
- * @returns 返回一个axios生成的promise对象，返回值样例：
+ * @returns {Promise<AxiosResponse<any, any>>} 返回一个axios生成的promise对象，返回值样例：
  * {
     "code": 0,
     "cmd": "File_GetAllFileList",
@@ -317,8 +317,8 @@ export function getAllFileList() {
 
 /**
  * 下载对应的文件
- * @param filename String 此处为文件的完整路径，包括文件名
- * @returns 返回一个axios生成的promise对象，返回值样例：
+ * @param {String} filename 此处为文件的完整路径，包括文件名
+ * @returns {Promise<AxiosResponse<any, any>>} 返回一个axios生成的promise对象，返回值样例：
  * 如果成功直接返回blob 失败返回如下
  * { "code": 0, "cmd": "File_GetFile", "massage": "", "data": "该文件不存在" }
  */
@@ -331,7 +331,7 @@ export function getFile(filename) {
 
 /**
  * 根据文件树结构返回已录制的文件总列表
- * @returns 返回一个axios生成的promise对象，返回值样例：
+ * @returns {Promise<AxiosResponse<any, any>>} 返回一个axios生成的promise对象，返回值样例：
  * {
     "code": 0,
     "cmd": "File_GetAllFileList",
@@ -371,7 +371,7 @@ export function getFilePathList() {
 
 /**
  * 根据文件类型分类获取已录制的文件总列表
- * @returns 返回一个axios生成的promise对象，返回值样例：
+ * @returns {Promise<AxiosResponse<any, any>>} 返回一个axios生成的promise对象，返回值样例：
  * {
     "code": 0,
     "cmd": "File_GetTypeFileList",
@@ -413,9 +413,9 @@ export function getTypeFileList() {
 /**
  * web登录接口(非B站登录)
  * 此处配置文件指 ./DDTV_Config.ini
- * @param username String 用于登陆的用户名，默认设置为ami，在配置文件中进行设置
- * @param password String 用于登陆的密码，默认设置为ddtv，在配置文件中进行设置
- * @returns 返回一个axios生成的promise对象，返回值样例：
+ * @param {String} username 用于登陆的用户名，默认设置为ami，在配置文件中进行设置
+ * @param {String} password 用于登陆的密码，默认设置为ddtv，在配置文件中进行设置
+ * @returns {Promise<AxiosResponse<any, any>>} 返回一个axios生成的promise对象，返回值样例：
  * {"code":0,"cmd":"Login","massage":"","data":{"Cookie":"836bd1ca-56f8-4195-99a2-8af1a074df9e"}}
  * 其中Cookie会自动配置为浏览器配置，无需二次配置
  */
@@ -431,7 +431,7 @@ export function webLogin(username, password) {
  * 获取用于B站登录的登陆二维码
  * 注意事项 返回值类型为arraybuffer，建议使用vueuse的useBase64对arraybuffer进行编码，
  * 然后直接在img标签的src属性进行拼接，例如:src="'data:image/png;base64,' + a.value"
- * @returns 返回一个axios生成的promise对象，返回值样例：[object ArrayBuffer]
+ * @returns {Promise<AxiosResponse<any, any>>} 返回一个axios生成的promise对象，返回值样例：[object ArrayBuffer]
  */
 export function biliLoginqr() {
   const params = new URLSearchParams();
@@ -441,7 +441,7 @@ export function biliLoginqr() {
 
 /**
  * 重置B站登录状态/退出登录B站
- * @returns 返回一个axios生成的promise对象，返回值样例：
+ * @returns {Promise<AxiosResponse<any, any>>} 返回一个axios生成的promise对象，返回值样例：
  * { "code": 0, "cmd": "Login_Reset", "massage": "", "data": "请访问 api/login 接口进行扫码登陆" }
  */
 export function biliLoginReset() {
@@ -453,7 +453,7 @@ export function biliLoginReset() {
 /**
  * 查询内部登陆状态
  * LoginState["未登录","已登录","登录失败","登陆中"]
- * @returns 返回一个axios生成的promise对象，返回值样例：
+ * @returns {Promise<AxiosResponse<any, any>>} 返回一个axios生成的promise对象，返回值样例：
  * { "code": 0, "cmd": "Login_State", "massage": "", "data": { "LoginState": 3 } }
  */
 export function getLoginState() {
@@ -464,7 +464,7 @@ export function getLoginState() {
 
 /**
  * 获取录制中的任务情况详细情况
- * @returns 返回一个axios生成的promise对象，返回值样例：
+ * @returns {Promise<AxiosResponse<any, any>>} 返回一个axios生成的promise对象，返回值样例：
  * //待补充
  * {"code":0,"cmd":"Rec_RecordingInfo","massage":"","data":[]}
  */
@@ -476,7 +476,7 @@ export function getRecordingInfo() {
 
 /**
  * 获取录制中的任务情况简略情况
- * @returns 返回一个axios生成的promise对象，返回值样例：
+ * @returns {Promise<AxiosResponse<any, any>>} 返回一个axios生成的promise对象，返回值样例：
  * //待补充
  * {"code":0,"cmd":"Rec_RecordingInfo","massage":"","data":[]}
  */
@@ -488,7 +488,7 @@ export function getRecordingInfoLite() {
 
 /**
  * 获取已经录制完成的任务详细情况
- * @returns 返回一个axios生成的promise对象，返回值样例：
+ * @returns {Promise<AxiosResponse<any, any>>} 返回一个axios生成的promise对象，返回值样例：
  * //待补充
  * {"code":0,"cmd":"Rec_RecordCompleteInfon","massage":"","data":[]}
  */
@@ -500,7 +500,7 @@ export function getRecordCompleteInfon() {
 
 /**
  * 获取已经录制完成的任务简略情况
- * @returns 返回一个axios生成的promise对象，返回值样例：
+ * @returns {Promise<AxiosResponse<any, any>>} 返回一个axios生成的promise对象，返回值样例：
  * //待补充
  * {"code":0,"cmd":"Rec_RecordCompleteInfon","massage":"","data":[]}
  */
@@ -513,8 +513,8 @@ export function getRecordCompleteInfonLite() {
 /**
  * 取消某个录制任务
  * 注意事项 注意！是UID！是UID！不是房间号！
- * @param uid long 要取消任务的账号UID
- * @returns 返回一个axios生成的promise对象，返回值样例：
+ * @param {Number} uid 要取消任务的账号UID
+ * @returns {Promise<AxiosResponse<any, any>>} 返回一个axios生成的promise对象，返回值样例：
  * //待补充
  */
 export function cancelDownload(uid) {
@@ -528,7 +528,7 @@ export function cancelDownload(uid) {
  * 获取房间详细配置信息
  * 注意事项 该接口根据服务器上房间配置的多少决定，数据量可能会较多；
  * 在启动成功前30秒最好不要调用，该阶段属于API请求更新数据阶段，可能为空的数据较多。
- * @returns 返回一个axios生成的promise对象，返回值样例：
+ * @returns {Promise<AxiosResponse<any, any>>} 返回一个axios生成的promise对象，返回值样例：
  * {
     "code": 0,
     "cmd": "Room_AllInfo",
@@ -616,7 +616,7 @@ export function getRoomAllInfo() {
  * 获取房间简要配置信息
  * 注意事项 该接口根据服务器上房间配置的多少决定，数据量可能会较多；
  * 在启动成功前30秒最好不要调用，该阶段属于API请求更新数据阶段，可能为空的数据较多。
- * @returns 返回一个axios生成的promise对象，返回值样例：
+ * @returns {Promise<AxiosResponse<any, any>>} 返回一个axios生成的promise对象，返回值样例：
  * {
     "code": 0,
     "cmd": "Room_AllInfo",
@@ -725,8 +725,8 @@ export function getRoomSummaryInfo() {
  * 增加一个加房间配置
  * 注意事项 该接口的调用频率不能超过3秒/次，该接口后面封装的B站原生API较为复杂，
  * 如果请求过多，可能会造成频率过高导致412鉴权错误导致IP被黑名单半小时左右。
- * @param uid long 要增加到房间配置中的账号UID
- * @returns 返回一个axios生成的promise对象，返回值样例：
+ * @param {Number} uid 要增加到房间配置中的账号UID
+ * @returns {Promise<AxiosResponse<any, any>>} 返回一个axios生成的promise对象，返回值样例：
  * //待补充
  */
 export function addRoom(uid) {
@@ -738,8 +738,8 @@ export function addRoom(uid) {
 
 /**
  * 删除一个房间配置
- * @param uid long 要增加到房间配置中的账号UID
- * @returns 返回一个axios生成的promise对象，返回值样例：
+ * @param {Number} uid 要增加到房间配置中的账号UID
+ * @returns {Promise<AxiosResponse<any, any>>} 返回一个axios生成的promise对象，返回值样例：
  * //待补充
  */
 export function deleteRoom(uid) {
@@ -751,9 +751,9 @@ export function deleteRoom(uid) {
 
 /**
  * 修改房间自动录制配置
- * @param uid long 要修改自动录制配置的账号UID
- * @param is_auto_rec bool 打开\关闭开播自动录制
- * @returns 返回一个axios生成的promise对象，返回值样例：
+ * @param {Number} uid 要修改自动录制配置的账号UID
+ * @param {Boolean} is_auto_rec 打开\关闭开播自动录制
+ * @returns {Promise<AxiosResponse<any, any>>} 返回一个axios生成的promise对象，返回值样例：
  * //待补充
  */
 export function updateRoomAutoRec(uid, is_auto_rec) {
@@ -766,9 +766,9 @@ export function updateRoomAutoRec(uid, is_auto_rec) {
 
 /**
  * 修改房间弹幕录制配置
- * @param uid long 要修改弹幕录制配置的账号UID
- * @param is_auto_rec bool 打开\关闭该房间的弹幕录制功能
- * @returns 返回一个axios生成的promise对象，返回值样例：
+ * @param {Number} uid 要修改弹幕录制配置的账号UID
+ * @param {Boolean} is_auto_rec 打开\关闭该房间的弹幕录制功能
+ * @returns {Promise<AxiosResponse<any, any>>} 返回一个axios生成的promise对象，返回值样例：
  */
 export function updateRoomDanmuRec(uid, is_rec_danmu) {
   const params = new URLSearchParams();
@@ -780,8 +780,8 @@ export function updateRoomDanmuRec(uid, is_rec_danmu) {
 
 /**
  * 通过B站搜索搜索直播用户
- * @param keyword String 需要搜索的关键词
- * @returns 返回一个axios生成的promise对象，返回值样例：
+ * @param {String} keyword 需要搜索的关键词
+ * @returns {Promise<AxiosResponse<any, any>>} 返回一个axios生成的promise对象，返回值样例：
  * {
     "code": 0,
     "cmd": "User_Search",

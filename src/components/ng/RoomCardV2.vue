@@ -122,15 +122,15 @@
 </template>
 <script setup>
 import store from "@/store";
-await postFormAPI("Rec_RecordingInfo_Lite").then((res) => {
+await getRecordingInfoLite().then((res) => {
   store.commit("Rec_RecordingInfo_Lite", res.data.data);
 });
-await postFormAPI("Room_AllInfo").then((res) => {
+await getRoomAllInfo().then((res) => {
   store.commit("Room_AllInfo", res.data.data);
 });
 </script>
 <script>
-import { postFormAPI } from "@/api";
+import { getRecordingInfoLite, getRoomAllInfo } from "@/newapi";
 import TweenLite from "gsap";
 
 export default {

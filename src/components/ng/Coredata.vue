@@ -19,7 +19,7 @@
   </ng-infocard>
 </template>
 <script>
-// TODO 整理逻辑和添加轮询
+// TODO: 整理逻辑和添加轮询
 import InfoCard from "./InfoCard";
 // import { postFormAPI } from "@/api";
 import { getSystemResources, getRecordingInfoLite, getRoomAllInfo } from "@/newapi";

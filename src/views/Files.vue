@@ -98,11 +98,7 @@
 </template>
 
 <script>
-import {
-  postFormAPI
-  // getListAPI
-} from "../api";
-// import { play_str } from "../utils/play_url"
+import { getFilePathList } from "@/newapi";
 export default {
   data() {
     return {
@@ -263,8 +259,13 @@ export default {
       }
     },
     GetFiles: async function () {
-      let data = await postFormAPI("File_GetFilePathList");
-      return data.data.data;
+      await getFilePathList()
+        .then((res) => {
+          return res.data.data;
+        })
+        .catch((err) => {
+          return new Promise.reject(err);
+        });
     },
     handleCheckAllChange: function (val) {
       if (val) {
