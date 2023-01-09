@@ -8,6 +8,7 @@ const Flv = () => import("../views/flv.vue");
 const About = () => import("../views/About.vue");
 const Files = () => import("../views/Files.vue");
 const blogin = () => import("../views/blogin.vue");
+const test = () => import("../views/test.vue");
 
 // import { isAuthenticated } from "@/utils/authenticated";
 
@@ -82,6 +83,16 @@ const routes = [
       login: true,
       show: true,
       title: "FLV"
+    }
+  },
+  {
+    path: "/test",
+    name: "test",
+    component: test,
+    meta: {
+      login: true,
+      show: true,
+      title: "测试"
     }
   },
   {

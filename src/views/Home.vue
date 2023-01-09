@@ -52,30 +52,6 @@ export default {
       liveUpdateTime: null,
       liveUpdateTime_time: "",
       lp: "",
-      options: [
-        {
-          value: "1",
-          label: "停止录制"
-        },
-        {
-          value: "2",
-          label: "删除房间并停止录制"
-        },
-        {
-          value: "3",
-          label: "删除房间"
-        }
-      ],
-      OneDayFrom: null,
-      room: [],
-      CoreData: [
-        { title: "房间数", data: "--" },
-        { title: "正在录制", data: "--" },
-        { title: "CPU占用", data: "--" },
-        { title: "内存占用", data: "--" },
-        { title: "硬盘占用", data: "--" },
-        { title: "下载总量", data: "--" }
-      ],
       timer: null,
       updateTimeManger: null
     };

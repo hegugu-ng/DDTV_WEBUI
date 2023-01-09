@@ -1,161 +1,156 @@
 <template>
-  <div>
-    <div class="ng-lookup">
-      <el-checkbox
-        size="small"
-        class="ng-checkbox right10"
-        :indeterminate="isIndeterminate"
-        v-model="CheckAll"
-        @change="handleCheckAllChange"
-        border
-        >全选
-      </el-checkbox>
-      <el-input
-        class="ng-roominput right10"
-        size="small"
-        v-model="SearchKeywords"
-        @keyup="handleOnkeyup($event)"
-        placeholder="搜索UID/房间号/昵称/标题"
-        clearable
-      >
-        <template #prefix>
-          <el-icon class="el-input__icon">
-            <search />
-          </el-icon>
-        </template>
-      </el-input>
-      <el-select class="ng-todo right10" v-model="BatchOperationSelect" size="small" placeholder="执行的操作">
-        <el-option v-for="item in BatchOperation" :key="item.value" :label="item.label" :value="item.value">
-        </el-option>
-      </el-select>
-      <el-button
-        :disabled="BatchOperationSelect === ''"
-        size="small"
-        @click="$emit('requestgroup', BatchOperationSelect, CheckedRoom)"
-        >确定
-      </el-button>
-    </div>
-    <el-checkbox-group v-model="CheckedRoom" v-loading="SearchLoading">
-      <ul class="ng-roomGroup">
-        <!--这里放一个插槽，用来放置列表第一个定制的元素，比如添加房间-->
-        <slot v-if="SearchResult.length === 0"></slot>
-        <li class="RoomCardV2" v-for="(item, index) in room" :key="index" v-loading="item.load">
-          <div class="ng-roomManager" :id="'m' + index">
-            <div class="ng-configbar">
-              <el-icon class="el-icon-back ng-bticon" @click="stemo('#m' + index, '0%')">
-                <arrow-left />
-              </el-icon>
-              <div class="ng-hostname">{{ item.uname }}</div>
-            </div>
-            <div class="ng-btngroup">
-              <div>
-                <div class="ng-fromtitle">基础管理</div>
-                <el-button size="small">管理文件</el-button>
-                <el-button size="small" type="danger" @click="requestApi('Room_Del', item.uid, null, index)"
-                  >删除房间
-                </el-button>
+  <ng-infocard title="录制中房间管理" :update="UpdateTime" style="margin-top: 3vh">
+    <table class="ng-lookup">
+      <colgroup>
+        <col width="3%" />
+        <col width="55%" />
+        <col width="25%" />
+        <col width="15%" />
+      </colgroup>
+      <thead>
+        <tr>
+          <th>
+            <el-checkbox class="ng-checkbox" :indeterminate="isIndeterminate" v-model="CheckAll"
+              @change="handleCheckAllChange" :disabled="Loading" />
+          </th>
+          <th>
+            <el-input class="ng-roominput" size="small" v-model="SearchKeywords" @keyup="handleOnkeyup($event)"
+              placeholder="搜索UID/房间号/昵称/标题" :disabled="Loading" clearable>
+              <template #prefix>
+                <el-icon class="el-input__icon">
+                  <search />
+                </el-icon>
+              </template>
+            </el-input>
+          </th>
+          <th>
+            <el-select class="ng-todo" v-model="BatchOperationSelect" :disabled="Loading" size="small"
+              placeholder="执行的操作">
+              <el-option v-for="item in BatchOperation" :key="item.value" :label="item.label" :value="item.value">
+              </el-option>
+            </el-select>
+          </th>
+          <th>
+            <el-button :disabled="BatchOperationSelect === '' || Loading" size="small"
+              @click="$emit('requestgroup', BatchOperationSelect, CheckedRoom)">确定
+            </el-button>
+          </th>
+        </tr>
+      </thead>
+    </table>
+    <el-skeleton :loading="Loading" :count="skLen" animated>
+      <template #template>
+        <div class="room-sk">
+          <div class="ng-roomCover">
+            <el-skeleton-item variant="image" style="width: 100%; height: 100%" />
+          </div>
+          <div class="ng-roominfo">
+            <div class="ng-faceGroup">
+              <div class="ng-face">
+                <el-skeleton-item style="--el-skeleton-circle-size: 40px" variant="circle" />
               </div>
-              <div>
-                <div class="ng-fromtitle">录制弹幕</div>
-                <el-switch
-                  size="small"
-                  v-model="item.IsRecDanmu"
-                  active-color="#3bdd83"
-                  inactive-color="#a0b5a9"
-                  @change="requestApi('Room_DanmuRec', item.uid, item.IsRecDanmu, index)"
-                />
-                <el-button
-                  v-if="item.IsDownload"
-                  style="margin-left: 12px"
-                  size="small"
-                  type="danger"
-                  @click="requestApi('Rec_CancelDownload', item.uid, null, index)"
-                  >停止录制
-                </el-button>
+            </div>
+            <div class="ng-roomnameCard">
+              <el-skeleton-item variant="text" style="font-size: 15px; width: 80%" />
+              <div class="ng-hostgroup">
+                <el-skeleton-item variant="text" style="font-size: 0.6rem; width: 60%" />
               </div>
             </div>
           </div>
-
-          <div>
-            <div class="ng-roomCover">
-              <div class="ng-isLive ng-floatbar" v-if="item.live_status === 1">正在直播</div>
-              <div class="ng-floatbar">
-                <el-checkbox class="ng-checkbox" :label="item" :key="item" @change="handleCheckedRoomChange"
-                  >{{}}
-                </el-checkbox>
-              </div>
-              <div class="ng-clink" :onclick="`window.open('https://live.bilibili.com/${item.room_id}')`"></div>
-              <img class="ng-image" referrerPolicy="no-referrer" :src="item.cover_from_user" />
-              <div class="ng-roomType ng-floatbar">{{ item.st }}</div>
-            </div>
-            <div class="ng-roominfo">
-              <div class="ng-faceGroup" :onclick="`window.open('https://space.bilibili.com/${item.uid}')`">
-                <div class="ng-face">
-                  <img class="ng-image" referrerPolicy="no-referrer" :src="item.face" />
-                </div>
-              </div>
-              <div class="ng-roomnameCard">
-                <div class="ng-roomtitle">{{ item.title }}</div>
-                <div class="ng-hostgroup">
+        </div>
+      </template>
+      <template #default>
+        <el-checkbox-group v-model="CheckedRoom">
+          <ul class="ng-roomGroup">
+            <!--这里放一个插槽，用来放置列表第一个定制的元素，比如添加房间-->
+            <slot v-if="SearchResult.length === 0"></slot>
+            <li class="RoomCardV2" v-for="(item, index) in room" :key="index" v-loading="item.load">
+              <div class="ng-roomManager" :id="'m' + index">
+                <div class="ng-configbar">
+                  <el-icon class="el-icon-back ng-bticon" @click="stemo('#m' + index, '0%')">
+                    <arrow-left />
+                  </el-icon>
                   <div class="ng-hostname">{{ item.uname }}</div>
-                  <ng-svg
-                    icon-class="setting2"
-                    :size="{ width: '22px', height: '22px' }"
-                    class="ng-bticon"
-                    @click="stemo('#m' + index, '100%')"
-                  />
-                  <el-switch
-                    v-model="item.IsAutoRec"
-                    active-color="#3bdd83"
-                    inactive-color="#6b997f"
-                    @change="requestApi('Room_AutoRec', item.uid, item.IsAutoRec, index)"
-                  ></el-switch>
+                </div>
+                <div class="ng-btngroup">
+                  <div>
+                    <div class="ng-fromtitle">基础管理</div>
+                    <el-button size="small">管理文件</el-button>
+                    <el-button size="small" type="danger" @click="requestApi('Room_Del', item.uid, null, index)">删除房间
+                    </el-button>
+                  </div>
+                  <div>
+                    <div class="ng-fromtitle">录制弹幕</div>
+                    <el-switch size="small" v-model="item.IsRecDanmu" active-color="#3bdd83" inactive-color="#a0b5a9"
+                      @change="requestApi('Room_DanmuRec', item.uid, item.IsRecDanmu, index)" />
+                    <el-button v-if="item.IsDownload" style="margin-left: 12px" size="small" type="danger"
+                      @click="requestApi('Rec_CancelDownload', item.uid, null, index)">停止录制
+                    </el-button>
+                  </div>
                 </div>
               </div>
-            </div>
-          </div>
-        </li>
-      </ul>
-    </el-checkbox-group>
-    <el-empty v-if="room.length === 0" description="列表为空"></el-empty>
-  </div>
+
+              <div>
+                <div class="ng-roomCover">
+                  <div class="ng-isLive ng-floatbar" v-if="item.live_status === 1">正在直播</div>
+                  <div class="ng-floatbar">
+                    <el-checkbox class="ng-checkbox" :label="item" :key="item" @change="handleCheckedRoomChange">{{}}
+                    </el-checkbox>
+                  </div>
+                  <div class="ng-clink" :onclick="`window.open('https://live.bilibili.com/${item.room_id}')`"></div>
+                  <img class="ng-image" referrerPolicy="no-referrer" :src="item.cover_from_user" />
+                  <div class="ng-roomType ng-floatbar">{{ item.st }}</div>
+                </div>
+                <div class="ng-roominfo">
+                  <div class="ng-faceGroup" :onclick="`window.open('https://space.bilibili.com/${item.uid}')`">
+                    <div class="ng-face">
+                      <img class="ng-image" referrerPolicy="no-referrer" :src="item.face" />
+                    </div>
+                  </div>
+                  <div class="ng-roomnameCard">
+                    <div class="ng-roomtitle">{{ item.title }}</div>
+                    <div class="ng-hostgroup">
+                      <div class="ng-hostname">{{ item.uname }}</div>
+                      <ng-svg icon-class="setting2" :size="{ width: '22px', height: '22px' }" class="ng-bticon"
+                        @click="stemo('#m' + index, '100%')" />
+                      <el-switch v-model="item.IsAutoRec" active-color="#3bdd83" inactive-color="#6b997f"
+                        @change="requestApi('Room_AutoRec', item.uid, item.IsAutoRec, index)"></el-switch>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </el-checkbox-group>
+        <el-empty v-if="room.length === 0" description="列表为空"></el-empty>
+      </template>
+    </el-skeleton>
+  </ng-infocard>
 </template>
-<script setup>
-import store from "@/store";
-await getRecordingInfoLite().then((res) => {
-  store.commit("Rec_RecordingInfo_Lite", res.data.data);
-});
-await getRoomAllInfo().then((res) => {
-  store.commit("Room_AllInfo", res.data.data);
-});
-</script>
+
 <script>
-import { getRecordingInfoLite, getRoomAllInfo } from "@/newapi";
+// roomCard 需要所有的房间数据，并且将其展示 如果需要在开播的房间，则需要处理筛选
 import TweenLite from "gsap";
+import { getRoomAllInfo } from "@/newapi";
+import store from "@/store";
+import { room_data } from "@/utils/data_cli";
+import InfoCard from "./InfoCard";
 
 export default {
-  name: "RoomGroupV3",
-  props: {
-    roomFilterMap: {
-      type: Map,
-      default: () => new Map()
-    }
+  name: "RoomGroup",
+  components: {
+    "ng-infocard": InfoCard
   },
   data: function () {
     return {
+      skLen: 3,
+      // 加载状态
+      Loading: true,
+      // 显示的更新信息
+      UpdateTime: "正在更新数据",
       IsNull: false,
       // 传递来的房间数据
-      room:
-        this.roomFilterMap.size > 0
-          ? this.$store.state.Room_AllInfo.filter((item) => {
-              for (let [key, value] of this.roomFilterMap) {
-                if (item[key] !== value) {
-                  return false;
-                }
-              }
-              return true;
-            })
-          : this.$store.state.Room_AllInfo,
+      room: [],
       forkRoom: undefined,
       // 工具栏 全选标志
       CheckAll: false,
@@ -191,22 +186,59 @@ export default {
     };
   },
   mounted() {
-    this.forkRoom = this.room;
-    this.timer = setInterval(() => {
-      for (let i = 0; i < this.room.length; i++) {
-        let item = this.room[i];
-        if (item.live_status !== 1) continue;
-        let now = Date.now();
-        let time = this.formatSeconds(now / 1000 - item.live_time);
-        let room = this.room;
-        room[i].st = time;
-      }
-    }, 1000);
+    this.LoadData();
+    // this.forkRoom = this.room;
+    // this.timer = setInterval(() => {
+    //   for (let i = 0; i < this.room.length; i++) {
+    //     let item = this.room[i];
+    //     if (item.live_status !== 1) continue;
+    //     let now = Date.now();
+    //     let time = this.formatSeconds(now / 1000 - item.live_time);
+    //     let room = this.room;
+    //     room[i].st = time;
+    //   }
+    // }, 1000);
   },
   beforeUnmount() {
     clearInterval(this.timer);
   },
   methods: {
+    LoadData: function () {
+      if (store.state.Room_AllInfo) {
+        console.log("RoomCard发现store中已经存在数据");
+        this.UpdateDataView(true);
+      } else {
+        Promise.all([getRoomAllInfo()]).then((res) => {
+          console.log("RoomCard组件请求数据成功", res);
+          store.commit("Room_AllInfo", res[0].data.data);
+          this.UpdateDataView(true);
+        });
+      }
+    },
+    UpdateDataView: function (IsDownload) {
+      let allRoom = this.$store.state.Room_AllInfo;
+      if (IsDownload) {
+        let liveRoomData = [];
+        // 开始生成本地渲染列表的索引
+        allRoom.forEach((item) => {
+          if (item.live_status === 1 && item.IsDownload) {
+            liveRoomData.push(item);
+          }
+        });
+        room_data(this.room, liveRoomData);
+      } else {
+        room_data(this.room, allRoom);
+      };
+      this.forkRoom = this.room;
+      if (this.room.length !== 0) {
+        this.skLen = this.room.length;
+      }
+      setTimeout(() => {
+        this.Loading = false;
+      }, 1000);
+
+      this.UpdateTime = Date().toString();
+    },
     handleOnkeyup(event) {
       this.SearchLoading = true;
       if (event.keyCode === 13) {
@@ -291,35 +323,6 @@ export default {
       }
       return result;
     },
-    // 已弃用
-    // fuzzyMatch: function (str1, key) {
-    //   let index = -1,
-    //     flag = false;
-    //   str1 = String(str1).toLowerCase();
-    //   key = String(key).toLowerCase();
-    //   let i = 0,
-    //     arr = key.split("");
-    //   for (; i < arr.length; i++) {
-    //     //有一个关键字都没匹配到，则没有匹配到数据
-    //     if (str1.indexOf(arr[i]) < 0) {
-    //       break;
-    //     } else {
-    //       let match = str1.matchAll(arr[i]);
-    //       let next = match.next();
-    //       while (!next.done) {
-    //         if (next.value.index > index) {
-    //           index = next.value.index;
-    //           if (i === arr.length - 1) {
-    //             flag = true;
-    //           }
-    //           break;
-    //         }
-    //         next = match.next();
-    //       }
-    //     }
-    //   }
-    //   return flag;
-    // },
     handleCheckAllChange(val) {
       this.CheckedRoom = val ? this.room : [];
       this.isIndeterminate = false;
@@ -373,6 +376,18 @@ export default {
 </script>
 
 <style>
+.room-sk {
+  display: inline-block;
+  width: 228px;
+  border: 1px solid #e9eaec;
+  padding: 10px 2px;
+  margin: 0 0.8rem 0.8rem 0;
+  border-radius: 8px;
+  background: #fff;
+  position: relative;
+  overflow: hidden;
+}
+
 .ng-btngroup {
   padding: 0 10px 0 10px;
 }
@@ -406,8 +421,6 @@ export default {
 
 .ng-lookup {
   margin: 0.8rem 0 0.8rem 0;
-  display: flex;
-  align-items: center;
 }
 
 .ng-roominput {
