@@ -2,7 +2,7 @@
   <div class="nav" id="navbar">
     <div class="logo"></div>
     <div class="router-bar">
-      <el-menu router :collapse="isCollapse" class="nav">
+      <el-menu router :collapse="isCollapse" :collapse-transition="false" class="nav">
         <el-menu-item :index="item.router" v-for="(item, count) in info" :key="count">
           <el-icon><ng-svg class="nav-icon" :icon-class="item.icon" /></el-icon>
           <template #title>
@@ -10,23 +10,9 @@
           </template>
         </el-menu-item>
       </el-menu>
-      <!-- <div
-        class="bar-item"
-        v-for="(item, count) in info"
-        :key="count"
-        @click="$router.push({ path: item.router })"
-        :style="item.router === $route.path ? 'background-color: #1863ff;' : ''"
-      >
-        <el-tooltip class="item" effect="dark" :content="item.title" placement="right" :disabled="!navBar">
-          <button class="ddtv-ui-bt nav-bt" :style="itemcss">
-            <ng-svg class="nav-icon" :icon-class="item.icon" />
-            <div class="title" v-show="titleshow">{{ item.title }}</div>
-          </button>
-        </el-tooltip>
-      </div> -->
     </div>
     <div :class="'/about' === $route.path ? 'bar-item navon' : 'bar-item'" @click="$router.push({ path: '/about' })">
-      <button class="ddtv-ui-bt nav-bt" :style="itemcss" @change="updateRoomAutoRec(1, 2), (1, 2)">
+      <button class="ddtv-ui-bt nav-bt" :style="itemcss">
         <ng-svg class="nav-icon" icon-class="more" />
         <div class="title" v-if="titleshow">更多</div>
       </button>
@@ -35,13 +21,19 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
-const isCollapse = ref(false);
+import { ref, computed } from "vue";
+import { useWindowSize } from "@vueuse/core";
+const { width } = useWindowSize();
+
+const isCollapse = ref(
+  computed(() => {
+    return width.value < 1024;
+  })
+);
 </script>
 
 <script>
 import { mapGetters, mapState } from "vuex";
-import { updateRoomAutoRec } from "@/newapi";
 
 export default {
   name: "navBar",
@@ -98,7 +90,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="css">
 @media screen and (min-width: 1024px) {
   .nav {
     width: 206px;
@@ -113,6 +105,7 @@ export default {
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
+  border: 0;
   /* box-shadow: 2px 0 10px rgb(0 0 0 / 10%); */
   /* border-right: 1px solid #e6e4e4; */
   box-shadow: 2px 0 6px 0 rgb(0 21 41 / 35%);
