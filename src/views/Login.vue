@@ -1,41 +1,32 @@
 <template>
   <div class="login" v-loading="load">
-    <div class="viewBox">
-      <div v-if="atinput">
-        <i class="el-icon-setting ng-network" @click="atinput = !atinput"></i>
-        <div class="title">欢迎回来！</div>
-        <div class="rd-title">登录以继续</div>
-        <form @submit.prevent="onSubmit">
-          <div class="input-title">用户名</div>
-          <input class="ng-input" v-model="login.loginname" placeholder="请输入用户名" autocomplete="username" />
-          <div class="input-title">密码</div>
-          <input
-            class="ng-input"
-            type="password"
-            v-model="login.password"
-            placeholder="请输入密码"
-            autocomplete="current-password"
-          />
-          <div style="display: flex; align-items: center; margin-bottom: 10px">
-            <input type="checkbox" id="save7days" v-model="login.save7days" />
-            <label class="ng-check-ladel" for="save7days">七天内免登录</label>
-          </div>
-          <button class="ng-login" id="btn" @click="userlogin">登录</button>
-        </form>
-      </div>
-      <div v-else>
-        <i class="el-icon-user ng-network" @click="atinput = !atinput"></i>
-        <div class="title">设置</div>
-        <div class="rd-title">链接到NGWORKS事件中心</div>
-        <div class="input-title">APPID</div>
-        <input class="ng-input" v-model="ngevent.appid" placeholder="请输入你的appid" />
-        <div class="input-title">NGKEY</div>
-        <input class="ng-input" type="password" v-model="ngevent.key" placeholder="请输入NGKEY" />
-        <div style="display: flex; align-items: center; margin-bottom: 10px">
-          <input type="checkbox" id="save" v-model="ngevent.save" />
-          <label class="ng-check-ladel" for="save">记住我</label>
+    <div class="login-element">
+      <div class="login-card">
+        <div class="login-banner">
+          <div class="banner-image"></div>
         </div>
-        <button class="ng-login">验证</button>
+        <div class="viewBox">
+          <i class="el-icon-setting ng-network" @click="atinput = !atinput"></i>
+          <div class="title">欢迎回来！</div>
+          <div class="rd-title">登录以继续</div>
+          <form @submit.prevent="onSubmit">
+            <div class="input-title">用户名</div>
+            <input class="ng-input" v-model="login.loginname" placeholder="请输入用户名" autocomplete="username" />
+            <div class="input-title">密码</div>
+            <input
+              class="ng-input"
+              type="password"
+              v-model="login.password"
+              placeholder="请输入密码"
+              autocomplete="current-password"
+            />
+            <div style="display: flex; align-items: center; margin-bottom: 10px">
+              <input type="checkbox" id="save7days" v-model="login.save7days" />
+              <label class="ng-check-ladel" for="save7days">七天内免登录</label>
+            </div>
+            <button class="ng-login" id="btn" @click="userlogin">登录</button>
+          </form>
+        </div>
       </div>
     </div>
   </div>
@@ -121,7 +112,10 @@ export default {
         let res = await postListAPIv2("/api/Login", param);
         let loginres = await postFormAPI("Login_State");
         if (res.data.code != 0) {
-          this.openWindows(res.data.massage, "登录出现问题");
+          let message = res.data.massage;
+          if (message === undefined) message = "数据异常，请检查网络连接与网站配置。";
+          console.log(message);
+          this.openWindows(message, "登录出现问题");
         } else {
           this.saveCookies(res.data.data.Cookie);
           console.log(loginres);
@@ -144,14 +138,47 @@ export default {
 
 <style scoped>
 .login {
-  flex: 1;
-  height: 100%;
+  background-image: url("../assets/img/login_bg.png");
+  min-height: 100vh;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   display: flex;
-  flex-direction: row;
-  justify-content: space-evenly;
+  flex-direction: column;
+}
+
+.banner-image {
+  height: 100%;
+  width: 325px;
+  background-image: url("../assets/img/banner.png");
+}
+
+.login-element {
+  justify-content: center;
   align-items: center;
-  background-color: #484676;
-  background-image: linear-gradient(90deg, #484676 0%, #00c6cd 75%);
+  flex: 1 1 0%;
+  display: flex;
+}
+
+.login-card {
+  display: flex;
+  border-radius: 0.375rem;
+  height: 400px;
+}
+
+/* banner */
+.login-banner {
+  flex: 1 1 0%;
+  height: 100%;
+  z-index: 2;
+  border-radius: 20px 0px 0px 20px;
+  overflow: hidden;
+}
+
+@media (min-width: 768px) {
+  .login-banner {
+    display: inline-block;
+  }
 }
 
 .ng-network {
@@ -168,9 +195,10 @@ export default {
 .viewBox {
   background-color: #fff;
   width: 250px;
-  border-radius: 9px;
-  box-shadow: 0px 0px 50px 20px #00000036;
-  padding: 25px 25px 25px 25px;
+  /* border-radius: 9px; */
+  /* box-shadow: 0px 0px 50px 20px #00000036; */
+  padding: 60px 25px 25px 25px;
+  border: 1px solid rgb(233, 234, 236);
 }
 
 .rd-title {

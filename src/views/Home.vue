@@ -33,7 +33,7 @@ import { room_data } from "@/utils/data_cli";
 import { mapState } from "vuex";
 import { getRoomAllInfo, getSystemResources, getRecordingInfoLite } from "@/newapi";
 import { NetworkConnection, NetworkDisconnection, TestInfo } from "@/utils/error";
-import store from "@/store";
+// import store from "@/store";
 export default {
   computed: {
     ...mapState(["screenWidth", "connectStatus"])
